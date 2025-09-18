@@ -1,0 +1,201 @@
+/* ======== RESET GENERAL ======== */
+body {
+  font-family: 'Barlow', sans-serif;
+  background-color: #FCE8C7; 
+  color: #4A3B34; 
+  margin: 0;
+  padding: 0;
+}
+
+/* ======== HERO / CAROUSEL ======== */
+.hero {
+  overflow: hidden;
+}
+
+.hero .carousel-item img {
+  height: 100vh;
+  object-fit: cover;
+  filter: brightness(0.65);
+}
+
+.carousel-caption.custom-caption {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  background: rgba(0,0,0,0.35);
+  padding: 30px;
+  border-radius: 10px;
+}
+
+.titulo-hero {
+  font-family: 'Playfair Display', serif;
+  font-size: 4rem;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.8);
+  margin-bottom: 20px;
+}
+
+.subtitulo-hero {
+  font-size: 1.5rem;
+  color: #f1f1f1;
+  text-shadow: 0 3px 10px rgba(0,0,0,0.6);
+}
+
+/* ===== BOTONES ===== */
+.btn-reserva-header,
+.btn-reserva,
+.btn-menu,
+.vive-experiencia a.btn {
+  border-radius: 30px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-reserva-header {
+  border: 2px solid #FFD700;
+  color: #FFD700;
+  padding: 12px 30px;
+}
+.btn-reserva-header:hover {
+  background: #FFD700;
+  color: #1E1E1E;
+  transform: scale(1.05);
+}
+
+.btn-reserva {
+  background-color: #b22222;
+  color: #fff;
+  padding: 12px 30px;
+}
+.btn-reserva:hover {
+  background-color: #8b1a1a;
+  transform: translateY(-3px);
+}
+
+.btn-menu {
+  border: 2px solid #8B0000;
+  color: #8B0000;
+  padding: 0.75rem 1.5rem;
+  margin-bottom: 1rem;
+}
+.btn-menu:hover {
+  background-color: #8B0000;
+  color: #fff;
+}
+
+.vive-experiencia a.btn {
+  border: 2px solid #b22222;
+  color: #b22222;
+  padding: 12px 28px;
+}
+.vive-experiencia a.btn:hover {
+  background: #b22222;
+  color: #fff;
+}
+
+/* ======== MENÚ (categorías en cards) ======== */
+#menu h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #4a3b34;
+  margin-bottom: 2rem;
+}
+
+.menu-card {
+  background: #fff;
+  border: 1px solid #FFD700;
+  border-radius: 12px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.menu-card img {
+  height: 220px;
+  object-fit: cover;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+.menu-card:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+.menu-card .card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #b22222;
+}
+
+#menu{
+  background: #fffaf0;
+}
+
+/* ======== PLATO ESTRELLA ======== */
+.plato-estrella {
+  padding-bottom: 3rem;
+  text-align: center;
+  background: #fffaf0;
+}
+.plato-estrella h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ======== SOBRE NOSOTROS ======== */
+.sobre-nosotros {
+  background: #fff;
+  padding: 60px 20px;
+}
+.titulo-seccion {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #4a3b34;
+}
+.titulo-seccion span {
+  color: #b22222;
+}
+.descripcion-seccion {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #333;
+}
+
+/* ======== EXPERIENCIA ======== */
+.vive-experiencia {
+  background: #fff;
+}
+.vive-experiencia h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #b22222;
+}
+.vive-experiencia p {
+  font-size: 1rem;
+  color: #444;
+}
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 992px) {
+  .logo-central img { height: 80px; }
+  .left-menu { margin-right: 30px; }
+  .right-menu { margin-left: 30px; }
+}
+
+@media (max-width: 768px) {
+  .header-transparent,
+  .header-general { padding: 12px 0; }
+  .header-transparent .navbar-nav,
+  .header-general .navbar-nav { flex-direction: column; gap: 12px; }
+  .logo-central img { height: 65px; }
+  .btn-reserva-header { padding: 6px 16px; font-size: 0.9rem; }
+  .topbar { flex-direction: column; font-size: 0.75rem; gap: 4px; text-align: center; padding: 6px; }
+}

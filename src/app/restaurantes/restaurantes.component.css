@@ -1,0 +1,127 @@
+/* === GLOBAL === */
+body {
+  font-family: 'Barlow', sans-serif;
+  background-color: #faf7f4;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* === HEADER === */
+.header-top, .header-bottom {
+  background-color: #4A3B34; /* mismo color que footer */
+}
+
+.header-top .nav-link,
+.header-bottom .nav-link {
+  color: #FCE8C7 !important;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+}
+
+.header-top .nav-link:hover,
+.header-bottom .nav-link:hover {
+  color: #E6A756 !important;
+}
+
+.header-search .search-input {
+  border: 1px solid #E6A756;
+  border-radius: 20px;
+  padding: 5px 15px;
+  outline: none;
+}
+
+.icon-circle {
+  width: 40px;
+  height: 40px;
+  background-color: #E6A756;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lang-flag {
+  font-size: 0.9rem;
+  color: #FCE8C7;
+  font-weight: bold;
+}
+
+/* Botón domicilio */
+.btn-domicilio {
+  background-color: #E6A756;
+  color: #4A3B34;
+  font-weight: 700;
+  border: none;
+  padding: 5px 15px;
+  border-radius: 20px;
+  transition: background 0.3s;
+}
+.btn-domicilio:hover {
+  background-color: #d2953d;
+}
+
+/* === SECCIÓN RESTAURANTES === */
+.section-title {
+  color: #8B2E2E;
+  font-weight: 700;
+}
+
+.restaurant-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.restaurant-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+.btn-location {
+  display: inline-block;
+  margin-top: 10px;
+  background-color: #8B2E2E;
+  color: #fff;
+  padding: 8px 15px;
+  border-radius: 20px;
+  transition: background 0.3s;
+}
+.btn-location:hover {
+  background-color: #6d2323;
+}
+
+/* === FOOTER === */
+#footer {
+  background-color: #4A3B34;
+  color: #FCE8C7;
+  padding: 40px 0 20px 0;
+  margin-top: 50px;
+}
+
+#footer h5 {
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+#footer a {
+  color: #FCE8C7;
+  transition: color 0.3s;
+}
+
+#footer a:hover {
+  color: #E6A756;
+}
+
+.footer-redes img {
+  margin-right: 5px;
+}

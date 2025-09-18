@@ -1,0 +1,381 @@
+/* ======== PLATO ESTRELLA ======== */
+
+/* Fondo general */
+#plato-estrella {
+  background: url('C:\Users\user\Desktop\PROJECTS\la_gruta_DW\src\assets\images\paisaje-gruta-mitica-interior-harare_1162783-425.jpg') 
+              center center / cover no-repeat fixed;
+  background-attachment: fixed;
+  color: #fff;
+}
+
+/* Hero del plato */
+.hero-plato {
+  position: relative;
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+              url('C:\Users\user\Desktop\PROJECTS\la_gruta_DW\src\assets\images\paisaje-gruta-mitica-interior-harare_1162783-425.jpg') center/cover no-repeat;
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.hero-plato::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+}
+.hero-plato h1 {
+  font-size: 3rem;
+  color: #FFD700;
+  text-shadow: 0 0 10px #ff4500, 0 0 20px #ff6347, 0 0 40px #ff6347;
+  animation: parpadeo 1.5s infinite alternate;
+  position: relative;
+  z-index: 2;
+}
+.hero-plato p {
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  font-size: 1.4rem;
+  color: #f1f1f1;
+  text-shadow: 0 0 8px rgba(0,0,0,0.8);
+  position: relative;
+  z-index: 2;
+}
+
+/* Tarjeta principal del plato */
+.card-plato {
+  background: rgba(0,0,0,0.55);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(255,69,0,0.5);
+}
+.card-plato h2 {
+  font-size: 2.2rem;
+  color: #FFD700;
+  text-align: center;
+  text-shadow: 0 0 10px #ff4500, 0 0 20px #ff6347;
+  animation: parpadeo 1.5s infinite alternate;
+}
+.card-plato p, 
+.card-plato li {
+  color: #fff !important;
+}
+
+/* Imagen principal */
+.img-plato {
+  width: 100%;
+  max-width: 450px;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+/* Galería de imágenes */
+.gallery-img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+.gallery-img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(255,69,0,0.8);
+}
+
+/* Efecto de chispas */
+.img-wrapper {
+  position: relative;
+  display: inline-block;
+}
+.spark::after {
+  content: "";
+  position: absolute;
+  top: -10px; left: -10px; right: -10px; bottom: -10px;
+  border-radius: 20px;
+  background: radial-gradient(circle, rgba(255,140,0,0.7) 0%, transparent 70%);
+  opacity: 0.6;
+  animation: spark 2s infinite ease-in-out alternate;
+  z-index: -1;
+}
+
+/* Animaciones */
+@keyframes spark {
+  0% { box-shadow: 0 0 10px #ff4500, 0 0 20px #ff6347; opacity: 0.5; }
+  100% { box-shadow: 0 0 30px #ff4500, 0 0 60px #ff6347; opacity: 0.9; }
+}
+@keyframes parpadeo {
+  0% { text-shadow: 0 0 10px #ff4500, 0 0 20px #ff6347; }
+  100% { text-shadow: 0 0 20px #ff4500, 0 0 40px #ff6347; }
+}
+
+/* ======== RESET GENERAL ======== */
+body {
+    font-family: 'Barlow', sans-serif;
+    background-color: #FCE8C7; 
+    color: #4A3B34; 
+    margin: 0;
+    padding: 0;
+}
+
+/* ===== TOPBAR ===== */
+.topbar {
+  background: transparent; 
+  color: #fff;
+  font-size: 1.1rem;
+  padding: 6px 40px;
+  border-top: 1px solid rgba(255,255,255,0.25);   
+  border-bottom: 1px solid rgba(255,255,255,0.25); 
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.topbar .redes a {
+  margin-left: 12px;
+  display: inline-block;
+  transition: opacity 0.3s ease;
+}
+.topbar .redes a:hover {
+  opacity: 0.7;
+}
+
+/* HEADER: mismo tono que el footer */
+.topbar, .bottombar {
+  background-color: #4A3B34; 
+  color: #FCE8C7; 
+}
+
+/* Links del header con buen contraste */
+.topbar .nav-link,
+.bottombar .nav-link {
+  color: #FCE8C7 !important;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.topbar .nav-link:hover,
+.bottombar .nav-link:hover {
+  color: #E6A756 !important; 
+}
+
+/* ===== HEADER ===== */
+.header-transparent {
+  position: absolute;
+  top: 40px; /* debajo de la topbar */
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(74,59,52,0.6); /* tono café del footer con transparencia */
+  padding: 15px 0;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  border-top: 1px solid rgba(255,255,255,0.15);
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.header-transparent.scrolled {
+  position: fixed;
+  top: 0;
+  background: rgba(74,59,52,0.9); /* menos transparencia al hacer scroll */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+
+/* ===== NAVBAR GENERAL ===== */
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 25px; /* espacio uniforme entre ítems */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header-transparent .nav-link {
+  font-family: 'Barlow', sans-serif;
+  font-weight: 600;
+  color: #fff !important;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+.header-transparent .nav-link:hover {
+  color: #FFD700 !important;
+  transform: translateY(-2px);
+}
+
+/* ===== MENÚS CERCA DEL LOGO ===== */
+.left-menu,
+.right-menu {
+  flex: 1; 
+  display: flex;
+  gap: 25px;
+}
+
+.left-menu {
+  justify-content: flex-end;  /* pegado al logo */
+  margin-right: 60px;         
+}
+
+.right-menu {
+  justify-content: flex-start; /* pegado al logo */
+  margin-left: 60px;           
+}
+
+/* ===== LOGO CENTRADO ===== */
+.logo-central {
+  z-index: 10;
+}
+.logo-central img {
+  height: 95px;
+  display: block;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+}
+
+/* ===== BOTÓN RESERVA ===== */
+.btn-reserva-header {
+  border: 2px solid #FFD700;
+  color: #FFD700;
+  border-radius: 40px;
+  padding: 10px 26px;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  box-shadow: 0 0 10px rgba(255,215,0,0.3);
+}
+.btn-reserva-header:hover {
+  background: #FFD700;
+  color: #1E1E1E;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255,215,0,0.6);
+}
+
+/* ===== FOOTER ===== */
+#footer {
+  background-color: #4A3B34;
+  color: #FCE8C7;
+  padding: 50px 20px;
+}
+#footer h5 {
+  color: #E6A756;
+  margin-bottom: 15px;
+}
+#footer a {
+  color: #FCE8C7;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+#footer a:hover {
+  color: #E6A756;
+}
+#footer .footer-redes a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+#footer hr {
+  border-color: rgba(255,255,255,0.2);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 992px) {
+  .logo-central img {
+    height: 80px;
+  }
+  .left-menu {
+    margin-right: 30px;
+  }
+  .right-menu {
+    margin-left: 30px;
+  }
+}
+@media (max-width: 768px) {
+  .topbar {
+    flex-direction: column;
+    font-size: 0.75rem;
+    gap: 4px;
+    text-align: center;
+    padding: 6px;
+  }
+  .header-transparent {
+    top: 0;
+    padding: 12px 0;
+  }
+  .header-transparent .navbar-nav {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .logo-central img {
+    height: 65px;
+  }
+  .btn-reserva-header {
+    padding: 6px 16px;
+    font-size: 0.9rem;
+  }
+}
+
+/* HEADER sólido (no flotante) */
+.header-solid {
+  position: relative; /* ya no es absolute ni fixed */
+  width: 100%;
+  background-color: #4A3B34; /* mismo tono del footer */
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  z-index: 1000;
+}
+
+/* Links del header sólido */
+.header-solid .nav-link {
+  font-family: 'Barlow', sans-serif;
+  font-weight: 600;
+  color: #FCE8C7 !important;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+.header-solid .nav-link:hover {
+  color: #FFD700 !important;
+  transform: translateY(-2px);
+}
+
+/* Logo centrado en el header sólido */
+.header-solid .logo-central img {
+  height: 95px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+}
+
+.btn-menu {
+  font-size: 1.1rem;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid #8B0000;
+  border-radius: 8px;
+  background-color: transparent;
+  color: #8B0000;
+  transition: all 0.3s ease;
+  text-decoration: none;
+
+  margin-bottom: 1rem; /* 👈 separa el botón del borde blanco */
+}
+
+
+.btn-menu:hover {
+  background-color: #8B0000;
+  color: #fff;
+}
+
+.plato-estrella {
+  padding-bottom: 3rem; /* 👈 añade espacio al fondo de la sección */
+}
+
+.plato-estrella h2 {
+  font-family: 'Playfair Display', serif; /* fuente elegante */
+  font-size: 2.5rem; /* tamaño grande */
+  margin-top: 2rem; /* más espacio arriba */
+  margin-bottom: 1.5rem; /* espacio hacia el botón */
+}

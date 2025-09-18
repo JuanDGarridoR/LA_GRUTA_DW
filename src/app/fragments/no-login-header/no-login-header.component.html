@@ -1,0 +1,46 @@
+<header class="header-solid">
+  <nav class="container-fluid d-flex justify-content-between align-items-center position-relative">
+
+    <!-- Menú izquierdo -->
+    <ul class="navbar-nav flex-row gap-4 left-menu">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/menu">Menú</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/restaurantes">Restaurantes</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/home']" fragment="sobre-nosotros">Nosotros</a>
+      </li>
+    </ul>
+
+    <!-- Logo central -->
+    <a class="navbar-brand logo-central position-absolute top-50 start-50 translate-middle" routerLink="/home">
+      <img src="assets/images/logoGruta.png" alt="Logo La Gruta">
+    </a>
+
+    <!-- Menú derecho -->
+    <ul class="navbar-nav flex-row gap-4 right-menu align-items-center">
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/home']" fragment="footer">Contacto</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link btn btn-reserva-header" [routerLink]="['/home']" fragment="reservas">Reserva Aquí</a>
+      </li>
+
+      <!-- Dropdown de perfil -->
+      <li class="nav-item dropdown">
+        <a href="#" class="nav-link dropdown-toggle d-flex align-items-center"
+           id="profileDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="assets/images/perfil.png" alt="Perfil" class="rounded-circle" style="width:40px; height:40px;">
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="profileDropdown2">
+          <li class="dropdown-item-text fw-bold">NombreUsuario</li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" routerLink="/profile/edit/1">Editar Perfil</a></li>
+          <li><button class="dropdown-item">Cerrar sesión</button></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</header>

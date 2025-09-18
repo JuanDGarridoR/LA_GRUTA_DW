@@ -1,0 +1,152 @@
+/* ======== RESET GENERAL ======== */
+body {
+    font-family: 'Barlow', sans-serif;
+    background-color: #FCE8C7; 
+    color: #4A3B34; 
+    margin: 0;
+    padding: 0;
+}
+
+/* ===== HEADER SÓLIDO ===== */
+.header-solid {
+    position: relative;
+    width: 100%;
+    background-color: #4A3B34;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    z-index: 1000;
+}
+
+/* Navbar general */
+.navbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Links del header sólido */
+.header-solid .nav-link {
+    font-family: 'Barlow', sans-serif;
+    font-weight: 600;
+    color: #FCE8C7 !important;
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+.header-solid .nav-link:hover {
+    color: #FFD700 !important;
+    transform: translateY(-2px);
+}
+
+/* Menús cerca del logo */
+.left-menu,
+.right-menu {
+    flex: 1;
+    display: flex;
+    gap: 25px;
+}
+
+.left-menu {
+    justify-content: flex-end;
+    margin-right: 60px;
+}
+
+.right-menu {
+    justify-content: flex-start;
+    margin-left: 60px;
+    align-items: center;
+}
+
+/* Logo central */
+.logo-central {
+    z-index: 10;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.logo-central img {
+    height: 95px;
+    display: block;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+}
+
+/* Botón de reserva */
+.btn-reserva-header {
+    border: 2px solid #FFD700;
+    color: #FFD700;
+    border-radius: 40px;
+    padding: 10px 26px;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    box-shadow: 0 0 10px rgba(255,215,0,0.3);
+}
+.btn-reserva-header:hover {
+    background: #FFD700;
+    color: #1E1E1E;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255,215,0,0.6);
+}
+
+/* ===== FOOTER ===== */
+#footer {
+    background-color: #4A3B34;
+    color: #FCE8C7;
+    padding: 50px 20px;
+}
+
+#footer h5 {
+    color: #E6A756;
+    margin-bottom: 15px;
+}
+
+#footer a {
+    color: #FCE8C7;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+#footer a:hover {
+    color: #E6A756;
+}
+
+#footer .footer-redes a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+}
+
+#footer hr {
+    border-color: rgba(255,255,255,0.2);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 992px) {
+    .logo-central img {
+        height: 80px;
+    }
+    .left-menu {
+        margin-right: 30px;
+    }
+    .right-menu {
+        margin-left: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .logo-central img {
+        height: 65px;
+    }
+    .btn-reserva-header {
+        padding: 6px 16px;
+        font-size: 0.9rem;
+    }
+    .navbar-nav {
+        flex-direction: column;
+        gap: 12px;
+    }
+}

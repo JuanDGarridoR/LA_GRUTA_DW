@@ -1,0 +1,16 @@
+<app-solid-header></app-solid-header>
+<!-- src/app/restaurants/restaurants.component.html -->
+<section class="restaurants-section container my-5">
+  <h2 class="section-title text-center mb-5">Nuestras Sedes en Bogotá</h2>
+  <div class="row g-4">
+    <div class="col-12 col-md-6 col-lg-4" *ngFor="let sede of sedes">
+      <div class="restaurant-card">
+        <h4>{{ sede.nombre }}</h4>
+        <p><strong>Dirección:</strong> {{ sede.direccion }}</p>
+        <p><strong>Teléfono:</strong> {{ sede.telefono }}</p>
+        <a [href]="sede.mapsUrl" target="_blank" class="btn-location">Ver ubicación</a>
+      </div>
+    </div>
+  </div>
+</section>
+<app-footer></app-footer>
