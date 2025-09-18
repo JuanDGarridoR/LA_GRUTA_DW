@@ -10,7 +10,6 @@ import { NoLoginHeaderComponent } from './fragments/no-login-header/no-login-hea
 import { FooterComponent } from './fragments/footer/footer.component';
 import { HomeComponent } from './home/home.component';
 import { RestaurantesComponent } from './restaurantes/restaurantes.component';
-import { PlatoEstrellaComponent } from './plato-estrella/plato-estrella.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +20,6 @@ import { PlatoEstrellaComponent } from './plato-estrella/plato-estrella.componen
     FooterComponent,
     HomeComponent,
     RestaurantesComponent,
-    PlatoEstrellaComponent
   ],
   imports: [
     BrowserModule,
