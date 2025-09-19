@@ -7,12 +7,13 @@ body {
   padding: 0;
 }
 
-/* ======== HERO / CAROUSEL ======== */
+/* ===== HERO / CAROUSEL ===== */
 .hero {
   overflow: hidden;
+  position: relative;
 }
 
-.hero .carousel-item img {
+.carousel-item-img {
   height: 100vh;
   object-fit: cover;
   filter: brightness(0.65);
@@ -23,10 +24,16 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   background: rgba(0,0,0,0.35);
   padding: 30px;
   border-radius: 10px;
+  width: 90%;
+  max-width: 700px;
 }
 
 .titulo-hero {
@@ -38,13 +45,17 @@ body {
   letter-spacing: 3px;
   text-shadow: 0 4px 20px rgba(0,0,0,0.8);
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .subtitulo-hero {
+  font-family: 'Playfair Display', serif;
   font-size: 1.5rem;
   color: #f1f1f1;
   text-shadow: 0 3px 10px rgba(0,0,0,0.6);
+  text-align: center;
 }
+
 
 /* ===== BOTONES ===== */
 .btn-reserva-header,
