@@ -15,7 +15,14 @@
       <tbody>
         <tr *ngFor="let comida of comidas">
           <td>
-            <img [src]="comida.imagen" [alt]="comida.nombre" class="img-fluid" style="width: 100px"/>
+           <img 
+  [src]="getImageUrl(comida.imagen)" 
+  alt="{{ comida.nombre }}" 
+  width="80" 
+/>
+
+
+
           </td>
           <td>{{ comida.nombre }}</td>
           <td>{{ comida.categoria ? comida.categoria.nombre : '—' }}</td>
