@@ -1,0 +1,48 @@
+/* ======== RESET GENERAL ======== */
+body {
+    font-family: 'Barlow', sans-serif;
+    background-color: #FCE8C7; 
+    color: #4A3B34; 
+    margin: 0;
+    padding: 0;
+}
+
+/* ===== FOOTER ===== */
+#footer {
+    background-color: #4A3B34;
+    color: #FCE8C7;
+    padding: 50px 20px;
+}
+
+#footer h5 {
+    color: #E6A756;
+    margin-bottom: 15px;
+}
+
+#footer a {
+    color: #FCE8C7;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+#footer a:hover {
+    color: #E6A756;
+}
+
+#footer .footer-redes a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+}
+
+#footer hr {
+    border-color: rgba(255,255,255,0.2);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    #footer {
+        padding: 30px 15px;
+    }
+}

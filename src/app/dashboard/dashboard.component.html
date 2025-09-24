@@ -1,0 +1,26 @@
+<div class="dashboard-container">
+  <div class="sidebar">
+    <h2 class="p-3">Panel</h2>
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="clientes" routerLinkActive="active"
+          >Clientes</a
+        >
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="comidas" routerLinkActive="active"
+          >Comidas</a
+        >
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="adicionales" routerLinkActive="active"
+          >Adicionales</a
+        >
+      </li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>
