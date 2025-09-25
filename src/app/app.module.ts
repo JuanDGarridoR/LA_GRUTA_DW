@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http'; 
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -43,6 +44,7 @@ import { ComidasFormComponent } from './dashboard/comidas-form/comidas-form.comp
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    HttpClientModule,  
     CarouselModule.forRoot()
   ],
   providers: [],
