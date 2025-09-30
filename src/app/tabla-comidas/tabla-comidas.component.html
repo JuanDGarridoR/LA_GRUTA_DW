@@ -1,0 +1,35 @@
+<main class="container my-5">
+  <h2 class="text-center mb-5">Todas las Comidas</h2>
+
+  <div class="table-responsive d-flex justify-content-center">
+    <table class="table table-hover table-bordered align-middle text-center">
+      <thead class="table-dark text-center">
+        <tr>
+          <th>Imagen</th>
+          <th>Nombre</th>
+          <th>Categoría</th>
+          <th>Descripción</th>
+          <th>Precio</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let comida of comidas">
+          <td>
+           <img 
+  [src]="getImageUrl(comida.imagen)" 
+  alt="{{ comida.nombre }}" 
+  width="80" 
+/>
+
+
+
+          </td>
+          <td>{{ comida.nombre }}</td>
+          <td>{{ comida.categoria ? comida.categoria.nombre : '—' }}</td>
+          <td>{{ comida.descripcion }}</td>
+          <td>{{ comida.precio | currency:'COP':'symbol':'1.0-0' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>

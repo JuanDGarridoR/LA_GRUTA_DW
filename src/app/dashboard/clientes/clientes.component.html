@@ -1,0 +1,36 @@
+<h1 class="mb-4">Lista de Usuarios</h1>
+
+<table class="table table-striped table-hover shadow-sm">
+  <thead class="table-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Usuario</th>
+      <th scope="col" class="text-center">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let usuario of usuarios">
+      <th scope="row">{{ usuario.id }}</th>
+      <td>{{ usuario.nombre }}</td>
+      <td class="text-center">
+        <button
+          class="btn btn-warning btn-sm me-2"
+          (click)="editarUsuario(usuario.id)"
+        >
+          Editar
+        </button>
+        <button
+          class="btn btn-danger btn-sm"
+          (click)="eliminarUsuario(usuario.id)"
+        >
+          Eliminar
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="mt-4">
+  <button class="btn btn-success me-2">Nuevo Usuario</button>
+  <button class="btn btn-secondary">Volver</button>
+</div>

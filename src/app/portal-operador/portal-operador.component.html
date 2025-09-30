@@ -1,0 +1,83 @@
+<div class="container-fluid my-4">
+  <h1 class="mb-4">Portal del Operador: Pedidos Activos</h1>
+
+  <div class="table-responsive shadow-sm">
+    <table class="table table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>ID Pedido</th>
+          <th>Cliente</th>
+          <th>Detalle</th>
+          <th>Total</th>
+          <th>Estado</th>
+          <th>Domiciliario</th>
+          <th class="text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let pedido of pedidos"
+          [class.table-success]="pedido.estado === 'entregado'"
+        >
+          <td>#{{ pedido.id }}</td>
+          <td>{{ pedido.cliente }}</td>
+          <td>
+            <ul>
+              <li *ngFor="let comida of pedido.comidas">{{ comida.nombre }}</li>
+            </ul>
+          </td>
+          <td>{{ pedido.total | currency : "COP" : "symbol" : "1.0-0" }}</td>
+          <td>
+            <span
+              class="badge"
+              [ngClass]="{
+                'bg-primary': pedido.estado === 'recibido',
+                'bg-warning text-dark': pedido.estado === 'cocinando',
+                'bg-info text-dark': pedido.estado === 'enviado',
+                'bg-success': pedido.estado === 'entregado'
+              }"
+            >
+              {{ pedido.estado | uppercase }}
+            </span>
+          </td>
+          <td>
+            <div *ngIf="pedido.domiciliarioAsignado; else noAsignado">
+              <div>{{ pedido.domiciliarioAsignado.nombre }}</div>
+              <small class="text-muted">{{
+                pedido.domiciliarioAsignado.celular
+              }}</small>
+            </div>
+            <ng-template #noAsignado>N/A</ng-template>
+          </td>
+          <td class="text-center">
+            <button
+              *ngIf="pedido.estado === 'recibido'"
+              class="btn btn-sm btn-primary"
+              (click)="marcarCocinando(pedido.id)"
+            >
+              Marcar como Cocinando
+            </button>
+
+            <button
+              *ngIf="pedido.estado === 'cocinando'"
+              class="btn btn-sm btn-warning"
+              (click)="marcarEnviado(pedido.id)"
+            >
+              Asignar y Enviar
+            </button>
+
+            <button
+              *ngIf="pedido.estado === 'enviado'"
+              class="btn btn-sm btn-info"
+              (click)="marcarEntregado(pedido.id)"
+            >
+              Marcar como Entregado
+            </button>
+
+            <span *ngIf="pedido.estado === 'entregado'">Completado</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

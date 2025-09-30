@@ -1,0 +1,46 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="m-0">Todos los Adicionales</h1>
+  <button class="btn btn-success" (click)="agregarAdicional()">
+    Agregar Adicional
+  </button>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-hover align-middle text-center">
+    <thead class="table-dark">
+      <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Categorías Disponibles</th>
+        <th>Precio</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let adicional of adicionales">
+        <td>{{ adicional.nombre }}</td>
+        <td>{{ adicional.descripcion }}</td>
+        <td>
+          <span *ngFor="let categoria of adicional.categorias; let last = last">
+            {{ categoria.nombre }}{{ !last ? ", " : "" }}
+          </span>
+        </td>
+        <td>{{ adicional.precio | currency : "COP" : "symbol" : "1.0-0" }}</td>
+        <td>
+          <button
+            class="btn btn-warning btn-sm me-2"
+            (click)="editarAdicional(adicional.id)"
+          >
+            Editar
+          </button>
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="eliminarAdicional(adicional.id)"
+          >
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

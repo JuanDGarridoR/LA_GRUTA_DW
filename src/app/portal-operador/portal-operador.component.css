@@ -1,0 +1,15 @@
+ul {
+  padding-left: 1.2rem;
+  margin-bottom: 0;
+}
+
+li {
+  font-size: 0.9em;
+}
+
+.badge {
+  font-size: 0.85em;
+  padding: 0.5em 0.8em;
+  min-width: 90px;
+  display: inline-block;
+}

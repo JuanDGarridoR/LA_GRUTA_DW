@@ -1,0 +1,53 @@
+/* ======== TABLA DE COMIDAS ======== */
+main h2 {
+  font-weight: bold;
+  color: #8B2E2E;
+  margin-bottom: 2rem;
+}
+
+/* Contenedor de la tabla */
+.table-responsive {
+  background: #fff5e6;
+  border: 2px solid #e6a756;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Estilos generales de la tabla */
+.table {
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+.table thead {
+  background: #8B2E2E;
+  color: #fff;
+  font-size: 1rem;
+}
+.table th {
+  text-transform: uppercase;
+  font-weight: bold;
+  padding: 12px;
+}
+.table td {
+  background: #fffaf0;
+  padding: 15px;
+  vertical-align: middle;
+  color: #4a3b34;
+  font-size: 0.95rem;
+}
+
+/* Imágenes dentro de la tabla */
+.table img {
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Hover en filas */
+.table-hover tbody tr:hover td {
+  background: #fce8c7;
+  color: #8B2E2E;
+  font-weight: bold;
+  cursor: pointer;
+}

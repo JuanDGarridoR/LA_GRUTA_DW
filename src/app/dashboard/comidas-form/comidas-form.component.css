@@ -1,0 +1,7 @@
+.form-container {
+  background-color: white;
+  padding: 2.5rem;
+  border-radius: 12px;
+  max-width: 800px; /* Limita el ancho del formulario */
+  margin: 0 auto; /* Centra el formulario */
+}

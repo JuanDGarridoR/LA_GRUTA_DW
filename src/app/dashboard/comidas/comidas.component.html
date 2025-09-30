@@ -1,0 +1,51 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="m-0">Todas las Comidas</h1>
+  <button class="btn btn-success" routerLink="/dashboard/comidas/agregar">
+    Agregar Comida
+  </button>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-hover align-middle text-center">
+    <thead class="table-dark">
+      <tr>
+        <th>Imagen</th>
+        <th>Nombre</th>
+        <th>Categoría</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let comida of comidas">
+        <td>
+          <img
+            [src]="comida.imagen"
+            [alt]="comida.nombre"
+            class="img-fluid"
+            style="width: 100px"
+          />
+        </td>
+        <td>{{ comida.nombre }}</td>
+        <td>{{ comida.categoria?.nombre || "Sin categoría" }}</td>
+        <td>{{ comida.descripcion }}</td>
+        <td>{{ comida.precio | currency : "COP" : "symbol" : "1.0-0" }}</td>
+        <td>
+          <button
+            class="btn btn-warning btn-sm me-2"
+            [routerLink]="['/dashboard/comidas/editar', comida.id]"
+          >
+            Editar
+          </button>
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="eliminarComida(comida.id)"
+          >
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
