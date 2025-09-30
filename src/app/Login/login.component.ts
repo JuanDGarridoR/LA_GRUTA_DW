@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router'; // 1. Asegúrate de importar el Router
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -8,18 +8,31 @@ import { Router } from '@angular/router'; // 1. Asegúrate de importar el Router
 })
 export class LoginComponent {
 
-  // Ya no necesitamos la variable 'credentials', pero la podemos dejar por ahora
   credentials = {
     username: '',
     password: ''
   };
 
-  // 2. Inyecta el Router en el constructor para poder usarlo
   constructor(private router: Router) { }
 
-  // 3. Simplificamos la función login a una sola línea
-  login() {
-    console.log('Botón de ingresar presionado, redirigiendo al dashboard...');
-    this.router.navigate(['/dashboard/clientes']);
+  login(): void {
+    console.log('Iniciando sesión con el usuario:', this.credentials.username);
+
+    // Convertimos el nombre de usuario a minúsculas para que no importe si escriben "Admin" o "admin"
+    const userRole = this.credentials.username.toLowerCase();
+
+    // Lógica de redirección basada solo en el nombre de usuario
+    if (userRole === 'admin') {
+      // Si el usuario es 'admin', va al dashboard de administrador
+      this.router.navigate(['/dashboard/clientes']);
+
+    } else if (userRole === 'operador') {
+      // Si el usuario es 'operador', va al portal de operador
+      this.router.navigate(['/operador/portal']);
+
+    } else {
+      // Para cualquier otro usuario (o si es 'cliente'), va a la página de inicio
+      this.router.navigate(['/home']);
+    }
   }
 }

@@ -20,6 +20,7 @@ import { AdicionalesComponent } from './dashboard/adicionales/adicionales.compon
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CrearCuentaComponent } from './crear-cuenta/crear-cuenta.component';
 import { ComidasFormComponent } from './dashboard/comidas-form/comidas-form.component';
+import { PortalOperadorComponent } from './portal-operador/portal-operador.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ComidasFormComponent } from './dashboard/comidas-form/comidas-form.comp
     ComidasComponent,
     AdicionalesComponent,
     CrearCuentaComponent,
-    ComidasFormComponent
+    ComidasFormComponent,
+    PortalOperadorComponent
     
   ],
   imports: [

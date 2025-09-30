@@ -12,6 +12,7 @@ import { ClientesComponent } from './dashboard/clientes/clientes.component';
 import { ComidasComponent } from './dashboard/comidas/comidas.component';
 import { AdicionalesComponent } from './dashboard/adicionales/adicionales.component';
 import { ComidasFormComponent } from './dashboard/comidas-form/comidas-form.component';
+import { PortalOperadorComponent } from './portal-operador/portal-operador.component';
 
 
 const routes: Routes = [
@@ -24,6 +25,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'crear-cuenta', component: CrearCuentaComponent },
   { path: 'dashboard', component: DashboardComponent },
+  {path: 'operador/portal', component: PortalOperadorComponent},
   {
     path: 'dashboard',
     component: DashboardComponent,
