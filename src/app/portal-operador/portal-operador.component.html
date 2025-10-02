@@ -7,7 +7,7 @@
         <tr>
           <th>ID Pedido</th>
           <th>Cliente</th>
-          <th>Detalle</th>
+          <th>Detalle del Pedido</th>
           <th>Total</th>
           <th>Estado</th>
           <th>Domiciliario</th>
@@ -15,15 +15,23 @@
         </tr>
       </thead>
       <tbody>
-        <tr
-          *ngFor="let pedido of pedidos"
-          [class.table-success]="pedido.estado === 'entregado'"
-        >
+        <tr *ngFor="let pedido of pedidos">
           <td>#{{ pedido.id }}</td>
-          <td>{{ pedido.cliente }}</td>
+          <td>{{ pedido.cliente?.username }}</td>
           <td>
             <ul>
-              <li *ngFor="let comida of pedido.comidas">{{ comida.nombre }}</li>
+              <li *ngFor="let item of pedido.items">
+                <strong>{{ item.cantidad }}x</strong> {{ item.comida?.nombre }}
+
+                <ul
+                  *ngIf="item.adicionales && item.adicionales.length > 0"
+                  class="adicionales-list"
+                >
+                  <li *ngFor="let adicional of item.adicionales">
+                    + {{ adicional.nombre }}
+                  </li>
+                </ul>
+              </li>
             </ul>
           </td>
           <td>{{ pedido.total | currency : "COP" : "symbol" : "1.0-0" }}</td>
@@ -57,7 +65,6 @@
             >
               Marcar como Cocinando
             </button>
-
             <button
               *ngIf="pedido.estado === 'cocinando'"
               class="btn btn-sm btn-warning"
@@ -65,7 +72,6 @@
             >
               Asignar y Enviar
             </button>
-
             <button
               *ngIf="pedido.estado === 'enviado'"
               class="btn btn-sm btn-info"
@@ -73,7 +79,6 @@
             >
               Marcar como Entregado
             </button>
-
             <span *ngIf="pedido.estado === 'entregado'">Completado</span>
           </td>
         </tr>
