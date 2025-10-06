@@ -12,38 +12,58 @@ import { ClientesComponent } from './dashboard/clientes/clientes.component';
 import { ComidasComponent } from './dashboard/comidas/comidas.component';
 import { AdicionalesComponent } from './dashboard/adicionales/adicionales.component';
 import { ComidasFormComponent } from './dashboard/comidas-form/comidas-form.component';
-
+import { PortalOperadorComponent } from './portal-operador/portal-operador.component';
+import { UserFormComponent } from './dashboard/user-form/user-form.component';
+import { AditionalFormComponent } from './dashboard/aditional-form/aditional-form.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
-  { path: 'restaurantes', component: RestaurantesComponent },
-  { path: 'plato-estrella', component: PlatoEstrellaComponent },
-  { path: 'menu', component: MenuComponent },
-  { path: 'tabla-comidas', component: TablaComidasComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'crear-cuenta', component: CrearCuentaComponent },
-  { path: 'dashboard', component: DashboardComponent },
-  {
-    path: 'dashboard',
-    component: DashboardComponent,
-    children: [
-      { path: '', redirectTo: 'clientes', pathMatch: 'full' }, 
-      { path: 'clientes', component: ClientesComponent },
-      { path: 'comidas', component: ComidasComponent },
-      { path: 'comidas/agregar', component: ComidasFormComponent },
-      { path: 'comidas/editar/:id', component: ComidasFormComponent },
-      { path: 'adicionales', component: AdicionalesComponent }
-    ]
-  },
+{ path: '', redirectTo: '/home', pathMatch: 'full' },
+{ path: 'home', component: HomeComponent },
+{ path: 'restaurantes', component: RestaurantesComponent },
+{ path: 'plato-estrella', component: PlatoEstrellaComponent },
+{ path: 'menu', component: MenuComponent },
+{ path: 'tabla-comidas', component: TablaComidasComponent },
+{ path: 'login', component: LoginComponent },
+{ path: 'crear-cuenta', component: CrearCuentaComponent },
+{ path: 'operador/portal', component: PortalOperadorComponent },
 
-  
+{
+path: 'dashboard',
+component: DashboardComponent,
+children: [
+{ path: '', redirectTo: 'clientes', pathMatch: 'full' },
 
-  // otras rutas...
+
+  // Rutas de clientes
+  { path: 'clientes', component: ClientesComponent },
+  { path: 'clientes/nuevo', component: UserFormComponent },
+  { path: 'clientes/editar/:id', component: UserFormComponent },
+
+  // Rutas de comidas
+  { path: 'comidas', component: ComidasComponent },
+  { path: 'comidas/agregar', component: ComidasFormComponent },
+  { path: 'comidas/editar/:id', component: ComidasFormComponent },
+
+  // Rutas de adicionales
+  { path: 'adicionales', component: AdicionalesComponent },
+  { path: 'adicionales/nuevo', component: AditionalFormComponent },
+  { path: 'adicionales/editar/:id', component: AditionalFormComponent },
+],
+
+
+},
+
+// Ruta comodín para redirigir a home
+{ path: '**', redirectTo: '/home' },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' })],
-  exports: [RouterModule]
+imports: [
+RouterModule.forRoot(routes, {
+anchorScrolling: 'enabled',
+scrollPositionRestoration: 'enabled',
+}),
+],
+exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

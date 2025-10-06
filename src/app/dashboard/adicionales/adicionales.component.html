@@ -27,18 +27,9 @@
         </td>
         <td>{{ adicional.precio | currency : "COP" : "symbol" : "1.0-0" }}</td>
         <td>
-          <button
-            class="btn btn-warning btn-sm me-2"
-            (click)="editarAdicional(adicional.id)"
-          >
-            Editar
-          </button>
-          <button
-            class="btn btn-danger btn-sm"
-            (click)="eliminarAdicional(adicional.id)"
-          >
-            Eliminar
-          </button>
+<button (click)="editarAdicional(adicional.id ?? 0)">Editar</button>
+<button (click)="eliminarAdicional(adicional.id ?? 0)">Eliminar</button>
+
         </td>
       </tr>
     </tbody>

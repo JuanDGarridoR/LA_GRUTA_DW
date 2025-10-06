@@ -1,0 +1,83 @@
+
+<h1 class="mb-4">{{ pageTitle }}</h1>
+
+<div class="form-container shadow-sm">
+  <form [formGroup]="adicionalForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label>Nombre</label>
+      <input type="text" formControlName="nombre" class="form-control" placeholder="Nombre del adicional" />
+    </div>
+
+    <div class="mb-3">
+      <label>Descripción</label>
+      <textarea formControlName="descripcion" class="form-control" placeholder="Descripción opcional"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label>Precio</label>
+      <input type="number" formControlName="precio" class="form-control" min="0" />
+    </div>
+
+    <div class="mb-3">
+      <label>Categoría</label>
+      <select multiple class="form-select" formControlName="categorias">
+        <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
+      </select>
+    </div>
+
+    <div class="form-check mb-3">
+      <input type="checkbox" formControlName="disponible" class="form-check-input" id="disponibleCheck" />
+      <label class="form-check-label" for="disponibleCheck">Disponible</label>
+    </div>
+
+    <div class="d-flex justify-content-end mt-4">
+      <button type="button" class="btn btn-secondary me-2" (click)="cancelar()">Cancelar</button>
+      <button type="submit" class="btn btn-primary">
+        {{ editMode ? "Actualizar Adicional" : "Guardar Adicional" }}
+      </button>
+    </div>
+  </form>
+</div>
+
+<hr />
+
+<div *ngIf="adicionales.length > 0">
+  <h4 class="mt-4 mb-2">Lista de Adicionales</h4>
+  <table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+        <th>Categorías</th>
+        <th>Disponible</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let adicional of adicionales">
+        <td>{{ adicional.nombre }}</td>
+        <td>{{ adicional.descripcion }}</td>
+        <td>${{ adicional.precio }}</td>
+        <td>{{ adicional.categorias?.join(', ') }}</td>
+        <td>{{ adicional.disponible ? 'Sí' : 'No' }}</td>
+        <td>
+         <button
+  class="btn btn-warning btn-sm me-2"
+  (click)="editarAdicional(adicional.id ?? 0)"
+>
+  Editar
+</button>
+<button
+  class="btn btn-danger btn-sm"
+  (click)="eliminarAdicional(adicional.id ?? 0)"
+>
+  Eliminar
+</button>
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
