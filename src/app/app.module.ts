@@ -5,7 +5,7 @@ import { CarouselModule } from 'ngx-bootstrap/carousel';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HeaderComponent } from './fragments/header/header.component';
 import { FooterComponent } from './fragments/footer/footer.component';
 import { HomeComponent } from './home/home.component';
@@ -21,6 +21,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { CrearCuentaComponent } from './crear-cuenta/crear-cuenta.component';
 import { ComidasFormComponent } from './dashboard/comidas-form/comidas-form.component';
 import { PortalOperadorComponent } from './portal-operador/portal-operador.component';
+import { UserFormComponent } from './dashboard/user-form/user-form.component';
+import { AditionalFormComponent } from './dashboard/aditional-form/aditional-form.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -39,14 +42,18 @@ import { PortalOperadorComponent } from './portal-operador/portal-operador.compo
     AdicionalesComponent,
     CrearCuentaComponent,
     ComidasFormComponent,
-    PortalOperadorComponent
+    PortalOperadorComponent,
+    UserFormComponent,
+    AditionalFormComponent
     
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule,  
+    HttpClientModule,
+    CommonModule,
+    ReactiveFormsModule,
     CarouselModule.forRoot()
   ],
   providers: [],

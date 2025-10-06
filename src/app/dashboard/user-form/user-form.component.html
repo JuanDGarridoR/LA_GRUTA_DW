@@ -1,0 +1,89 @@
+<h1 class="mb-4">{{ pageTitle }}</h1>
+
+<div class="form-container shadow-sm" *ngIf="user">
+  <form #userForm="ngForm" (ngSubmit)="guardarUsuario()">
+
+
+<!-- Username -->
+<div class="mb-3">
+  <label for="username" class="form-label">Nombre de Usuario</label>
+  <input
+    type="text"
+    class="form-control"
+    id="username"
+    name="username"
+    [(ngModel)]="user.username"
+    required
+  />
+</div>
+
+<!-- Password -->
+<div class="mb-3" *ngIf="!isEditMode">
+  <label for="password" class="form-label">Contraseña</label>
+  <input
+    type="password"
+    class="form-control"
+    id="password"
+    name="password"
+    [(ngModel)]="user.password"
+    required
+  />
+</div>
+
+<!-- Rol -->
+<div class="mb-3">
+  <label for="role" class="form-label">Rol</label>
+  <select
+    class="form-select"
+    id="role"
+    name="role"
+    [(ngModel)]="user.role"
+    required
+  >
+    <option value="USER">Usuario</option>
+    <option value="ADMIN">Administrador</option>
+    <option value="OPERADOR">Operador</option>
+  </select>
+</div>
+
+<!-- Dirección -->
+<div class="mb-3">
+  <label for="direccion" class="form-label">Dirección</label>
+  <input
+    type="text"
+    class="form-control"
+    id="direccion"
+    name="direccion"
+    [(ngModel)]="user.direccion"
+  />
+</div>
+
+<!-- Teléfono -->
+<div class="mb-3">
+  <label for="telefono" class="form-label">Teléfono</label>
+  <input
+    type="text"
+    class="form-control"
+    id="telefono"
+    name="telefono"
+    [(ngModel)]="user.telefono"
+  />
+</div>
+
+<!-- Botones -->
+<div class="d-flex justify-content-end">
+  <button type="button" class="btn btn-secondary me-2" (click)="cancelar()">
+    Cancelar
+  </button>
+  <button
+    type="submit"
+    class="btn btn-success"
+    [disabled]="userForm.invalid"
+  >
+    {{ isEditMode ? "Actualizar Usuario" : "Guardar Usuario" }}
+  </button>
+</div>
+
+
+  </form>
+</div>

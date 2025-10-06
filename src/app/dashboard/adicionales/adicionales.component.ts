@@ -1,64 +1,55 @@
 import { Component, OnInit } from '@angular/core';
-// Importamos el modelo de datos. Ajusta la ruta si es necesario.
+import { Router } from '@angular/router';
+import { AdicionalService } from '../../services/adicional.service';
 import { Adicional } from '../../models/adicional/adicional.model';
-import { CATEGORIAS } from '../../models/categoria/categoria.model';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
-  selector: 'app-adicionales',
-  templateUrl: './adicionales.component.html',
-  styleUrls: ['./adicionales.component.css']
+selector: 'app-adicionales',
+templateUrl: './adicionales.component.html',
+styleUrls: ['./adicionales.component.css']
 })
 export class AdicionalesComponent implements OnInit {
 
-  // Arreglo de adicionales "quemados"
-  adicionales: Adicional[] = [
-    {
-      id: 1,
-      nombre: 'Queso Parmesano Extra',
-      descripcion: 'Una porción generosa de queso parmesano rallado.',
-      precio: 3500,
-      categorias: [CATEGORIAS[1], CATEGORIAS[2], CATEGORIAS[3]] // Pizzas, Pastas, Risottos
-    },
-    {
-      id: 2,
-      nombre: 'Panceta Crujiente',
-      descripcion: 'Tiras de panceta horneadas hasta quedar crujientes.',
-      precio: 5000,
-      categorias: [CATEGORIAS[2]] // Pastas
-    },
-    {
-      id: 3,
-      nombre: 'Salsa de la Casa',
-      descripcion: 'Nuestra salsa pomodoro especial.',
-      precio: 4000,
-      categorias: [CATEGORIAS[0], CATEGORIAS[1], CATEGORIAS[2]] // Antipastos, Pizzas, Pastas
-    },
-    {
-      id: 4,
-      nombre: 'Porción de Pan de Ajo',
-      descripcion: '2 unidades de pan artesanal con mantequilla de ajo.',
-      precio: 6000,
-      categorias: [CATEGORIAS[0], CATEGORIAS[2]] // Antipastos, Pastas
-    }
-  ];
+adicionales: Adicional[] = [];
 
-  constructor() { }
+constructor(
+private adicionalService: AdicionalService,
+private router: Router
+) {}
 
-  ngOnInit(): void {
-  }
+ngOnInit(): void {
+this.cargarAdicionales();
+}
 
-  // Funciones para los botones de acción
-  agregarAdicional(): void {
-    console.log('Abriendo formulario para agregar nuevo adicional...');
-  }
+cargarAdicionales(): void {
+this.adicionalService.getAll().subscribe({
+next: (data) => this.adicionales = data,
+error: (err) => console.error('❌ Error al cargar adicionales:', err)
+});
+}
 
-  editarAdicional(id: number | undefined): void {
-    if (!id) return;
-    console.log(`Editando adicional con ID: ${id}`);
-  }
+agregarAdicional(): void {
+this.router.navigate(['/adicionales/nuevo']);
+}
 
-  eliminarAdicional(id: number | undefined): void {
-    if (!id) return;
-    console.log(`Eliminando adicional con ID: ${id}`);
-  }
+editarAdicional(id: number): void {
+this.router.navigate(['/adicionales/editar', id]);
+}
+
+eliminarAdicional(id: number): void {
+const confirmacion = confirm('¿Estás seguro de que deseas eliminar este adicional?');
+if (confirmacion) {
+this.adicionalService.delete(id).subscribe({
+next: () => {
+this.adicionales = this.adicionales.filter(a => a.id !== id);
+console.log(`✅ Adicional con ID ${id} eliminado`);
+},
+error: (err: HttpErrorResponse) => {
+console.error('❌ Error al eliminar adicional:', err);
+alert('No se pudo eliminar el adicional.');
+}
+});
+}
+}
 }
