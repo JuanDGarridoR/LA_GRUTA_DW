@@ -22,7 +22,7 @@ import { CrearCuentaComponent } from './crear-cuenta/crear-cuenta.component';
 import { ComidasFormComponent } from './dashboard/comidas-form/comidas-form.component';
 import { PortalOperadorComponent } from './portal-operador/portal-operador.component';
 import { UserFormComponent } from './dashboard/user-form/user-form.component';
-import { AditionalFormComponent } from './dashboard/aditional-form/aditional-form.component';
+import { AdicionalFormComponent } from './dashboard/adicional-form/adicional-form.component';
 import { CommonModule } from '@angular/common';
 
 @NgModule({
@@ -44,7 +44,7 @@ import { CommonModule } from '@angular/common';
     ComidasFormComponent,
     PortalOperadorComponent,
     UserFormComponent,
-    AditionalFormComponent
+    AdicionalFormComponent
     
   ],
   imports: [

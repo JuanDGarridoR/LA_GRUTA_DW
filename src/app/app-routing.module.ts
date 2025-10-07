@@ -14,7 +14,7 @@ import { AdicionalesComponent } from './dashboard/adicionales/adicionales.compon
 import { ComidasFormComponent } from './dashboard/comidas-form/comidas-form.component';
 import { PortalOperadorComponent } from './portal-operador/portal-operador.component';
 import { UserFormComponent } from './dashboard/user-form/user-form.component';
-import { AditionalFormComponent } from './dashboard/aditional-form/aditional-form.component';
+import { AdicionalFormComponent } from './dashboard/adicional-form/adicional-form.component';
 
 const routes: Routes = [
 { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -46,8 +46,8 @@ children: [
 
   // Rutas de adicionales
   { path: 'adicionales', component: AdicionalesComponent },
-  { path: 'adicionales/nuevo', component: AditionalFormComponent },
-  { path: 'adicionales/editar/:id', component: AditionalFormComponent },
+  { path: 'adicionales/nuevo', component: AdicionalFormComponent },
+  { path: 'adicionales/editar/:id', component: AdicionalFormComponent },
 ],
 
 
