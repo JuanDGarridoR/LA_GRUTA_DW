@@ -27,9 +27,10 @@
         </td>
         <td>{{ adicional.precio | currency : "COP" : "symbol" : "1.0-0" }}</td>
         <td>
-<button (click)="editarAdicional(adicional.id ?? 0)">Editar</button>
-<button (click)="eliminarAdicional(adicional.id ?? 0)">Eliminar</button>
-
+          <button (click)="editarAdicional(adicional.id ?? 0)">Editar</button>
+          <button (click)="eliminarAdicional(adicional.id ?? 0)">
+            Eliminar
+          </button>
         </td>
       </tr>
     </tbody>
