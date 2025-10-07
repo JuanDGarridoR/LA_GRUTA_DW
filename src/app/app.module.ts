@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http'; 
+import { HttpClientModule } from '@angular/common/http';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { HeaderComponent } from './fragments/header/header.component';
 import { FooterComponent } from './fragments/footer/footer.component';
 import { HomeComponent } from './home/home.component';
@@ -14,16 +15,17 @@ import { PlatoEstrellaComponent } from './plato-estrella/plato-estrella.componen
 import { MenuComponent } from './menu/menu.component';
 import { TablaComidasComponent } from './tabla-comidas/tabla-comidas.component';
 import { LoginComponent } from './login/login.component';
+
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { ClientesComponent } from './dashboard/clientes/clientes.component';
 import { ComidasComponent } from './dashboard/comidas/comidas.component';
 import { AdicionalesComponent } from './dashboard/adicionales/adicionales.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { ComidasFormComponent } from './dashboard/comidas-form/comidas-form.component';
-import { PortalOperadorComponent } from './portal-operador/portal-operador.component';
 import { UserFormComponent } from './dashboard/user-form/user-form.component';
-import { AditionalFormComponent } from './dashboard/aditional-form/aditional-form.component';
-import { CommonModule } from '@angular/common';
+import { PortalOperadorComponent } from './portal-operador/portal-operador.component';
+
 import { RegisterComponent } from './register/register.component';
+import { AdicionalFormComponent } from './dashboard/adicional-form/adicional-form.component';
 
 
 @NgModule({
@@ -44,17 +46,16 @@ import { RegisterComponent } from './register/register.component';
     ComidasFormComponent,
     PortalOperadorComponent,
     UserFormComponent,
-    AditionalFormComponent,
-    RegisterComponent
-    
+    RegisterComponent,       
+    AdicionalFormComponent,     
   ],
+  
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule,
-    CommonModule,
     ReactiveFormsModule,
+    HttpClientModule,
     CarouselModule.forRoot()
   ],
   providers: [],
