@@ -13,17 +13,18 @@ import { RestaurantesComponent } from './restaurantes/restaurantes.component';
 import { PlatoEstrellaComponent } from './plato-estrella/plato-estrella.component';
 import { MenuComponent } from './menu/menu.component';
 import { TablaComidasComponent } from './tabla-comidas/tabla-comidas.component';
-import { LoginComponent } from './Login/login.component';
+import { LoginComponent } from './login/login.component';
 import { ClientesComponent } from './dashboard/clientes/clientes.component';
 import { ComidasComponent } from './dashboard/comidas/comidas.component';
 import { AdicionalesComponent } from './dashboard/adicionales/adicionales.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { CrearCuentaComponent } from './crear-cuenta/crear-cuenta.component';
 import { ComidasFormComponent } from './dashboard/comidas-form/comidas-form.component';
 import { PortalOperadorComponent } from './portal-operador/portal-operador.component';
 import { UserFormComponent } from './dashboard/user-form/user-form.component';
 import { AditionalFormComponent } from './dashboard/aditional-form/aditional-form.component';
 import { CommonModule } from '@angular/common';
+import { RegisterComponent } from './register/register.component';
+
 
 @NgModule({
   declarations: [
@@ -40,11 +41,11 @@ import { CommonModule } from '@angular/common';
     ClientesComponent,
     ComidasComponent,
     AdicionalesComponent,
-    CrearCuentaComponent,
     ComidasFormComponent,
     PortalOperadorComponent,
     UserFormComponent,
-    AditionalFormComponent
+    AditionalFormComponent,
+    RegisterComponent
     
   ],
   imports: [

@@ -13,6 +13,9 @@ export class HeaderComponent implements OnInit {
   role$!: Observable<string | null>;
   username$!: Observable<string | null>;
 
+  role: string | null = null;
+  username: string | null = null;
+
   headerClass: string = 'header-general solid';
 
   constructor(
@@ -24,6 +27,10 @@ export class HeaderComponent implements OnInit {
     this.isLoggedIn$ = this.authService.isLoggedIn$;
     this.role$ = this.authService.role$;
     this.username$ = this.authService.username$;
+
+    // Suscribirse para valores inmediatos (sin async en todo el HTML)
+    this.role$.subscribe(role => (this.role = role));
+    this.username$.subscribe(username => (this.username = username));
 
     // Detectar cambios de ruta
     this.router.events.subscribe(event => {
@@ -40,13 +47,11 @@ export class HeaderComponent implements OnInit {
     this.authService.logout();
   }
 
-  // Determina si la ruta es /home
   esHome(): boolean {
     const currentRoute = this.router.url.split('#')[0];
     return currentRoute === '/home';
   }
 
-  // Actualiza la clase del header según la ruta y scroll
   private updateHeaderClass(url: string) {
     if (url.startsWith('/home')) {
       this.headerClass = 'header-general transparent';
@@ -55,27 +60,22 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-scrollToFragment(event: Event, fragment: string): void {
-  event.preventDefault(); // Evita reload
+  scrollToFragment(event: Event, fragment: string): void {
+    event.preventDefault();
 
-  // Buscar el elemento en la página actual
-  const element = document.getElementById(fragment);
+    const element = document.getElementById(fragment);
 
-  if (element) {
-    // Si existe, hacer scroll
-    element.scrollIntoView({ behavior: 'smooth' });
-  } else {
-    // Si no existe, navegar a /home y luego hacer scroll
-    this.router.navigate(['/home']).then(() => {
-      setTimeout(() => {
-        const target = document.getElementById(fragment);
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 50);
-    });
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      this.router.navigate(['/home']).then(() => {
+        setTimeout(() => {
+          const target = document.getElementById(fragment);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 50);
+      });
+    }
   }
-}
-
-
 }

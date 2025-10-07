@@ -41,5 +41,17 @@ export class AdicionalService {
   eliminarAdicional(id: number): Observable<void> {
     return this.delete(id);
   }
+
+  // Obtener adicionales por slug de categoría
+getByCategoriaSlug(slug: string): Observable<Adicional[]> {
+  return this.http.get<Adicional[]>(`${this.apiUrl}/categoria/${slug}`);
+}
+
+// (opcional) Obtener adicionales por ID de categoría
+getByCategoriaId(id: number): Observable<Adicional[]> {
+  return this.http.get<Adicional[]>(`${this.apiUrl}/categoria/id/${id}`);
+}
+
+
 }
 

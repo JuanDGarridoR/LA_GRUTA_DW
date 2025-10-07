@@ -5,8 +5,7 @@ import { HomeComponent } from './home/home.component';
 import { PlatoEstrellaComponent } from './plato-estrella/plato-estrella.component';
 import { MenuComponent } from './menu/menu.component';
 import { TablaComidasComponent } from './tabla-comidas/tabla-comidas.component';
-import { LoginComponent } from './Login/login.component';
-import { CrearCuentaComponent } from './crear-cuenta/crear-cuenta.component';
+import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ClientesComponent } from './dashboard/clientes/clientes.component';
 import { ComidasComponent } from './dashboard/comidas/comidas.component';
@@ -15,6 +14,8 @@ import { ComidasFormComponent } from './dashboard/comidas-form/comidas-form.comp
 import { PortalOperadorComponent } from './portal-operador/portal-operador.component';
 import { UserFormComponent } from './dashboard/user-form/user-form.component';
 import { AditionalFormComponent } from './dashboard/aditional-form/aditional-form.component';
+import { RegisterComponent } from './register/register.component';
+
 
 const routes: Routes = [
 { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -24,8 +25,9 @@ const routes: Routes = [
 { path: 'menu', component: MenuComponent },
 { path: 'tabla-comidas', component: TablaComidasComponent },
 { path: 'login', component: LoginComponent },
-{ path: 'crear-cuenta', component: CrearCuentaComponent },
 { path: 'operador/portal', component: PortalOperadorComponent },
+{ path: 'register', component: RegisterComponent },
+
 
 {
 path: 'dashboard',

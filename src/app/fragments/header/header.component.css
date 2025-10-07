@@ -141,3 +141,30 @@ body {
     font-size: 0.9rem;
   }
 }
+
+.btn-reserva-header {
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-weight: 600;
+  color: #fff;
+  background-color: #b22222;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-reserva-header:hover {
+  background-color: #8b1a1a;
+}
+
+/* Diferenciar roles opcional */
+.nav-item[ng-reflect-ng-if*='ADMIN'] .btn-reserva-header {
+  background-color: #343a40; /* gris oscuro */
+}
+.nav-item[ng-reflect-ng-if*='CLIENTE'] .btn-reserva-header {
+  background-color: #b22222; /* rojo vino */
+}
+.nav-item[ng-reflect-ng-if*='DOMICILIARIO'] .btn-reserva-header {
+  background-color: #ffc107; /* amarillo */
+  color: #000;
+}
+

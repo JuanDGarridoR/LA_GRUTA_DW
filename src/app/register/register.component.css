@@ -28,11 +28,9 @@
   text-align: center;
 }
 
-.login-box h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 2rem;
-  margin-bottom: 20px;
-  color: #b22222;
+h2 {
+  color: #7a1616;
+  margin-bottom: 25px;
 }
 
 .form-control {
@@ -51,18 +49,12 @@
 
 .btn-login:hover {
   background-color: #8b1a1a;
-  transform: translateY(-2px);
 }
 
-.login-box a {
-  display: block;
-  margin-top: 12px;
-  font-size: 0.9rem;
-  color: #b22222;
-  text-decoration: none;
-  transition: color 0.3s ease;
+.error {
+  color: red;
 }
 
-.login-box a:hover {
-  color: #FFD700;
+.success {
+  color: green;
 }
