@@ -28,7 +28,7 @@ export class AdicionalFormComponent implements OnInit {
     private adicionalService: AdicionalService,
     private router: Router,
     private route: ActivatedRoute
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
@@ -36,6 +36,7 @@ export class AdicionalFormComponent implements OnInit {
       this.isEditMode = true;
       this.pageTitle = 'Editar Adicional';
       const adicionalId = +idParam;
+
       this.adicionalService.getAdicionalById(adicionalId).subscribe(data => {
         this.adicional = data;
         if (!this.adicional.categorias) {
@@ -64,12 +65,19 @@ export class AdicionalFormComponent implements OnInit {
   }
 
   guardarAdicional(): void {
+    if (!this.adicional.nombre.trim() || this.adicional.precio <= 0) {
+      alert('Por favor completa todos los campos requeridos.');
+      return;
+    }
+
     if (this.isEditMode) {
       this.adicionalService.actualizarAdicional(this.adicional.id!, this.adicional).subscribe(() => {
+        alert('Adicional actualizado correctamente ✅');
         this.router.navigate(['/dashboard/adicionales']);
       });
     } else {
       this.adicionalService.crearAdicional(this.adicional).subscribe(() => {
+        alert('Adicional creado correctamente 🎉');
         this.router.navigate(['/dashboard/adicionales']);
       });
     }
