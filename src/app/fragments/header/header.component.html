@@ -1,117 +1,76 @@
-<header [ngClass]="headerClass">
-  <nav
-    class="container-fluid d-flex justify-content-between align-items-center position-relative"
-  >
-    <!-- 🧭 Menú Izquierdo -->
+<header [ngClass]="headerClass" [class.scrolled]="isScrolled">
+  <nav class="container-fluid d-flex justify-content-between align-items-center position-relative">
+    <!-- 🧭 Izquierda -->
     <ul class="navbar-nav flex-row gap-4 left-menu">
+      <li class="nav-item"><a class="nav-link" routerLink="/menu">Menú</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/restaurantes">Restaurantes</a></li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/menu">Menú</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/restaurantes">Restaurantes</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/home']" fragment="sobre-nosotros">
-          Nosotros
-        </a>
+        <a class="nav-link" [routerLink]="['/home']" fragment="sobre-nosotros">Nosotros</a>
       </li>
     </ul>
 
     <!-- 🎯 Logo central -->
-    <a
-      class="navbar-brand logo-central position-absolute top-50 start-50 translate-middle"
-      routerLink="/home"
-    >
+    <a class="navbar-brand logo-central position-absolute top-50 start-50 translate-middle" routerLink="/home">
       <img src="assets/images/logoGruta.png" alt="Logo La Gruta Nera" />
     </a>
 
-    <!-- 🧑 Menú Derecho -->
+    <!-- 🧑 Derecha -->
     <ul class="navbar-nav flex-row gap-4 right-menu align-items-center">
       <li class="nav-item">
-        <a
-          class="nav-link"
-          href="#"
-          (click)="scrollToFragment($event, 'footer')"
-        >
-          Contacto
+        <a class="nav-link" href="#" (click)="scrollToFragment($event, 'footer')">Contacto</a>
+      </li>
+
+      <!-- 🔸 Carro SOLO visible en /menu -->
+      <li class="nav-item cart-wrapper" *ngIf="isMenu()">
+        <a class="nav-link position-relative" routerLink="/carro" [class.pulse]="pulseCart">
+          <span class="cart-text">Carro</span>
+          <span class="badge-cart" *ngIf="cartCount() > 0">{{ cartCount() }}</span>
         </a>
       </li>
 
       <!-- 🔸 ADMIN -->
-      <li
-        class="nav-item"
-        *ngIf="(isLoggedIn$ | async) && (role$ | async) === 'ADMIN'"
-      >
-        <a class="nav-link btn btn-reserva-header" routerLink="/dashboard">
-          Dashboard
-        </a>
+      <li class="nav-item" *ngIf="(isLoggedIn$ | async) && (role$ | async) === 'ADMIN'">
+        <a class="nav-link btn btn-reserva-header" routerLink="/dashboard">Dashboard</a>
       </li>
 
       <!-- 🔸 CLIENTE -->
-      <li
-        class="nav-item"
-        *ngIf="(isLoggedIn$ | async) && (role$ | async) === 'CLIENTE'"
-      >
-        <a class="nav-link btn btn-reserva-header" routerLink="/mis-pedidos">
-          Mis Pedidos
-        </a>
+      <li class="nav-item" *ngIf="(isLoggedIn$ | async) && (role$ | async) === 'CLIENTE'">
+        <a class="nav-link btn btn-reserva-header" routerLink="/mis-pedidos">Mis Pedidos</a>
       </li>
 
       <!-- 🔸 DOMICILIARIO -->
-      <li
-        class="nav-item"
-        *ngIf="(isLoggedIn$ | async) && (role$ | async) === 'DOMICILIARIO'"
-      >
-        <a
-          class="nav-link btn btn-reserva-header"
-          routerLink="/pedidos-asignados"
-        >
-          Entregas
-        </a>
+      <li class="nav-item" *ngIf="(isLoggedIn$ | async) && (role$ | async) === 'DOMICILIARIO'">
+        <a class="nav-link btn btn-reserva-header" routerLink="/pedidos-asignados">Entregas</a>
       </li>
 
       <!-- 🔸 LOGIN (no autenticado) -->
       <li class="nav-item" *ngIf="!(isLoggedIn$ | async)">
-        <a class="nav-link btn btn-reserva-header" routerLink="/login">
-          Login
-        </a>
+        <a class="nav-link btn btn-reserva-header" routerLink="/login">Login</a>
       </li>
 
-      <!-- 🔸 Dropdown de Perfil (usuario autenticado) -->
+      <!-- 🔸 Dropdown Perfil (autenticado) -->
       <li class="nav-item dropdown" *ngIf="isLoggedIn$ | async">
-        <a
-          href="#"
-          class="nav-link dropdown-toggle d-flex align-items-center"
-          id="profileDropdown"
-          role="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <img
-            src="assets/images/perfil.png"
-            alt="Perfil"
-            class="rounded-circle"
-            style="width: 40px; height: 40px"
-          />
+        <a href="#" class="nav-link dropdown-toggle d-flex align-items-center" id="profileDropdown"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="assets/images/perfil.png" alt="Perfil" class="rounded-circle" style="width: 40px; height: 40px" />
         </a>
 
-        <ul
-          class="dropdown-menu dropdown-menu-end shadow-lg"
-          aria-labelledby="profileDropdown"
-        >
+        <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="profileDropdown">
           <li class="dropdown-item-text fw-bold">
             {{ (username$ | async) || 'Usuario' }}
           </li>
           <li><hr class="dropdown-divider" /></li>
+          <li><a class="dropdown-item" routerLink="/profile/edit/1">Editar Perfil</a></li>
+          <li><button class="dropdown-item" (click)="logout()">Cerrar sesión</button></li>
+          <li><hr class="dropdown-divider" /></li>
+          <!-- Carro también dentro del dropdown (opcional) -->
           <li>
-            <a class="dropdown-item" routerLink="/profile/edit/1">
-              Editar Perfil
+            <a class="dropdown-item d-flex justify-content-between align-items-center" routerLink="/carro">
+              Carro
+              <span class="badge rounded-pill text-bg-warning" *ngIf="cartCount() > 0">
+                {{ cartCount() }}
+              </span>
             </a>
-          </li>
-          <li>
-            <button class="dropdown-item" (click)="logout()">
-              Cerrar sesión
-            </button>
           </li>
         </ul>
       </li>

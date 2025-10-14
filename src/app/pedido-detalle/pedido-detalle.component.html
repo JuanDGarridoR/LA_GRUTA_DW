@@ -1,0 +1,34 @@
+<h2>Pedido #{{ pedido?.id }}</h2>
+
+<div *ngIf="loading">Cargando...</div>
+<div *ngIf="error" class="text-danger" aria-live="assertive">{{ error }}</div>
+
+<!-- Usamos alias 'p' para evitar "possibly undefined" -->
+<div *ngIf="!loading && pedido as p">
+  <p>Estado: <strong>{{ p.estado }}</strong></p>
+  <p>Creado: {{ p.creadoEn | date:'short' }}</p>
+  <p>Artículos: {{ totalItems() }}</p>
+
+  <hr>
+
+  <ng-container *ngIf="(p.items?.length || 0) > 0; else sinItems">
+    <div *ngFor="let it of (p.items || [])" class="mb-3">
+      <div><strong>{{ it.comidaNombre }}</strong> × {{ it.cantidad }}</div>
+
+      <div *ngIf="(it.adicionales?.length || 0) > 0">
+        + {{ adNames(it) }}
+      </div>
+
+      <div>Subtotal: {{ subtotalFmt(it) | currency:'COP' }}</div>
+    </div>
+  </ng-container>
+
+  <ng-template #sinItems>
+    <p class="text-muted">Este pedido no tiene ítems para mostrar.</p>
+  </ng-template>
+
+  <hr>
+  <h3>Total: {{ p.total | currency:'COP' }}</h3>
+
+  <a routerLink="/menu" class="btn btn-primary">Seguir comprando</a>
+</div>

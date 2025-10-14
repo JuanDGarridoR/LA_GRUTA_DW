@@ -1,0 +1,8 @@
+.carro-item { display:flex; gap:12px; padding:10px 0; border-bottom:1px solid #eee; }
+.info { flex:1; }
+.qty { margin:6px 0; display:flex; align-items:center; gap:6px; }
+.subtotal { font-size:.95rem; color:#444; }
+.total-bar { position:sticky; bottom:0; background:#fff; padding:10px 0;
+  display:flex; justify-content:space-between; align-items:center; border-top:1px solid #eee; margin-top:10px; }
+.empty { text-align:center; padding:24px 0; }
+.error { color:#b00020; }

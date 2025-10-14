@@ -15,6 +15,8 @@ import { PortalOperadorComponent } from './portal-operador/portal-operador.compo
 import { UserFormComponent } from './dashboard/user-form/user-form.component';
 import { AdicionalFormComponent } from './dashboard/adicional-form/adicional-form.component';
 import { RegisterComponent } from './register/register.component';
+import { CarroComponent } from './carro/carro.component';
+import { PedidoDetalleComponent } from './pedido-detalle/pedido-detalle.component';
 
 const routes: Routes = [
 { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -26,6 +28,8 @@ const routes: Routes = [
 { path: 'login', component: LoginComponent },
 { path: 'operador/portal', component: PortalOperadorComponent },
 { path: 'register', component: RegisterComponent },
+{ path: 'carro', component: CarroComponent },
+{ path: 'pedido/:id', component: PedidoDetalleComponent },
 
 
 {

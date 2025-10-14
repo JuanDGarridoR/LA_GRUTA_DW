@@ -1,6 +1,25 @@
 <main class="container my-5">
-  <h2 class="text-center mb-5">Menú</h2>
 
+    <!-- Barra de modo de orden -->
+<div class="orderbar">
+  <span class="orderbar-title">Inicia tu orden</span>
+
+  <button class="orderbtn"
+          [class.active]="isDomicilio()"
+          (click)="setOrderMode('domicilio')">
+    <span class="icon">🛵</span>
+    Domicilio
+  </button>
+
+  <button class="orderbtn"
+          [class.alt]="true"
+          [class.active-alt]="isRecoger()"
+          (click)="setOrderMode('recoger')">
+    <span class="icon">🏬</span>
+    Recoger/Consumir
+  </button>
+</div>
+  <h2 class="text-center mb-5">Menú</h2>
   <!-- Iterar sobre cada categoría -->
   <section *ngFor="let cat of categorias" [id]="cat.slug" class="mb-5">
     <h2 class="text-center mb-4">{{ cat.nombre }}</h2>
@@ -54,11 +73,12 @@
 
                 <!-- Botón Agregar -->
                 <button
-                  class="btn btn-primary mt-auto"
-                  (click)="agregarPedido(comida)"
-                >
-                  Agregar
-                </button>
+  class="btn btn-primary mt-auto"
+  (click)="onAgregarClick(comida)"
+>
+  Agregar
+</button>
+
               </div>
             </div>
           </div>

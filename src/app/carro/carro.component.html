@@ -1,0 +1,51 @@
+<h2>Carro</h2>
+
+<div *ngIf="(items$ | async) as items; else empty">
+  <ng-container *ngIf="items.length > 0; else empty">
+    <div *ngFor="let it of items" class="carro-item">
+      <img *ngIf="it.image" [src]="it.image" width="64" height="64" [alt]="it.nombre" />
+      <div class="info">
+        <div class="name">{{ it.nombre }}</div>
+
+        <div class="adicionales" *ngIf="(it.adicionales?.length || 0) > 0">
+          + {{ adNames(it) }}
+        </div>
+
+        <div class="qty">
+          <button class="btn btn-outline-secondary btn-sm"
+                  (click)="dec(it)" [disabled]="loading || it.cantidad <= 1">−</button>
+          <span class="mx-2">{{ it.cantidad }}</span>
+          <button class="btn btn-outline-secondary btn-sm"
+                  (click)="inc(it)" [disabled]="loading">+</button>
+          <button class="btn btn-outline-danger btn-sm"
+                  (click)="remove(it)" [disabled]="loading">Quitar</button>
+        </div>
+
+        <div class="subtotal">
+          Subtotal: {{ subtotal(it) | currency:'COP' }}
+        </div>
+      </div>
+    </div>
+
+    <div class="total-bar">
+      <div>Total: <strong>{{ total() | currency:'COP' }}</strong></div>
+      <button class="btn btn-primary"
+              (click)="confirmarPedido()"
+              [disabled]="loading || items.length === 0">
+        <span *ngIf="!loading">Confirmar pedido</span>
+        <span *ngIf="loading">Enviando…</span>
+      </button>
+    </div>
+
+    <p *ngIf="error" class="error mt-2" aria-live="assertive">
+      {{ error }}
+    </p>
+  </ng-container>
+</div>
+
+<ng-template #empty>
+  <div class="empty">
+    <p>Tu carro está vacío.</p>
+    <a routerLink="/menu" class="btn btn-primary">Ir al menú</a>
+  </div>
+</ng-template>

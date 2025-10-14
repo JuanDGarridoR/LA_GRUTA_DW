@@ -26,6 +26,8 @@ import { PortalOperadorComponent } from './portal-operador/portal-operador.compo
 
 import { RegisterComponent } from './register/register.component';
 import { AdicionalFormComponent } from './dashboard/adicional-form/adicional-form.component';
+import { CarroComponent } from './carro/carro.component';
+import { PedidoDetalleComponent } from './pedido-detalle/pedido-detalle.component';
 
 
 @NgModule({
@@ -47,7 +49,7 @@ import { AdicionalFormComponent } from './dashboard/adicional-form/adicional-for
     PortalOperadorComponent,
     UserFormComponent,
     RegisterComponent,       
-    AdicionalFormComponent,     
+    AdicionalFormComponent, CarroComponent, PedidoDetalleComponent,     
   ],
   
   imports: [

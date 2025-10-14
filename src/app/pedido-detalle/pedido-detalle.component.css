@@ -1,0 +1,87 @@
+/* Contenedor general */
+:host {
+  display: block;
+  max-width: 720px;
+  margin: 24px auto;
+  padding: 0 16px;
+  color: #222;
+}
+
+/* Título */
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+/* Metadatos del pedido */
+p {
+  margin: 0 0 6px 0;
+}
+
+/* Separadores */
+hr {
+  margin: 14px 0;
+  border: none;
+  border-top: 1px solid #e6e6e6;
+}
+
+/* Cada línea de ítem */
+.mb-3 {
+  margin-bottom: 12px !important;
+  padding: 10px 12px;
+  border: 1px solid #f0f0f0;
+  border-radius: 10px;
+  background: #fff;
+}
+
+/* Adicionales */
+.mb-3 > div:nth-child(2) {
+  color: #666;
+  font-size: 0.95rem;
+  margin-top: 2px;
+}
+
+/* Subtotal por ítem */
+.mb-3 > div:last-child {
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+/* Total */
+h3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.25rem;
+}
+
+/* Botón “Seguir comprando” */
+a.btn.btn-primary {
+  margin-top: 8px;
+}
+
+/* Estados */
+.text-danger {
+  color: #b00020 !important;
+}
+.loading,
+.empty {
+  color: #777;
+  font-style: italic;
+}
+
+/* Tarjeta general opcional (si quieres envolver todo) */
+.pedido-card {
+  background: #fff;
+  border: 1px solid #efefef;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+/* Responsive suave */
+@media (max-width: 480px) {
+  :host { margin-top: 12px; }
+  h2 { font-size: 1.25rem; }
+  .mb-3 { padding: 8px 10px; }
+  h3 { font-size: 1.1rem; }
+}
