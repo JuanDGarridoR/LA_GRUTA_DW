@@ -8,9 +8,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-
+  role = '';
+  username = '';
   categorias: Categoria[] = [];
-  
+
   slides = [
     { img: 'assets/images/REC-283110_Pizza.webp', alt: 'Interior del restaurante', titulo: 'La Gruta', subtitulo: 'Restaurante italiano tradicional en Bogotá' },
     { img: 'assets/images/pasta-en-el-cine-1024x683.jpg', alt: 'Plato de pasta', titulo: 'Sabor Auténtico', subtitulo: 'Platos preparados con ingredientes frescos' },
@@ -21,20 +22,23 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.categorias = CATEGORIAS;
+    this.loadUserData();
+  }
+
+  private loadUserData(): void {
+    this.role = localStorage.getItem('role') || '';
+    this.username = localStorage.getItem('username') || '';
   }
 
   scrollToCategoria(event: Event, slug: string) {
     event.preventDefault();
-
-    // Si Menu está en otra ruta, navegar primero
     this.router.navigate(['/menu']).then(() => {
-      // Scroll a la categoría
       setTimeout(() => {
         const element = document.getElementById(slug);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-      }, 100); // espera que se renderice el componente Menu
+      }, 100);
     });
   }
 }

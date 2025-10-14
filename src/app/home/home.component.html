@@ -14,6 +14,45 @@
   </carousel>
 </section>
 
+<!-- 🌟 Bienvenida para usuarios no logueados -->
+<section *ngIf="!role" class="py-5 text-center bg-light">
+  <h2>Bienvenido a La Gruta Nera</h2>
+  <p>Descubre los sabores auténticos de Italia sin salir de casa 🍕.</p>
+  <a routerLink="/login" class="btn btn-danger me-2">Iniciar Sesión</a>
+  <a routerLink="/register" class="btn btn-outline-dark">Registrarse</a>
+</section>
+
+<!-- 👑 ADMIN -->
+<section *ngIf="role === 'ADMIN'" class="py-5 text-center bg-dark text-white">
+  <div class="container">
+    <h2 class="display-6 fw-bold mb-3">Panel del Administrador</h2>
+    <p class="lead">
+      Bienvenido {{ username }} 👑 — Gestiona comidas, usuarios y categorías.
+    </p>
+    <a routerLink="/comidas/admin" class="btn btn-outline-light mt-3">Ir al Dashboard</a>
+  </div>
+</section>
+
+<!-- 🍝 CLIENTE -->
+<section *ngIf="role === 'CLIENTE'" class="py-5 text-center bg-light">
+  <div class="container">
+    <h2 class="display-6 fw-bold mb-3">¡Hola {{ username }}!</h2>
+    <p class="lead">Explora el menú y realiza tu pedido desde casa 🍝.</p>
+    <a routerLink="/menu" class="btn btn-danger mt-3">Ver Menú</a>
+  </div>
+</section>
+
+<!-- 🚴 DOMICILIARIO -->
+<section *ngIf="role === 'DOMICILIARIO'" class="py-5 text-center bg-warning-subtle">
+  <div class="container">
+    <h2 class="display-6 fw-bold mb-3">Zona del Domiciliario</h2>
+    <p class="lead">
+      Hola {{ username }} 🚴 — Aquí podrás ver tus entregas asignadas y marcar pedidos como completados.
+    </p>
+    <a routerLink="/pedidos-asignados" class="btn btn-dark mt-3">Ver Entregas</a>
+  </div>
+</section>
+
 
   <!-- Menú categorías -->
 <section id="menu" class="my-0">

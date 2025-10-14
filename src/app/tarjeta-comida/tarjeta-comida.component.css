@@ -1,0 +1,28 @@
+/* Tarjetas de platos */
+.card {
+  background-color: #FFF5E6;
+  border: 1px solid #E6A756;
+  border-radius: 12px;
+  color: #4A3B34;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card img {
+  height: 220px;
+  object-fit: cover;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+.card-title {
+  color: #7B5E48;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+.card-text {
+  font-size: 0.95rem;
+  color: #4A3B34;
+  line-height: 1.5;
+}

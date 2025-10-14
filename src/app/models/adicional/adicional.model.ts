@@ -1,5 +1,3 @@
-// src/app/models/adicional/adicional.model.ts
-
 import { Categoria } from '../categoria/categoria.model';
 import { Comida } from '../comida/comida.model';
 

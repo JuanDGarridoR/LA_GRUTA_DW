@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router'; // 1. Asegúrate de importar el Router
+import { AutenticacionService, LoginRequest } from '../services/autenticacion.service';
 
 @Component({
   selector: 'app-login',
@@ -7,19 +7,28 @@ import { Router } from '@angular/router'; // 1. Asegúrate de importar el Router
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  credentials: LoginRequest = { username: '', password: '' };
+  errorMsg = '';
+  loading = false;
 
-  // Ya no necesitamos la variable 'credentials', pero la podemos dejar por ahora
-  credentials = {
-    username: '',
-    password: ''
-  };
+  constructor(private authService: AutenticacionService) {}
 
-  // 2. Inyecta el Router en el constructor para poder usarlo
-  constructor(private router: Router) { }
+  login(): void {
+    this.loading = true;
+    this.errorMsg = '';
 
-  // 3. Simplificamos la función login a una sola línea
-  login() {
-    console.log('Botón de ingresar presionado, redirigiendo al dashboard...');
-    this.router.navigate(['/dashboard/clientes']);
+    this.authService.login(this.credentials).subscribe({
+      next: () => {
+        this.loading = false;
+        // el servicio ya redirige según el rol
+      },
+      error: (err) => {
+        this.loading = false;
+        this.errorMsg =
+          typeof err.error === 'string'
+            ? err.error
+            : 'Error al iniciar sesión. Verifique sus credenciales.';
+      }
+    });
   }
 }

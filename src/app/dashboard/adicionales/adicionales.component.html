@@ -1,35 +1,31 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
   <h1 class="m-0">Todos los Adicionales</h1>
-  <button class="btn btn-success" (click)="agregarAdicional()">
+  <button class="btn btn-success" routerLink="/dashboard/adicionales/nuevo">
     Agregar Adicional
   </button>
 </div>
 
 <div class="table-responsive">
-  <table class="table table-hover align-middle text-center">
+  <table class="table table-hover align-middle">
     <thead class="table-dark">
       <tr>
         <th>Nombre</th>
         <th>Descripción</th>
-        <th>Categorías Disponibles</th>
         <th>Precio</th>
-        <th>Acciones</th>
+        <th>Categorías Asociadas</th>
+        <th class="text-center">Acciones</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let adicional of adicionales">
         <td>{{ adicional.nombre }}</td>
         <td>{{ adicional.descripcion }}</td>
-        <td>
-          <span *ngFor="let categoria of adicional.categorias; let last = last">
-            {{ categoria.nombre }}{{ !last ? ", " : "" }}
-          </span>
-        </td>
         <td>{{ adicional.precio | currency : "COP" : "symbol" : "1.0-0" }}</td>
-        <td>
+        <td>{{ getNombresCategorias(adicional.categorias) }}</td>
+        <td class="text-center">
           <button
             class="btn btn-warning btn-sm me-2"
-            (click)="editarAdicional(adicional.id)"
+            [routerLink]="['/dashboard/adicionales/editar', adicional.id]"
           >
             Editar
           </button>

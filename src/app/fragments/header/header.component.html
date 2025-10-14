@@ -1,11 +1,10 @@
-<header [ngClass]="headerClass">
+<header [ngClass]="headerClass" [class.scrolled]="isScrolled">
   <nav
     class="container-fluid d-flex justify-content-between align-items-center position-relative"
   >
+    <!-- 🧭 Izquierda -->
     <ul class="navbar-nav flex-row gap-4 left-menu">
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/menu">Menú</a>
-      </li>
+      <li class="nav-item"><a class="nav-link" routerLink="/menu">Menú</a></li>
       <li class="nav-item">
         <a class="nav-link" routerLink="/restaurantes">Restaurantes</a>
       </li>
@@ -16,6 +15,7 @@
       </li>
     </ul>
 
+    <!-- 🎯 Logo central -->
     <a
       class="navbar-brand logo-central position-absolute top-50 start-50 translate-middle"
       routerLink="/home"
@@ -23,6 +23,7 @@
       <img src="assets/images/logoGruta.png" alt="Logo La Gruta Nera" />
     </a>
 
+    <!-- 🧑 Derecha -->
     <ul class="navbar-nav flex-row gap-4 right-menu align-items-center">
       <li class="nav-item">
         <a
@@ -33,19 +34,58 @@
         >
       </li>
 
+      <!-- 🔸 Carro SOLO visible en /menu -->
+      <li class="nav-item cart-wrapper" *ngIf="isMenu()">
+        <a
+          class="nav-link position-relative"
+          routerLink="/carro"
+          [class.pulse]="pulseCart"
+        >
+          <span class="cart-text">Carro</span>
+          <span class="badge-cart" *ngIf="cartCount() > 0">{{
+            cartCount()
+          }}</span>
+        </a>
+      </li>
+
+      <!-- 🔸 ADMIN -->
       <li
         class="nav-item"
         *ngIf="(isLoggedIn$ | async) && (role$ | async) === 'ADMIN'"
       >
-        <a class="nav-link btn btn-reserva-header" routerLink="/comidas/admin"
+        <a class="nav-link btn btn-reserva-header" routerLink="/dashboard"
           >Dashboard</a
         >
       </li>
 
+      <!-- 🔸 CLIENTE -->
+      <li
+        class="nav-item"
+        *ngIf="(isLoggedIn$ | async) && (role$ | async) === 'CLIENTE'"
+      >
+        <a class="nav-link btn btn-reserva-header" routerLink="/mis-pedidos"
+          >Mis Pedidos</a
+        >
+      </li>
+
+      <!-- 🔸 DOMICILIARIO -->
+      <li
+        class="nav-item"
+        *ngIf="(isLoggedIn$ | async) && (role$ | async) === 'DOMICILIARIO'"
+      >
+        <a
+          class="nav-link btn btn-reserva-header"
+          routerLink="/pedidos-asignados"
+          >Entregas</a
+        >
+      </li>
+
+      <!-- 🔸 LOGIN (no autenticado) -->
       <li class="nav-item" *ngIf="!(isLoggedIn$ | async)">
         <a class="nav-link btn btn-reserva-header" routerLink="/login">Login</a>
       </li>
 
+      <!-- 🔸 Dropdown Perfil (autenticado) -->
       <li class="nav-item dropdown" *ngIf="isLoggedIn$ | async">
         <a
           href="#"
@@ -62,6 +102,7 @@
             style="width: 40px; height: 40px"
           />
         </a>
+
         <ul
           class="dropdown-menu dropdown-menu-end shadow-lg"
           aria-labelledby="profileDropdown"
@@ -71,14 +112,31 @@
           </li>
           <li><hr class="dropdown-divider" /></li>
           <li>
-            <a class="dropdown-item" routerLink="/profile/edit/1"
+            <a class="dropdown-item" routerLink="/editar-perfil"
               >Editar Perfil</a
             >
           </li>
+
           <li>
             <button class="dropdown-item" (click)="logout()">
               Cerrar sesión
             </button>
+          </li>
+          <li><hr class="dropdown-divider" /></li>
+          <!-- Carro también dentro del dropdown (opcional) -->
+          <li>
+            <a
+              class="dropdown-item d-flex justify-content-between align-items-center"
+              routerLink="/carro"
+            >
+              Carro
+              <span
+                class="badge rounded-pill text-bg-warning"
+                *ngIf="cartCount() > 0"
+              >
+                {{ cartCount() }}
+              </span>
+            </a>
           </li>
         </ul>
       </li>

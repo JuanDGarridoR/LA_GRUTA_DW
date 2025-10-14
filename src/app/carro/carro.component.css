@@ -1,0 +1,182 @@
+:host {
+  display: block;
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+  font-family: 'Barlow', sans-serif;
+  color: #4A3B34;
+  background-color: #fffaf0; /* fondo crema */
+}
+
+h2 {
+  text-align: center;
+  font-weight: 700;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  color: #b22222; /* vino */
+  border-bottom: 2px solid #FFD700; /* dorado */
+  display: inline-block;
+  padding-bottom: 6px;
+}
+
+/* ITEM DEL CARRITO */
+.carro-item {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  background: #fff;
+  border: 1px solid #FFD700; /* borde dorado */
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.carro-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.carro-item img {
+  width: 90px;
+  height: 90px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* INFORMACIÓN */
+.info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #4A3B34;
+  font-family: 'Barlow', sans-serif;
+}
+
+.adicionales {
+  font-size: 0.9rem;
+  color: #5f5f5f;
+  margin-top: 2px;
+}
+
+/* CANTIDAD Y PRECIO */
+.bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.qty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-circle {
+  border: 1px solid #b22222;
+  color: #b22222;
+  background: transparent;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-weight: 600;
+  line-height: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-circle:hover {
+  background-color: #b22222;
+  color: white;
+}
+
+.subtotal {
+  font-weight: 600;
+  color: #4A3B34;
+  font-size: 1rem;
+}
+
+/* BOTÓN QUITAR */
+.btn-remove {
+  align-self: flex-end;
+  margin-top: 10px;
+  background: none;
+  border: none;
+  color: #b22222;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  font-family: 'Barlow', sans-serif;
+}
+
+.btn-remove:hover {
+  color: #8b1a1a;
+}
+
+/* TOTAL */
+.total-bar {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #FFD700;
+  border-radius: 12px;
+  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.05);
+  margin-top: 20px;
+}
+
+.total-text {
+  font-weight: 600;
+  color: #4A3B34;
+  font-size: 1.1rem;
+}
+
+/* BOTÓN PRINCIPAL */
+.btn-primary {
+  background-color: #b22222;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 25px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+  font-family: 'Barlow', sans-serif;
+}
+
+.btn-primary:hover {
+  background-color: #8b1a1a;
+  transform: translateY(-1px);
+}
+
+/* MENSAJES */
+.empty {
+  text-align: center;
+  padding: 40px 0;
+  color: #4A3B34;
+}
+
+.empty p {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.error {
+  color: #b22222;
+  text-align: center;
+  margin-top: 10px;
+  font-weight: 500;
+}

@@ -8,7 +8,7 @@ import { Comida } from '../models/comida/comida.model';
 })
 export class ComidaService {
 
-  // 👇 URL base del backend Spring Boot (ajusta si usas otro puerto o prefijo)
+  
   private apiUrl = 'http://localhost:8080/api/comidas';
 
   constructor(private http: HttpClient) {}
@@ -22,6 +22,10 @@ export class ComidaService {
   getComidaById(id: number): Observable<Comida> {
   return this.http.get<Comida>(`${this.apiUrl}/${id}`);
   }
+
+  getByCategoria(id: number): Observable<Comida[]> {
+  return this.http.get<Comida[]>(`${this.apiUrl}/categoria/${id}`);
+}
 
 
   // --------- CREATE ---------

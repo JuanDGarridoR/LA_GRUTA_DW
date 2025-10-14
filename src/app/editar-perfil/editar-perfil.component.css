@@ -1,0 +1,84 @@
+.editar-perfil-container {
+  max-width: 600px;
+  margin: 3rem auto;
+  background: #fffaf0;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  font-family: 'Barlow', sans-serif;
+  color: #4a3b34;
+}
+
+h2 {
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-weight: bold;
+  font-size: 2rem;
+  color: #b22222;
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #4a3b34;
+}
+
+input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #fff;
+  transition: border-color 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #b22222;
+  box-shadow: 0 0 6px rgba(178, 34, 34, 0.3);
+}
+
+/* BOTONES */
+.btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn-guardar {
+  background-color: #b22222;
+  color: #fff;
+  padding: 10px 25px;
+  border: none;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-guardar:hover {
+  background-color: #8b1a1a;
+  transform: translateY(-2px);
+}
+
+.btn-cancelar {
+  background: transparent;
+  border: 2px solid #b22222;
+  color: #b22222;
+  padding: 10px 25px;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-cancelar:hover {
+  background-color: #b22222;
+  color: #fff;
+}
