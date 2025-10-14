@@ -45,7 +45,7 @@ export class CarroComponent {
   subtotal(it: any): number {
     return (Number(it.precio) + this.adTotal(it)) * Number(it.cantidad ?? 0);
   }
-
+  
   // ===== Confirmar pedido: POST al backend y navegar al detalle =====
   confirmarPedido() {
     this.error = undefined;
