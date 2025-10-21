@@ -1,9 +1,11 @@
-import { Injectable } from '@angular/core';
+// src/app/services/autenticacion.service.ts
+import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { User } from '../models/user/user.model'; // 🔹 importa tu modelo User
+import { User } from '../models/user/user.model';
+import { CartService } from './cart.service';
 
 export interface LoginRequest {
   username: string;
@@ -20,42 +22,51 @@ export interface LoggedUser {
 export class AutenticacionService {
   private apiUrl = 'http://localhost:8080/api/users/login';
 
-  // 🔹 Subjects globales para emitir cambios
   private loggedInSubject = new BehaviorSubject<boolean>(false);
   private roleSubject = new BehaviorSubject<string | null>(null);
   private usernameSubject = new BehaviorSubject<string | null>(null);
-
-  // 🔹 Nuevo BehaviorSubject para el usuario completo
   private usuarioActualSubject = new BehaviorSubject<User | null>(this.getUsuarioActual());
-  usuario$ = this.usuarioActualSubject.asObservable();
 
-  // Observables para componentes
+  usuario$ = this.usuarioActualSubject.asObservable();
   isLoggedIn$ = this.loggedInSubject.asObservable();
   role$ = this.roleSubject.asObservable();
   username$ = this.usernameSubject.asObservable();
 
-  constructor(private router: Router, private http: HttpClient) {
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    private injector: Injector
+  ) {
     this.restoreSession();
   }
 
-  // 🟢 LOGIN
+  // ============================
+  // LOGIN
+  // ============================
   login(credentials: LoginRequest): Observable<LoggedUser> {
     return this.http.post<LoggedUser>(this.apiUrl, credentials).pipe(
       tap(user => {
-        // Guardar datos del usuario
+        // Guardar sesión
         localStorage.setItem('loggedIn', 'true');
         localStorage.setItem('id', user.id.toString());
+        localStorage.setItem('userId', user.id.toString());
         localStorage.setItem('role', user.role);
         localStorage.setItem('username', user.username);
-        localStorage.setItem('user', JSON.stringify(user)); // 🔹 Guardar usuario completo
+        localStorage.setItem('user', JSON.stringify(user));
 
-        // Emitir cambios globales
+        // Emitir estado
         this.loggedInSubject.next(true);
         this.roleSubject.next(user.role);
         this.usernameSubject.next(user.username);
-        this.usuarioActualSubject.next(user as User); // 🔹 emitir el usuario
+        this.usuarioActualSubject.next(user as User);
 
-        // Redirigir según rol
+        // Sincronizar carrito: migra invitado -> usuario y carga el del usuario
+        setTimeout(() => {
+          const cart = this.injector.get(CartService);
+          cart.syncWithUser(true); // migrateGuest = true
+        }, 0);
+
+        // Redirección por rol
         const role = user.role?.toUpperCase();
         if (role === 'ADMIN') {
           this.router.navigate(['/dashboard']);
@@ -70,28 +81,40 @@ export class AutenticacionService {
     );
   }
 
-  // 🟠 LOGOUT
+  // ============================
+  // LOGOUT
+  // ============================
   logout(): void {
-    localStorage.clear();
+    // NO borres los carritos por usuario; solo claves de sesión:
+    const authKeys = ['loggedIn', 'id', 'userId', 'role', 'username', 'user'];
+    authKeys.forEach(k => localStorage.removeItem(k));
+
+    // Cargar carrito de invitado en memoria (no borrar los carritos de usuarios)
+    setTimeout(() => {
+      const cart = this.injector.get(CartService);
+      cart.syncAsGuest();
+    }, 0);
+
     this.loggedInSubject.next(false);
     this.roleSubject.next(null);
     this.usernameSubject.next(null);
     this.usuarioActualSubject.next(null);
+
     this.router.navigate(['/login']);
   }
 
-  // 🧠 Obtener usuario actual (sin suscripción)
+  // ============================
+  // Utilidades de usuario
+  // ============================
   get currentUser(): User | null {
     return this.usuarioActualSubject.value;
   }
 
-  // 🔹 Obtener usuario guardado del localStorage
   getUsuarioActual(): User | null {
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user) : null;
   }
 
-  // 🔹 Actualizar usuario global (cuando se edita el perfil)
   setUsuario(user: User): void {
     localStorage.setItem('user', JSON.stringify(user));
     localStorage.setItem('username', user.username ?? '');
@@ -99,7 +122,9 @@ export class AutenticacionService {
     this.usernameSubject.next(user.username ?? '');
   }
 
-  // ♻️ Restaurar sesión al recargar la página
+  // ============================
+  // Restaurar sesión
+  // ============================
   private restoreSession(): void {
     if (localStorage.getItem('loggedIn') === 'true') {
       const role = localStorage.getItem('role');
@@ -110,6 +135,23 @@ export class AutenticacionService {
       this.roleSubject.next(role);
       this.usernameSubject.next(username);
       this.usuarioActualSubject.next(user);
+
+      // Cargar el carrito del usuario actual (sin migración)
+      setTimeout(() => {
+        const cart = this.injector.get(CartService);
+        cart.syncWithUser(false);
+      }, 0);
+    } else {
+      // Cargar carrito invitado
+      setTimeout(() => {
+        const cart = this.injector.get(CartService);
+        cart.syncAsGuest();
+      }, 0);
     }
+  }
+
+  getUserId(): number | null {
+    const id = localStorage.getItem('userId') || localStorage.getItem('id');
+    return id ? Number(id) : null;
   }
 }

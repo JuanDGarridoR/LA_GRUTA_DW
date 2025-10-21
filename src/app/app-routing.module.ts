@@ -1,7 +1,8 @@
+// src/app/app-routing.module.ts
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-// Componentes principales
+// Componentes principales (públicos)
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
@@ -16,7 +17,7 @@ import { CarroComponent } from './carro/carro.component';
 import { PedidoDetalleComponent } from './pedido-detalle/pedido-detalle.component';
 import { MisPedidosComponent } from './mis-pedidos/mis-pedidos.component';
 
-// Componentes del dashboard (admin)
+// Dashboard (admin)
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ClientesComponent } from './dashboard/clientes/clientes.component';
 import { ComidasComponent } from './dashboard/comidas/comidas.component';
@@ -26,16 +27,16 @@ import { UserFormComponent } from './dashboard/user-form/user-form.component';
 import { AdicionalFormComponent } from './dashboard/adicional-form/adicional-form.component';
 import { DomiciliariosComponent } from './dashboard/domiciliarios/domiciliarios.component';
 import { DomiciliariosFormComponent } from './dashboard/domiciliarios-form/domiciliarios-form.component';
-
-// Componente operador
-import { PortalOperadorComponent } from './portal-operador/portal-operador.component';
 import { PedidosComponent } from './dashboard/pedidos/pedidos.component';
+
+// Operador
+import { PortalOperadorComponent } from './portal-operador/portal-operador.component';
 
 const routes: Routes = [
   // Redirección por defecto
   { path: '', redirectTo: '/home', pathMatch: 'full' },
 
-  // Páginas públicas
+  // Rutas públicas
   { path: 'home', component: HomeComponent },
   { path: 'restaurantes', component: RestaurantesComponent },
   { path: 'plato-estrella', component: PlatoEstrellaComponent },
@@ -44,7 +45,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
 
-  // Portal del operador
+  // Operador
   { path: 'operador/portal', component: PortalOperadorComponent },
 
   // Perfil y pedidos del usuario
@@ -79,8 +80,9 @@ const routes: Routes = [
       { path: 'domiciliarios', component: DomiciliariosComponent },
       { path: 'domiciliarios/nuevo', component: DomiciliariosFormComponent },
       { path: 'domiciliarios/editar/:id', component: DomiciliariosFormComponent },
-      { path: 'pedidos', component: PedidosComponent },
 
+      // Pedidos (admin)
+      { path: 'pedidos', component: PedidosComponent },
     ],
   },
 

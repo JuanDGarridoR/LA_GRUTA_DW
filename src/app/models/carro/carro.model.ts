@@ -1,6 +1,6 @@
 // src/app/models/carro.model.ts
 
-// ✅ Ítem que el usuario añade al carrito
+// Ítem que el usuario añade al carrito
 export interface CartItem {
   comidaId: number;                     // ID de la comida seleccionada
   nombre: string;                       // Nombre de la comida
@@ -8,7 +8,7 @@ export interface CartItem {
   cantidad: number;                     // Cantidad seleccionada
   image?: string;                       // Imagen opcional de la comida
 
-  // 🧩 Adicionales u opciones extra del plato
+  // Adicionales u opciones extra del plato
   adicionalIds?: number[];              
   adicionales?: Array<{                 
     id: number;
@@ -17,22 +17,24 @@ export interface CartItem {
   }>;
 }
 
-// ✅ Payload para crear un pedido en el backend
+// Payload para crear un pedido en el backend
 export interface CreatePedidoRequest {
-  clienteId: number;                    // ID del cliente que realiza el pedido
-  direccion?: string;                   // Dirección opcional para entrega
-  notas?: string;                       // Notas adicionales (opcional)
-  items: Array<{                        // Lista de productos en el pedido
+  userId: number; // debe coincidir con el backend
+  direccion?: string;
+  notas?: string;
+  items: Array<{
     comidaId: number;
     cantidad: number;
     adicionalIds?: number[];
   }>;
 }
 
-// ✅ Respuesta estándar del backend al crear o consultar un pedido
+
+
+// Respuesta estándar del backend al crear o consultar un pedido
 export interface PedidoResponse {
   id: number;                           // ID del pedido generado
-  estado: string;                       // Estado actual del pedido (Ej: "PENDIENTE")
+  estado: string;                       // Estado actual del pedido (Ej: "EN_PROCESO", "ENTREGADO")
   total: number;                        // Total calculado del pedido
   creadoEn: string;                     // Fecha de creación del pedido
   items: Array<{                        // Detalle de los ítems del pedido

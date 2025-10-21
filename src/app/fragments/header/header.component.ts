@@ -10,27 +10,32 @@ import { CartService } from '../../services/cart.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  // 🔐 Observables de autenticación
+  // Observables de autenticación
   isLoggedIn$!: Observable<boolean>;
   role$!: Observable<string | null>;
   username$!: Observable<string | null>;
 
-  // 🔸 Valores locales (para mostrar inmediatamente)
+  // Valores locales (para no usar | async en el HTML)
+  isLoggedIn = false;
   role: string | null = null;
   username: string | null = null;
 
   headerClass: string = 'header-general solid';
   isScrolled = false;
 
-  // 🔔 Variables para carrito y animaciones
+  // Variables de carrito y animaciones
   pulseCart = false;
   showMiniToast = false;
-  lastAdded?: { nombre: string; precio: number; image?: string; cantidad: number };
-  private toastTimer?: any;
-  private pulseTimer?: any;
+  lastAdded: { nombre: string; precio: number; image?: string; cantidad: number } | null = null;
 
-  // 🔄 Subscripciones
+  // timers (usar number para browser)
+  private toastTimer?: number;
+  private pulseTimer?: number;
+
   private subs: Subscription[] = [];
+
+  // contador derivado del carrito
+  itemsCount = 0;
 
   constructor(
     private authService: AutenticacionService,
@@ -39,24 +44,36 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // ✅ Inicializar observables de autenticación
+    // Inicializar observables de autenticación
     this.isLoggedIn$ = this.authService.isLoggedIn$;
     this.role$ = this.authService.role$;
     this.username$ = this.authService.username$;
 
-    // ✅ Suscribirse a los cambios globales (incluye nombre actualizado del perfil)
+    // Suscripciones a auth -> valores locales
     this.subs.push(
+      this.isLoggedIn$.subscribe(v => (this.isLoggedIn = v)),
       this.role$.subscribe(role => (this.role = role)),
-      this.username$.subscribe(username => {
-        this.username = username;
-        console.log('🔁 Username actualizado en header:', username);
-      }),
+      this.username$.subscribe(username => (this.username = username))
+    );
+
+    // Suscribirse a cambios del carrito para mantener contador reactivo
+    this.subs.push(
+      this.cart.items$.subscribe(items => {
+        this.itemsCount = (items ?? []).reduce((s, it) => s + (it.cantidad ?? 0), 0);
+      })
+    );
+
+    // Escuchar navegación para actualizar clases del header
+    this.subs.push(
       this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
           this.updateHeaderClass(event.urlAfterRedirects);
         }
-      }),
-      // 🔔 Animación del carrito
+      })
+    );
+
+    // Animación del carrito (mini-toast y pulso)
+    this.subs.push(
       this.cart.lastAdded$?.subscribe(item => {
         if (!item) return;
         this.lastAdded = {
@@ -68,22 +85,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.showMiniToast = true;
         this.pulseCart = true;
 
-        clearTimeout(this.toastTimer);
-        clearTimeout(this.pulseTimer);
-        this.toastTimer = setTimeout(() => (this.showMiniToast = false), 2500);
-        this.pulseTimer = setTimeout(() => (this.pulseCart = false), 1200);
+        if (this.toastTimer) window.clearTimeout(this.toastTimer);
+        if (this.pulseTimer) window.clearTimeout(this.pulseTimer);
+
+        this.toastTimer = window.setTimeout(() => (this.showMiniToast = false), 2500);
+        this.pulseTimer = window.setTimeout(() => (this.pulseCart = false), 1200);
       })
     );
 
-    // ✅ Configuración inicial
+    // Configuración inicial
     this.updateHeaderClass(this.router.url);
     this.onScroll();
   }
 
   ngOnDestroy(): void {
     this.subs.forEach(s => s.unsubscribe());
-    clearTimeout(this.toastTimer);
-    clearTimeout(this.pulseTimer);
+    if (this.toastTimer) window.clearTimeout(this.toastTimer);
+    if (this.pulseTimer) window.clearTimeout(this.pulseTimer);
   }
 
   // ===== Scroll handler =====
@@ -92,13 +110,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.isScrolled = window.scrollY > 4;
   }
 
-  // ==== Helpers de UI ====
+  // ===== Helpers de UI =====
   cartCount(): number {
-    return this.cart.count();
+    return this.itemsCount;
   }
 
   logout(): void {
     this.authService.logout();
+    // Por si el logout no navegara:
+    this.router.navigate(['/login']);
   }
 
   esHome(): boolean {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { PedidoService } from './../services/pedido.service';
-import { Pedido, PedidoComida } from './../models/pedido/pedido.model';
+import { PedidoService } from '../services/pedido.service';          // ajusta la ruta si tu services/ está en otro lugar
+import { Pedido } from '../models/pedido/pedido.model';              // si tu modelo difiere, puedes cambiar a any[]
 
 @Component({
   selector: 'app-mis-pedidos',
@@ -8,74 +8,71 @@ import { Pedido, PedidoComida } from './../models/pedido/pedido.model';
   styleUrls: ['./mis-pedidos.component.css']
 })
 export class MisPedidosComponent implements OnInit {
-  pedidos: Pedido[] = [];
-  clienteId: number = 0;
-  cargando: boolean = true;
-  error: string = '';
 
-  expanded: Record<number, boolean> = {};
+  pedidos: Pedido[] = [];           // <- lo usa el HTML
+  loading = false;
+  error: string | null = null;
 
-  constructor(private pedidoService: PedidoService) {}
+  constructor(private pedidoSvc: PedidoService) {}
 
   ngOnInit(): void {
-    const stored = localStorage.getItem('id');
-    if (!stored) {
-      this.error = 'No se encontró sesión activa.';
-      this.cargando = false;
+    this.cargarMisPedidos();
+  }
+
+  cargarMisPedidos(): void {
+    this.loading = true;
+
+    // Obtén el id del usuario desde donde lo tengas (AuthService/localStorage/route params, etc.)
+    const userIdRaw = localStorage.getItem('userId');
+    const userId = userIdRaw ? Number(userIdRaw) : NaN;
+
+    if (Number.isNaN(userId)) {
+      this.error = 'No se encontró el usuario autenticado.';
+      this.loading = false;
       return;
     }
 
-    this.clienteId = Number(stored);
-    this.cargarPedidos();
-  }
-
-  cargarPedidos(): void {
-    this.cargando = true;
-    this.error = '';
-    this.pedidoService.getPedidosPorCliente(this.clienteId).subscribe({
+    this.pedidoSvc.getPedidosPorUsuario(userId).subscribe({
       next: (data) => {
-        this.pedidos = data || [];
-        this.pedidos.forEach(p => (this.expanded[p.id] = false));
-        this.cargando = false;
+        this.pedidos = data ?? [];
+        this.loading = false;
       },
       error: (err) => {
-        console.error('Error al cargar pedidos', err);
-        this.error = 'No se pudieron cargar los pedidos.';
-        this.cargando = false;
+        console.error('Error cargando pedidos', err);
+        this.error = 'No se pudieron cargar tus pedidos.';
+        this.loading = false;
       }
     });
   }
 
-  obtenerResumenPedido(pedido: Pedido): string {
-    if (!pedido.items || pedido.items.length === 0) return '— Sin items —';
-    return pedido.items.map(item => {
-      const nombre = item.comida?.nombre ?? 'Comida desconocida';
-      const adicionales = this.obtenerNombresAdicionales(item);
-      const extras = adicionales.length ? `(${adicionales})` : '';
-      return `${nombre} ${extras} x${item.cantidad}`;
-    }).join(' · ');
+  // --- helpers usados por la plantilla ---
+
+  /** Devuelve el arreglo de ítems del pedido sin importar cómo vengan nombrados en el modelo */
+  itemsDe(pedido: any): any[] {
+    return (
+      pedido?.items ??
+      pedido?.detalle ??
+      pedido?.detalles ??
+      pedido?.lineas ??
+      []
+    );
   }
 
-  obtenerNombresAdicionales(item: PedidoComida): string {
-    if (!item.adicionales || item.adicionales.length === 0) return '';
-    return item.adicionales
-      .filter(a => !!a && !!a.nombre)
-      .map(a => a.nombre)
-      .join(', ');
+  /** Subtotal de un ítem = precio unitario * cantidad (con llaves tolerantes a distintos nombres) */
+  subtotalItem(item: any): number {
+    const precio = Number(item?.precio ?? item?.precioUnitario ?? item?.valorUnitario ?? 0);
+    const cantidad = Number(item?.cantidad ?? item?.qty ?? item?.cant ?? 1);
+    return precio * cantidad;
   }
 
-  toggleExpand(pedidoId: number): void {
-    this.expanded[pedidoId] = !this.expanded[pedidoId];
+  /** Total del pedido sumando subtotales de sus ítems */
+  calcularTotalDesdeItems(pedido: any): number {
+    return this.itemsDe(pedido).reduce(
+      (acc: number, it: any) => acc + this.subtotalItem(it),
+      0
+    );
   }
 
-  subtotalItem(item: PedidoComida): number {
-    const precioComida = Number(item.comida?.precio ?? 0);
-    const totalAdicionales = (item.adicionales ?? []).reduce((s, a) => s + Number(a.precio ?? 0), 0);
-    return (precioComida + totalAdicionales) * (Number(item.cantidad ?? 0));
-  }
-
-  calcularTotalDesdeItems(pedido: Pedido): number {
-    if (!pedido.items) return 0;
-    return pedido.items.reduce((s, it) => s + this.subtotalItem(it), 0);
-  }
+  /** Para *ngFor trackBy (opcional, mejora rendimiento) */
+  trackByPedidoId = (_: number, p: any) => p?.id ?? p?.pedidoId ?? _;
 }
