@@ -8,34 +8,41 @@ import { CreatePedidoRequest, PedidoResponse } from '../models/carro/carro.model
   providedIn: 'root'
 })
 export class PedidoService {
-  // 🌐 URL base del backend
   private apiUrl = 'http://localhost:8080/api/pedidos';
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * 🟢 Crear un nuevo pedido
-   * POST /api/pedidos
-   */
+  // 🟢 Crear un nuevo pedido
   crearPedido(req: CreatePedidoRequest): Observable<PedidoResponse> {
     return this.http.post<PedidoResponse>(this.apiUrl, req);
   }
 
-  /**
-   * 🟠 Obtener todos los pedidos activos
-   * GET /api/pedidos
-   */
+  // 🟠 Obtener solo los pedidos activos
   getPedidosActivos(): Observable<Pedido[]> {
     return this.http.get<Pedido[]>(this.apiUrl);
   }
+  
 
-  /**
-   * 🟣 Actualizar el estado de un pedido
-   * PUT /api/pedidos/{id}/estado
-   */
+  // 🔵 Obtener todos los pedidos (activos + completados)
+  getTodosPedidos(): Observable<Pedido[]> {
+    return this.http.get<Pedido[]>(this.apiUrl);
+  }
+
+
+// 🔵 Obtener todos los pedidos incluyendo los finalizados
+getPedidosAdmin(): Observable<Pedido[]> {
+  return this.http.get<Pedido[]>(`${this.apiUrl}/todos`);
+}
+
+
+  // 🟣 Actualizar el estado de un pedido
+
+
   actualizarEstado(id: number, nuevoEstado: string): Observable<any> {
     const url = `${this.apiUrl}/${id}/estado`;
     const body = { estado: nuevoEstado };
-    return this.http.put(url, body);
+    return this.http.put(url, body); // ✅ devolver el Observable
   }
+  
+  
 }

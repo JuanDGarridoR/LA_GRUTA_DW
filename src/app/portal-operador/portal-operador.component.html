@@ -52,7 +52,7 @@
             <div *ngIf="pedido.domiciliarioAsignado; else noAsignado">
               <div>{{ pedido.domiciliarioAsignado.nombre }}</div>
               <small class="text-muted">{{
-                pedido.domiciliarioAsignado.celular
+                pedido.domiciliarioAsignado.telefono
               }}</small>
             </div>
             <ng-template #noAsignado>N/A</ng-template>

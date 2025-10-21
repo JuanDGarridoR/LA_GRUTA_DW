@@ -1,0 +1,110 @@
+<div class="container mt-4">
+  <h2 class="mb-3 text-center">
+    {{ editMode ? 'Editar Domiciliario' : 'Nuevo Domiciliario' }}
+  </h2>
+
+  <form #domForm="ngForm" (ngSubmit)="guardar()">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input
+          type="text"
+          id="nombre"
+          class="form-control"
+          [(ngModel)]="domiciliario.nombre"
+          name="nombre"
+          required
+        />
+      </div>
+
+      <div class="col-md-6">
+        <label for="correo" class="form-label">Correo</label>
+        <input
+          type="email"
+          id="correo"
+          class="form-control"
+          [(ngModel)]="domiciliario.correo"
+          name="correo"
+          required
+        />
+      </div>
+
+      <div class="col-md-6">
+        <label for="telefono" class="form-label">Teléfono</label>
+        <input
+          type="text"
+          id="telefono"
+          class="form-control"
+          [(ngModel)]="domiciliario.telefono"
+          name="telefono"
+          required
+        />
+      </div>
+
+      <div class="col-md-6">
+        <label for="vehiculo" class="form-label">Vehículo</label>
+        <select
+          id="vehiculo"
+          class="form-select"
+          [(ngModel)]="domiciliario.vehiculo"
+          name="vehiculo"
+          required
+        >
+          <option value="">Seleccione...</option>
+          <option value="Moto">Moto</option>
+          <option value="Carro">Carro</option>
+          <option value="Bicicleta">Bicicleta</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label for="placa" class="form-label">Placa (opcional)</label>
+        <input
+          type="text"
+          id="placa"
+          class="form-control"
+          [(ngModel)]="domiciliario.placa"
+          name="placa"
+        />
+      </div>
+
+      <div class="col-md-6">
+        <label for="zona" class="form-label">Zona de Cobertura</label>
+        <input
+          type="text"
+          id="zona"
+          class="form-control"
+          [(ngModel)]="domiciliario.zonaCobertura"
+          name="zonaCobertura"
+          required
+        />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Disponible</label>
+        <select
+          class="form-select"
+          [(ngModel)]="domiciliario.disponible"
+          name="disponible"
+        >
+          <option [ngValue]="true">Sí</option>
+          <option [ngValue]="false">No</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center mt-4">
+      <button
+        type="submit"
+        class="btn btn-primary me-2"
+        [disabled]="!domForm.form.valid"
+      >
+        {{ editMode ? 'Actualizar' : 'Guardar' }}
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="cancelar()">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>

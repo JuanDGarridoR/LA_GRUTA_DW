@@ -57,6 +57,16 @@
           >Dashboard</a
         >
       </li>
+      <!-- 🔸 OPERADOR -->
+<li
+class="nav-item"
+*ngIf="(isLoggedIn$ | async) && (role$ | async) === 'OPERADOR'"
+>
+<a class="nav-link btn btn-reserva-header" routerLink="/operador/portal">
+  Dashboard
+</a>
+</li>
+
 
       <!-- 🔸 CLIENTE -->
       <li
@@ -118,25 +128,26 @@
           </li>
 
           <li>
-            <button class="dropdown-item" (click)="logout()">
-              Cerrar sesión
-            </button>
+            <a
+            class="dropdown-item d-flex justify-content-between align-items-center"
+            routerLink="/carro"
+          >
+            Carrito
+            <span
+              class="badge rounded-pill text-bg-warning"
+              *ngIf="cartCount() > 0"
+            >
+              {{ cartCount() }}
+            </span>
+          </a>
+      
           </li>
           <li><hr class="dropdown-divider" /></li>
           <!-- Carro también dentro del dropdown (opcional) -->
           <li>
-            <a
-              class="dropdown-item d-flex justify-content-between align-items-center"
-              routerLink="/carro"
-            >
-              Carro
-              <span
-                class="badge rounded-pill text-bg-warning"
-                *ngIf="cartCount() > 0"
-              >
-                {{ cartCount() }}
-              </span>
-            </a>
+            <button class="dropdown-item" (click)="logout()">
+              Cerrar sesión
+            </button>
           </li>
         </ul>
       </li>

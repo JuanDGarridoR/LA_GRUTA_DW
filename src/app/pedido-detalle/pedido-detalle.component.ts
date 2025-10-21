@@ -18,7 +18,7 @@ export class PedidoDetalleComponent implements OnInit {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.http.get<PedidoResponse>(`/api/pedidos/${id}`).subscribe({
       next: (p) => { this.pedido = p; this.loading = false; },
-      error: (e) => { this.error = 'Tu pedido llegara en cualquier momento...'; this.loading = false; console.error(e); }
+      error: (e) => { this.error = 'Error al generar el pedido, vuelva a intentar.'; this.loading = false; console.error(e); }
     });
   }
 

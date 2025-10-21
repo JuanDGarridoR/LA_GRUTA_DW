@@ -1,4 +1,4 @@
-<h2>Su pedido esta en camino...{{ pedido?.id }}</h2>
+<h2>Pedido #{{ pedido?.id }}</h2>
 
 <div *ngIf="loading">Cargando...</div>
 <div *ngIf="error" class="text-danger" aria-live="assertive">{{ error }}</div>

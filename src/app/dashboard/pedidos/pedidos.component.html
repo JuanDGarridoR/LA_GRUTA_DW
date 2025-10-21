@@ -1,0 +1,73 @@
+<div class="container-fluid my-4">
+    <h1 class="mb-4 text-center">Pedidos</h1>
+  
+    <div *ngIf="cargando" class="text-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+  
+    <div *ngIf="!cargando && pedidos.length > 0" class="table-responsive shadow-sm">
+      <table class="table table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>ID Pedido</th>
+            <th>Cliente</th>
+            <th>Detalle del Pedido</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Domiciliario</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let pedido of pedidos">
+            <td>#{{ pedido.id }}</td>
+            <td>{{ pedido.cliente?.username }}</td>
+            <td>
+              <ul>
+                <li *ngFor="let item of pedido.items">
+                  <strong>{{ item.cantidad }}x</strong> {{ item.comida?.nombre }}
+                  <ul
+                    *ngIf="item.adicionales && item.adicionales.length > 0"
+                    class="adicionales-list"
+                  >
+                    <li *ngFor="let adicional of item.adicionales">
+                      + {{ adicional.nombre }}
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </td>
+            <td>{{ pedido.total | currency : 'COP' : 'symbol' : '1.0-0' }}</td>
+            <td>
+              <span
+                class="badge"
+                [ngClass]="{
+                  'bg-primary': pedido.estado === 'recibido',
+                  'bg-warning text-dark': pedido.estado === 'cocinando',
+                  'bg-info text-dark': pedido.estado === 'enviado',
+                  'bg-success': pedido.estado === 'entregado'
+                }"
+              >
+                {{ pedido.estado | uppercase }}
+              </span>
+            </td>
+            <td>
+              <div *ngIf="pedido.domiciliarioAsignado; else noAsignado">
+                <div>{{ pedido.domiciliarioAsignado.nombre }}</div>
+                <small class="text-muted">{{ pedido.domiciliarioAsignado.telefono }}</small>
+              </div>
+              <ng-template #noAsignado>N/A</ng-template>
+            </td>
+            <td>{{ pedido.fechaCreacion | date: 'short' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <div *ngIf="!cargando && pedidos.length === 0" class="text-center mt-5">
+      <p class="text-muted">No hay pedidos registrados.</p>
+    </div>
+  </div>
+  
