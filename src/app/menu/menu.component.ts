@@ -187,6 +187,19 @@ export class MenuComponent implements OnInit {
       adicionalIds,
       adicionales
     });
+    this.mostrarToast();
+  }
+
+  // Método para mostrar el aviso de pedido agregado
+  private mostrarToast(): void {
+    const toastEl = document.getElementById('pedidoToast');
+    if (!toastEl) return;
+
+    // Inicializa el Toast de Bootstrap
+    const toast = new (window as any).bootstrap.Toast(toastEl, {
+      delay: 3500 // duración en milisegundos (3.5 segundos)
+    });
+    toast.show();
   }
 
   // =========================
@@ -200,4 +213,6 @@ export class MenuComponent implements OnInit {
   agregarPedido(comida: Comida) {
     this.onAgregarClick(comida);
   }
+
+
 }

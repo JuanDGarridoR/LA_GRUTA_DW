@@ -147,17 +147,78 @@ body {
 }
 
 /* ======== PLATO ESTRELLA ======== */
+/* ======== PLATO ESTRELLA (Versión elegante beige y café) ======== */
 .plato-estrella {
-  padding-bottom: 3rem;
+  position: relative;
+  background: linear-gradient(145deg, #f7f3ee, #e8ddd0); /* beige muy claro y crema suave */
+  color: #4A3B34; /* café oscuro */
   text-align: center;
-  background: #fffaf0;
+  padding: 6rem 2rem;
+  overflow: hidden;
+  border-top: 3px solid #B29567;
+  border-bottom: 3px solid #B29567;
 }
+
+.plato-estrella::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 40%, rgba(255,255,255,0.25), transparent 70%);
+  z-index: 0;
+}
+
+.plato-estrella .contenido {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
 .plato-estrella h2 {
   font-family: 'Playfair Display', serif;
-  font-size: 2.5rem;
-  margin-top: 2rem;
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #3E2C23;
   margin-bottom: 1.5rem;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  animation: fadeInUp 1s ease forwards;
 }
+
+.plato-estrella p {
+  font-size: 1.2rem;
+  color: #5A4636;
+  font-style: italic;
+  margin-bottom: 2rem;
+  animation: fadeInUp 1.3s ease forwards;
+}
+
+.plato-estrella .btn-menu {
+  border: 2px solid #B29567;
+  color: #3E2C23;
+  background: #FCE8C7;
+  padding: 0.9rem 2rem;
+  border-radius: 30px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  animation: fadeInUp 1.5s ease forwards;
+}
+
+.plato-estrella .btn-menu:hover {
+  background: #B29567;
+  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 0 15px rgba(178,149,103,0.5);
+}
+
+/* Animación suave */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
 
 /* ======== SOBRE NOSOTROS ======== */
 .sobre-nosotros {
