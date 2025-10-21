@@ -43,6 +43,9 @@ getPedidosAdmin(): Observable<Pedido[]> {
     const body = { estado: nuevoEstado };
     return this.http.put(url, body); // ✅ devolver el Observable
   }
-  
+    // 🧍‍♂️ Obtener pedidos por cliente
+getPedidosPorCliente(idCliente: number): Observable<Pedido[]> {
+  return this.http.get<Pedido[]>(`${this.apiUrl}/cliente/${idCliente}`);
+}
   
 }

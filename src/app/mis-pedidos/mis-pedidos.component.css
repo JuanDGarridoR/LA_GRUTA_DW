@@ -1,0 +1,162 @@
+/* Fuente general del sitio */
+* {
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+}
+
+/* Fondo general */
+body, .container {
+  background-color: #F9F9F9;
+  color: #333;
+}
+
+/* Contenedor */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 15px;
+}
+
+/* Título principal */
+h2 {
+  font-weight: 700;
+  color: #8B0000;
+  margin-bottom: 25px;
+  text-align: center;
+  border-bottom: 2px solid #E0B043;
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+/* Tarjetas de pedidos */
+.card {
+  border: 1px solid #E0B043;
+  border-radius: 14px;
+  margin-bottom: 25px;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(139, 0, 0, 0.05);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(139, 0, 0, 0.12);
+}
+
+/* Encabezado */
+.card-header {
+  background-color: #8B0000;
+  color: #fff;
+  font-weight: 600;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+}
+
+/* Estados */
+/* Estados visuales de los pedidos */
+.badge {
+  font-size: 0.85rem;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* Pendiente */
+.bg-secondary {
+  background-color: #9c9c9c !important;
+}
+
+/* En preparación */
+.bg-warning {
+  background-color: #E0B043 !important;
+  color: #333 !important;
+}
+
+/* Enviado */
+.bg-info {
+  background-color: #c0392b !important; /* rojo vino claro para contraste */
+}
+
+/* Entregado */
+.bg-success {
+  background-color: #2e7d32 !important; /* verde oscuro elegante */
+}
+
+
+/* Cuerpo del pedido */
+.card-body {
+  padding: 15px 20px;
+}
+
+.card-body p {
+  margin: 6px 0;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+/* Lista de comidas */
+.list-group-item {
+  background-color: #fff;
+  border: none;
+  border-top: 1px solid #f0f0f0;
+  padding: 12px 16px;
+}
+
+.list-group-item:first-child {
+  border-top: none;
+}
+
+.list-group-item strong {
+  color: #8B0000;
+  font-weight: 600;
+}
+
+/* Adicionales */
+.list-group-item ul {
+  margin-top: 6px;
+  margin-bottom: 0;
+  padding-left: 18px;
+}
+
+.list-group-item li {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Precio total */
+.card-body strong {
+  color: #8B0000;
+  font-weight: 700;
+}
+
+/* Alerta de sin pedidos */
+.alert {
+  background-color: #fff5e6;
+  border: 1px solid #E0B043;
+  color: #8B0000;
+  border-radius: 10px;
+  padding: 12px 16px;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card, .alert {
+  animation: fadeIn 0.4s ease-in;
+}

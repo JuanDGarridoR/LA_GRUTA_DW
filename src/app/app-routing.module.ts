@@ -14,6 +14,7 @@ import { MenuComponent } from './menu/menu.component';
 import { TablaComidasComponent } from './tabla-comidas/tabla-comidas.component';
 import { CarroComponent } from './carro/carro.component';
 import { PedidoDetalleComponent } from './pedido-detalle/pedido-detalle.component';
+import { MisPedidosComponent } from './mis-pedidos/mis-pedidos.component';
 
 // Componentes del dashboard (admin)
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -50,6 +51,7 @@ const routes: Routes = [
   { path: 'editar-perfil', component: EditarPerfilComponent },
   { path: 'carro', component: CarroComponent },
   { path: 'pedido/:id', component: PedidoDetalleComponent },
+  { path: 'mis-pedidos', component: MisPedidosComponent },
 
   // Dashboard del administrador
   {

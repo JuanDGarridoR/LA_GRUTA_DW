@@ -32,6 +32,7 @@ import { EditarPerfilComponent } from './editar-perfil/editar-perfil.component';
 import { DomiciliariosComponent } from './dashboard/domiciliarios/domiciliarios.component';
 import { DomiciliariosFormComponent } from './dashboard/domiciliarios-form/domiciliarios-form.component';
 import { PedidosComponent } from './dashboard/pedidos/pedidos.component';
+import { MisPedidosComponent } from './mis-pedidos/mis-pedidos.component';
 
 
 @NgModule({
@@ -56,7 +57,7 @@ import { PedidosComponent } from './dashboard/pedidos/pedidos.component';
     AdicionalFormComponent, 
     CarroComponent, 
     PedidoDetalleComponent, 
-    EditarPerfilComponent, DomiciliariosComponent, DomiciliariosFormComponent, PedidosComponent,     
+    EditarPerfilComponent, DomiciliariosComponent, DomiciliariosFormComponent, PedidosComponent,MisPedidosComponent,     
   ],
   
   imports: [
