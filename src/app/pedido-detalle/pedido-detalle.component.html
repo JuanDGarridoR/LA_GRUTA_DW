@@ -1,34 +1,52 @@
-<h2>Pedido #{{ pedido?.id }}</h2>
+<div class="pedido-detalle-container" *ngIf="!loading && pedido as p; else loadingOrError">
+  <div class="pedido-header">
+    <h2 class="titulo">
+      <span class="pedido-label">Pedido</span> <span class="pedido-id">#{{ p.id }}</span>
+      <span class="estado-badge" [ngClass]="p.estado?.toLowerCase()">{{ p.estado }}</span>
+    </h2>
 
-<div *ngIf="loading">Cargando...</div>
-<div *ngIf="error" class="text-danger" aria-live="assertive">{{ error }}</div>
-
-<!-- Usamos alias 'p' para evitar "possibly undefined" -->
-<div *ngIf="!loading && pedido as p">
-  <p>Estado: <strong>{{ p.estado }}</strong></p>
-  <p>Creado: {{ p.creadoEn | date:'short' }}</p>
-  <p>Artículos: {{ totalItems() }}</p>
-
-  <hr>
-
-  <ng-container *ngIf="(p.items?.length || 0) > 0; else sinItems">
-    <div *ngFor="let it of (p.items || [])" class="mb-3">
-      <div><strong>{{ it.comidaNombre }}</strong> × {{ it.cantidad }}</div>
-
-      <div *ngIf="(it.adicionales?.length || 0) > 0">
-        + {{ adNames(it) }}
-      </div>
-
-      <div>Subtotal: {{ subtotalFmt(it) | currency:'COP' }}</div>
+    <div class="info-header">
+      <p><strong>Creado:</strong> {{ p.creadoEn | date: 'dd/MM/yyyy, hh:mm a' }}</p>
+      <p><strong>Artículos:</strong> {{ totalItems() }}</p>
     </div>
-  </ng-container>
+  </div>
 
-  <ng-template #sinItems>
-    <p class="text-muted">Este pedido no tiene ítems para mostrar.</p>
-  </ng-template>
+  <div class="pedido-items">
+    <ng-container *ngIf="(p.items?.length || 0) > 0; else sinItems">
+      <div *ngFor="let it of p.items" class="item-card">
+        <div class="item-info">
+          <h3>{{ it.comidaNombre }}</h3>
+          <p>Cantidad: {{ it.cantidad }}</p>
+          <p *ngIf="(it.adicionales?.length || 0) > 0" class="adicionales">
+            + {{ adNames(it) }}
+          </p>
+        </div>
+        <div class="subtotal">{{ subtotalFmt(it) | currency: 'COP' }}</div>
+      </div>
+    </ng-container>
 
-  <hr>
-  <h3>Total: {{ p.total | currency:'COP' }}</h3>
+    <ng-template #sinItems>
+      <p class="text-muted">Este pedido no tiene ítems para mostrar.</p>
+    </ng-template>
+  </div>
 
-  <a routerLink="/menu" class="btn btn-primary">Seguir comprando</a>
+ <div class="total-box">
+  <span class="label">Total:</span>
+  <span class="valor">
+    {{ p.total ? (p.total | currency: 'COP') : '—' }}
+  </span>
 </div>
+
+
+  <div class="acciones">
+    <a routerLink="/menu" class="btn-volver">Seguir comprando</a>
+    <a routerLink="/mis-pedidos" class="btn-secundario">Ver mis pedidos</a>
+  </div>
+</div>
+
+<ng-template #loadingOrError>
+  <div class="estado-carga">
+    <div *ngIf="loading" class="loading">Cargando pedido...</div>
+    <div *ngIf="error" class="error">{{ error }}</div>
+  </div>
+</ng-template>

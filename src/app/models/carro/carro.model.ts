@@ -1,52 +1,70 @@
 // src/app/models/carro.model.ts
 
-// Ítem que el usuario añade al carrito
+// ---------------------------------------
+// Tipos reutilizables
+// ---------------------------------------
+export interface Adicional {
+  id: number;
+  nombre: string;
+  precio?: number | null; // el back puede enviarlo null u omitirlo
+}
+
+export type PedidoEstado =
+  | 'EN_PROCESO'
+  | 'recibido'
+  | 'cocinando'
+  | 'enviado'
+  | 'entregado'
+  | string; // permite valores futuros sin romper el tipado
+
+// ---------------------------------------
+// Carrito (front)
+// ---------------------------------------
 export interface CartItem {
-  comidaId: number;                     // ID de la comida seleccionada
-  nombre: string;                       // Nombre de la comida
-  precio: number;                       // Precio base de la comida
-  cantidad: number;                     // Cantidad seleccionada
-  image?: string;                       // Imagen opcional de la comida
+  comidaId: number;   // ID de la comida seleccionada
+  nombre: string;     // Nombre de la comida
+  precio: number;     // Precio base de la comida
+  cantidad: number;   // Cantidad seleccionada
+  image?: string;     // Imagen opcional de la comida
 
   // Adicionales u opciones extra del plato
-  adicionalIds?: number[];              
-  adicionales?: Array<{                 
-    id: number;
-    nombre: string;
-    precio?: number;                    
-  }>;
+  adicionalIds?: number[];
+  adicionales?: Adicional[];
 }
 
-// Payload para crear un pedido en el backend
+// ---------------------------------------
+// Crear pedido (request al backend)
+// ---------------------------------------
+export interface CreatePedidoItem {
+  comidaId: number;
+  cantidad: number;
+  adicionalIds?: number[];
+}
+
 export interface CreatePedidoRequest {
-  userId: number; // debe coincidir con el backend
+  clienteId: number;   // antes: userId
   direccion?: string;
   notas?: string;
-  items: Array<{
-    comidaId: number;
-    cantidad: number;
-    adicionalIds?: number[];
-  }>;
+  items: CreatePedidoItem[];
 }
 
+// ---------------------------------------
+// Respuestas del backend (DTOs)
+// ---------------------------------------
+export interface PedidoItemResponse {
+  pedidoComidaId: number;
+  comidaId: number;
+  comidaNombre: string;
+  cantidad: number;
+  adicionales: Adicional[];
+  subtotal: number; // subtotal del ítem (incluye adicionales)
+}
 
-
-// Respuesta estándar del backend al crear o consultar un pedido
 export interface PedidoResponse {
-  id: number;                           // ID del pedido generado
-  estado: string;                       // Estado actual del pedido (Ej: "EN_PROCESO", "ENTREGADO")
-  total: number;                        // Total calculado del pedido
-  creadoEn: string;                     // Fecha de creación del pedido
-  items: Array<{                        // Detalle de los ítems del pedido
-    pedidoComidaId: number;
-    comidaId: number;
-    comidaNombre: string;
-    cantidad: number;
-    adicionales: Array<{                // Adicionales elegidos
-      id: number;
-      nombre: string;
-      precio?: number;
-    }>;
-    subtotal: number;                   // Subtotal de ese ítem
-  }>;
+  id: number;                 // ID del pedido generado
+  estado: PedidoEstado;       // Estado actual
+  total: number;              // Total calculado del pedido
+  creadoEn: string;           // ISO string de fecha de creación
+  fechaEntrega?: string;      // ISO string (si ya fue entregado)
+  items: PedidoItemResponse[]; // Detalle de los ítems
 }

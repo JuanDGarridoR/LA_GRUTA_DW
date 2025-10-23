@@ -1,65 +1,66 @@
 <div class="container mt-4">
-  <h2 class="text-center mb-4">Mis Pedidos</h2>
+  <h2 class="text-center mb-4 titulo">Mis Pedidos</h2>
 
-  <!-- Si no hay pedidos -->
-  <div
-    *ngIf="pedidos.length === 0"
-    class="alert alert-info text-center shadow-sm"
-  >
-    No tienes pedidos registrados todavía.
+  <!-- Confirmación al volver del carrito -->
+  <div *ngIf="justCreated && highlightId" class="alert alert-success shadow-sm text-center">
+    ✅ ¡Pedido #{{ highlightId }} confirmado!
+  </div>
+
+  <!-- Cargando -->
+  <div *ngIf="loading" class="d-flex justify-content-center my-5" aria-live="polite">
+    <div class="spinner-border text-danger" role="status" aria-label="Cargando pedidos"></div>
+  </div>
+
+  <!-- Vacío -->
+  <div *ngIf="!loading && pedidos.length === 0" class="alert alert-info text-center shadow-sm">
+    Aún no tienes pedidos. ¡Empieza en el <a routerLink="/menu">menú</a>!
   </div>
 
   <!-- Lista de pedidos -->
   <div
-    *ngFor="let pedido of pedidos"
+    *ngFor="let pedido of pedidos; trackBy: trackByPedidoId"
     class="card mb-4 shadow-sm border-0 pedido-card"
+    [class.pedido-highlight]="pedido.id === highlightId"
   >
-    <div class="card-header d-flex justify-content-between align-items-center">
-      <strong>Pedido #{{ pedido.id }}</strong>
+    <div class="card-header d-flex justify-content-between align-items-center bg-crema">
+      <strong class="text-vino">Pedido #{{ pedido.id }}</strong>
+
+      <!-- Chip de estado -->
       <span
         class="badge estado"
         [ngClass]="{
-          'bg-secondary': pedido.estado === 'recibido',
-          'bg-warning text-dark': pedido.estado === 'cocinando',
-          'bg-info text-dark': pedido.estado === 'enviado',
-          'bg-success': pedido.estado === 'entregado'
+          'badge-recibido':   (pedido.estado | lowercase) === 'recibido' || (pedido.estado | lowercase) === 'en_proceso',
+          'badge-cocinando':  (pedido.estado | lowercase) === 'cocinando',
+          'badge-enviado':    (pedido.estado | lowercase) === 'enviado',
+          'badge-entregado':  (pedido.estado | lowercase) === 'entregado'
         }"
       >
-        {{ pedido.estado | titlecase }}
+        {{ (pedido.estado || '').replace('_',' ') | titlecase }}
       </span>
     </div>
 
     <div class="card-body">
-      <p>
-        <strong>Fecha:</strong> {{ pedido.creadoEn | date:'medium' }}
+      <p class="mb-1">
+        <strong>Fecha:</strong>
+        <time [attr.datetime]="pedido.creadoEn">{{ pedido.creadoEn | date:'medium' }}</time>
       </p>
 
-      <!-- Lista de comidas -->
-      <div *ngIf="pedido.items && pedido.items.length > 0">
-        <h5 class="mt-3 mb-2">Productos</h5>
+      <!-- Productos -->
+      <div *ngIf="pedido.items?.length">
+        <h5 class="mt-3 mb-2 subtitulo">Productos</h5>
         <ul class="list-group list-group-flush">
-          <li
-            *ngFor="let item of pedido.items"
-            class="list-group-item border-0"
-          >
+          <li *ngFor="let item of pedido.items" class="list-group-item border-0">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <strong>{{ item.comida?.nombre }}</strong>
+                <strong>{{ item.comidaNombre }}</strong>
                 <span class="text-muted">×{{ item.cantidad }}</span>
-                <br />
-                <small class="text-muted">
-                  Precio unitario:
-                  {{
-                    item.comida?.precio | currency : "COP" : "symbol" : "1.0-0"
-                  }}
-                </small>
+                <div class="text-muted small" *ngIf="item.cantidad">
+                  Precio unitario (con adicionales):
+                  {{ (item.subtotal / item.cantidad) | currency:'COP':'symbol':'1.0-0' }}
+                </div>
               </div>
-              <div>
-                <strong>
-                  {{
-                    subtotalItem(item) | currency : "COP" : "symbol" : "1.0-0"
-                  }}
-                </strong>
+              <div class="fw-semibold text-danger">
+                {{ item.subtotal | currency:'COP':'symbol':'1.0-0' }}
               </div>
             </div>
 
@@ -69,9 +70,9 @@
               <ul class="ms-3 mb-0">
                 <li *ngFor="let adicional of item.adicionales">
                   {{ adicional.nombre }}
-                  ({{
-                    adicional.precio | currency : "COP" : "symbol" : "1.0-0"
-                  }})
+                  <ng-container *ngIf="adicional.precio != null">
+                    ({{ adicional.precio | currency:'COP':'symbol':'1.0-0' }})
+                  </ng-container>
                 </li>
               </ul>
             </div>
@@ -79,24 +80,25 @@
         </ul>
       </div>
 
-      <!-- Total general del pedido -->
-      <div
-        class="total-pedido mt-3 pt-2 border-top d-flex justify-content-between align-items-center"
-      >
+      <!-- Total -->
+      <div class="total-pedido mt-3 pt-2 border-top d-flex justify-content-between align-items-center">
         <strong>Total del pedido:</strong>
         <strong class="text-success">
-          {{
-            calcularTotalDesdeItems(pedido)
-              | currency : "COP" : "symbol" : "1.0-0"
-          }}
+          {{ (pedido.total ?? calcularTotalDesdeItems(pedido)) | currency:'COP':'symbol':'1.0-0' }}
         </strong>
       </div>
 
-      <!-- Fecha de entrega -->
+      <!-- Entrega (si aplica) -->
       <p *ngIf="pedido.fechaEntrega" class="mt-3 mb-0">
-        <strong>Entregado el:</strong>
-        {{ pedido.fechaEntrega | date : "medium" }}
+        <strong>Entregado el:</strong> {{ pedido.fechaEntrega | date:'medium' }}
       </p>
+
+      <!-- Acciones -->
+      <div class="d-flex gap-2 mt-3">
+        <a class="btn btn-outline-secondary btn-sm" [routerLink]="['/pedido', pedido.id]">
+          Ver detalle
+        </a>
+      </div>
     </div>
   </div>
 </div>

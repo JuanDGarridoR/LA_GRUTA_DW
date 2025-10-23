@@ -123,30 +123,39 @@ h2 {
   color: #8b1a1a;
 }
 
-/* TOTAL */
+/* TOTAL Y ACCIONES */
 .total-bar {
   position: sticky;
   bottom: 0;
   background: #fff;
   padding: 14px 20px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-end;
   border-top: 1px solid #FFD700;
   border-radius: 12px;
   box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.05);
   margin-top: 20px;
+  gap: 10px;
 }
 
 .total-text {
+  align-self: flex-start;
   font-weight: 600;
   color: #4A3B34;
   font-size: 1.1rem;
 }
 
-/* BOTÓN PRINCIPAL */
-.btn-primary {
-  background-color: #b22222;
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* BOTONES */
+.btn-guardar,
+.btn-confirmar {
   border: none;
   border-radius: 25px;
   padding: 10px 25px;
@@ -157,7 +166,21 @@ h2 {
   font-family: 'Barlow', sans-serif;
 }
 
-.btn-primary:hover {
+.btn-guardar {
+  background-color: #FFD700; /* dorado */
+  color: #4A3B34;
+}
+
+.btn-guardar:hover {
+  background-color: #e0b043;
+  transform: translateY(-1px);
+}
+
+.btn-confirmar {
+  background-color: #b22222; /* vino */
+}
+
+.btn-confirmar:hover {
   background-color: #8b1a1a;
   transform: translateY(-1px);
 }
@@ -180,3 +203,49 @@ h2 {
   margin-top: 10px;
   font-weight: 500;
 }
+
+.loading {
+  text-align: center;
+  color: #4A3B34;
+  font-style: italic;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-guardar {
+  background-color: #d4af37; /* dorado suave */
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.btn-guardar:hover {
+  background-color: #bfa230;
+  transform: translateY(-1px);
+}
+
+.btn-confirmar {
+  background-color: #b22222; /* vino */
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.btn-confirmar:hover {
+  background-color: #8b1a1a;
+  transform: translateY(-1px);
+}
+

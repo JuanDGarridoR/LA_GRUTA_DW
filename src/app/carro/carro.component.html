@@ -1,5 +1,9 @@
 <h2>Carrito</h2>
 
+<!-- Estado o mensajes -->
+<p *ngIf="error" class="error" aria-live="assertive">{{ error }}</p>
+<p *ngIf="loading" class="loading">Procesando pedido...</p>
+
 <div *ngIf="items$ | async as items; else empty">
   <ng-container *ngIf="items.length > 0; else empty">
     <div *ngFor="let it of items" class="carro-item">
@@ -37,21 +41,31 @@
       </div>
     </div>
 
+    <!-- Total + Acciones -->
     <div class="total-bar">
       <div class="total-text">Total: {{ total() | currency : "COP" }}</div>
-      <button
-        class="btn-primary"
-        (click)="confirmarPedido()"
-        [disabled]="loading || items.length === 0"
-      >
-        <span *ngIf="!loading">Confirmar pedido</span>
-        <span *ngIf="loading">Enviando…</span>
-      </button>
-    </div>
 
-    <p *ngIf="error" class="error" aria-live="assertive">
-      {{ error }}
-    </p>
+      <div class="actions">
+        <!-- 🔹 Guardar = volver al menú -->
+        <button
+          class="btn-guardar"
+          (click)="volverAlMenu()"
+          [disabled]="loading"
+        >
+          <span>Volver al menú</span>
+        </button>
+
+        <!-- 🔹 Confirmar = enviar pedido -->
+        <button
+          class="btn-confirmar"
+          (click)="confirmarPedido()"
+          [disabled]="loading || total() === 0"
+        >
+          <span *ngIf="!loading">Confirmar pedido</span>
+          <span *ngIf="loading">Confirmando...</span>
+        </button>
+      </div>
+    </div>
   </ng-container>
 </div>
 
