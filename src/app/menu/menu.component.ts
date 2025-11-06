@@ -11,21 +11,23 @@ import { CartService } from '../services/cart.service';
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.css']
 })
-
-
 export class MenuComponent implements OnInit {
 
   comidas: Comida[] = [];
   categorias: Categoria[] = [];
 
   // Modal de adicionales
-  extras: Adicional[] = [];            // lista de adicionales cargados
-  showExtrasModal = false;             // mostrar/ocultar modal
-  selectedComida?: Comida;             // comida actualmente seleccionada
-  selectedAdicional: Adicional | null = null;
+  extras: Adicional[] = [];                     // lista de adicionales cargados
+  showExtrasModal = false;                      // mostrar/ocultar modal
+  selectedComida?: Comida;                      // comida actualmente seleccionada
+  selectedAdicionales: Adicional[] = [];        // ✅ múltiples adicionales seleccionados
   loadingExtras = false;
 
-  // al inicio del componente
+  // Cantidad pendiente
+  private pendingCantidad = 1;                  // ✅ mínimo 1
+  private readonly MAX_ADICIONALES = 4;         // ✅ máximo 4 diferentes adicionales
+
+  // Modo de pedido
   orderMode: 'domicilio' | 'recoger' = (localStorage.getItem('order_mode') as any) || 'domicilio';
 
   setOrderMode(mode: 'domicilio' | 'recoger') {
@@ -35,11 +37,7 @@ export class MenuComponent implements OnInit {
   isDomicilio(): boolean { return this.orderMode === 'domicilio'; }
   isRecoger(): boolean { return this.orderMode === 'recoger'; }
 
-
-  // cuando el usuario presiona "Agregar" y hay que esperar el adicional
-  private pendingCantidad = 1;
-
-  // ❗ Ajusta aquí qué categorías requieren adicional sí o sí
+  // Categorías que requieren adicional obligatorio
   private readonly CATS_REQUIEREN_ADICIONAL = new Set<string>([
     // 'combos',
     // 'pizzas-personalizadas'
@@ -95,7 +93,7 @@ export class MenuComponent implements OnInit {
 
   verAdicionales(comida: Comida) {
     this.selectedComida = comida;
-    this.selectedAdicional = null;
+    this.selectedAdicionales = [];  // limpiar selección anterior
     this.extras = [];
     this.loadingExtras = true;
     this.showExtrasModal = true;
@@ -113,23 +111,34 @@ export class MenuComponent implements OnInit {
         this.loadingExtras = false;
       },
       error: (err) => {
-        console.error(' Error al cargar adicionales:', err);
+        console.error('❌ Error al cargar adicionales:', err);
         this.loadingExtras = false;
       }
     });
+  }
+
+  // ✅ alternar selección de adicionales (checkboxes)
+  toggleAdicional(adicional: Adicional) {
+    const index = this.selectedAdicionales.findIndex(a => a.id === adicional.id);
+    if (index >= 0) {
+      // si ya está seleccionado, lo quitamos
+      this.selectedAdicionales.splice(index, 1);
+    } else {
+      // si no está, lo agregamos (si no supera el máximo)
+      if (this.selectedAdicionales.length < this.MAX_ADICIONALES) {
+        this.selectedAdicionales.push(adicional);
+      } else {
+        alert(`Solo puedes seleccionar hasta ${this.MAX_ADICIONALES} adicionales.`);
+      }
+    }
   }
 
   // =========================
   //     AGREGAR AL CARRO
   // =========================
 
-  /**
-   * Handler del botón "Agregar" en la tarjeta.
-   * - Si la categoría requiere adicional → abre modal.
-   * - Si no requiere → agrega directo con la cantidad (>=1).
-   */
   onAgregarClick(comida: Comida) {
-    const cantidad = Math.max(comida.cantidad || 0, 1);
+    const cantidad = Math.max(comida.cantidad || 0, 1); // ✅ siempre mínimo 1
     const slug = (comida.categoria?.slug || '').toLowerCase();
 
     if (this.CATS_REQUIEREN_ADICIONAL.has(slug)) {
@@ -140,52 +149,43 @@ export class MenuComponent implements OnInit {
     }
 
     // Agregar directo sin adicional
-    this.agregarAlCarro(comida, cantidad, null);
-    // limpiar cantidad en UI
+    this.agregarAlCarro(comida, cantidad, []);
     comida.cantidad = 0;
   }
 
-  /**
-   * Click en "Confirmar selección" del modal de adicionales.
-   */
   confirmarSeleccion() {
     if (!this.selectedComida) return;
 
-    this.agregarAlCarro(this.selectedComida, this.pendingCantidad, this.selectedAdicional);
-    // limpiar estado de modal
+    const cantidad = Math.max(this.pendingCantidad, 1);
+    this.agregarAlCarro(this.selectedComida, cantidad, this.selectedAdicionales);
+
+    // limpiar modal
     this.selectedComida.cantidad = 0;
     this.selectedComida = undefined;
-    this.selectedAdicional = null;
+    this.selectedAdicionales = [];
     this.pendingCantidad = 1;
     this.showExtrasModal = false;
   }
 
-  /**
-   * Agrega realmente al CartService con o sin adicional.
-   * (con chequeos de tipos para evitar (number|undefined)[])
-   */
-  private agregarAlCarro(comida: Comida, cantidad: number, adicional: Adicional | null) {
-    let adicionalIds: number[] = [];
-    let adicionales: Array<{ id: number; nombre: string; precio?: number }> = [];
+  private agregarAlCarro(comida: Comida, cantidad: number, adicionales: Adicional[] = []) {
+    const adicionalIds = adicionales
+      .filter(a => typeof a.id === 'number')
+      .map(a => a.id as number);
 
-    if (adicional && typeof adicional.id === 'number') {
-      adicionalIds = [adicional.id]; // ahora es number[]
-      adicionales = [{
-        id: adicional.id,
-        nombre: (adicional as any).nombre ?? '',
-        // si tu modelo tiene precio, úsalo; si no, puedes quitar este campo
-        precio: (adicional as any).precio
-      }];
-    }
+    const adicionalesData = adicionales.map(a => ({
+      id: a.id!,
+      nombre: (a as any).nombre ?? '',
+      precio: (a as any).precio
+    }));
 
     this.cart.add({
-      comidaId: Number(comida.id),           // asegura number (por si viene opcional)
+      comidaId: Number(comida.id),
       nombre: String(comida.nombre ?? ''),
       precio: Number(comida.precio),
       cantidad,
       image: comida.imagen,
       adicionalIds,
-      adicionales
+      adicionales: adicionalesData
     });
     this.mostrarToast();
   }
@@ -195,9 +195,8 @@ export class MenuComponent implements OnInit {
     const toastEl = document.getElementById('pedidoToast');
     if (!toastEl) return;
 
-    // Inicializa el Toast de Bootstrap
     const toast = new (window as any).bootstrap.Toast(toastEl, {
-      delay: 3500 // duración en milisegundos (3.5 segundos)
+      delay: 3500
     });
     toast.show();
   }
@@ -206,13 +205,13 @@ export class MenuComponent implements OnInit {
   //    LEGACY / PLACEHOLDER
   // =========================
 
-  addAdicionalToComida(ad: Adicional) {
-    this.selectedAdicional = ad;
-  }
-
   agregarPedido(comida: Comida) {
     this.onAgregarClick(comida);
   }
+
+  isAdicionalSeleccionado(adicional: any): boolean {
+  return this.selectedAdicionales?.some(a => a.id === adicional.id) || false;
+}
 
 
 }
