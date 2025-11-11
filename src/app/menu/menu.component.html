@@ -1,28 +1,6 @@
 <main class="container my-5">
-  <!-- Barra de modo de orden 
-  <div class="orderbar">
-    <span class="orderbar-title">Inicia tu orden</span>
-
-    <button
-      class="orderbtn"
-      [class.active]="isDomicilio()"
-      (click)="setOrderMode('domicilio')"
-    >
-      <span class="icon">🛵</span>
-      Domicilio
-    </button>
-
-    <button
-      class="orderbtn"
-      [class.alt]="true"
-      [class.active-alt]="isRecoger()"
-      (click)="setOrderMode('recoger')"
-    >
-      <span class="icon">🏬</span>
-      Recoger/Consumir
-    </button>
-  </div>-->
   <h2 class="text-center mb-5">Menú</h2>
+
   <!-- Iterar sobre cada categoría -->
   <section *ngFor="let cat of categorias" [id]="cat.slug" class="mb-5">
     <h2 class="text-center mb-4">{{ cat.nombre }}</h2>
@@ -50,9 +28,9 @@
                 <div
                   class="d-flex justify-content-between align-items-center mb-2"
                 >
-                  <span class="fw-bold">{{
-                    comida.precio | currency : "COP"
-                  }}</span>
+                  <span class="fw-bold">
+                    {{ comida.precio | currency : "COP" }}
+                  </span>
                   <button
                     class="btn btn-sm btn-outline-primary"
                     (click)="verAdicionales(comida)"
@@ -108,7 +86,7 @@
     </a>
   </div>
 
-  <!-- 🧩 MODAL DE ADICIONALES ESTILO COMBO -->
+  <!-- MODAL DE ADICIONALES -->
   <div
     class="modal-backdrop"
     *ngIf="showExtrasModal"
@@ -127,7 +105,7 @@
 
     <div class="modal-body">
       <div class="row">
-        <!-- 🥘 COMIDA PRINCIPAL -->
+        <!-- COMIDA PRINCIPAL -->
         <div class="col-lg-5 text-center mb-4 mb-lg-0 border-end">
           <img
             [src]="getImageUrl(selectedComida?.imagen)"
@@ -142,15 +120,15 @@
           </p>
         </div>
 
-        <!-- 🍟 ADICIONALES -->
+        <!-- ADICIONALES -->
         <div class="col-lg-7 ps-lg-4">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h6 class="fw-bold mb-0">Acompañamientos</h6>
             <small class="text-muted"
-              >{{ selectedAdicional ? "1" : "0" }}/1</small
+              >{{ selectedAdicionales.length }}/4 seleccionados</small
             >
           </div>
-          <p class="text-muted small">Es necesario elegir uno</p>
+          <p class="text-muted small">Puedes elegir hasta 4 adicionales</p>
 
           <div *ngIf="loadingExtras" class="text-center py-4">
             <div class="spinner-border text-danger" role="status">
@@ -185,10 +163,9 @@
                   +{{ adicional.precio | currency : "COP" }}
                 </div>
                 <input
-                  type="radio"
-                  name="adicional"
-                  [value]="adicional"
-                  [(ngModel)]="selectedAdicional"
+                  type="checkbox"
+                  [checked]="isAdicionalSeleccionado(adicional)"
+                  (change)="toggleAdicional(adicional)"
                 />
               </div>
             </label>
@@ -210,34 +187,37 @@
       </button>
       <button
         class="btn btn-primary"
-        [disabled]="!selectedAdicional"
+        [disabled]="selectedAdicionales.length === 0"
         (click)="confirmarSeleccion()"
       >
         Confirmar selección
       </button>
     </div>
   </div>
-  <!-- 🧾 Toast de confirmación de pedido -->
-<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 2000;">
+
+  <!-- TOAST -->
   <div
-    id="pedidoToast"
-    class="toast align-items-center text-white border-0"
-    role="alert"
-    aria-live="assertive"
-    aria-atomic="true"
+    class="toast-container position-fixed bottom-0 end-0 p-3"
+    style="z-index: 2000;"
   >
-    <div class="d-flex">
-      <div class="toast-body fw-bold">
-        🛍️ ¡Tu pedido ha sido agregado al carrito!
+    <div
+      id="pedidoToast"
+      class="toast align-items-center text-white border-0"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+    >
+      <div class="d-flex">
+        <div class="toast-body fw-bold">
+          🛍️ ¡Tu pedido ha sido agregado al carrito!
+        </div>
+        <button
+          type="button"
+          class="btn-close btn-close-white me-2 m-auto"
+          data-bs-dismiss="toast"
+          aria-label="Close"
+        ></button>
       </div>
-      <button
-        type="button"
-        class="btn-close btn-close-white me-2 m-auto"
-        data-bs-dismiss="toast"
-        aria-label="Close"
-      ></button>
     </div>
   </div>
-</div>
-
 </main>

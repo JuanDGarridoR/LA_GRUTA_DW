@@ -65,7 +65,10 @@ export class AdicionalFormComponent implements OnInit {
   }
 
   guardarAdicional(): void {
-    if (!this.adicional.nombre.trim() || this.adicional.precio <= 0) {
+    const nombreValido = this.adicional.nombre?.trim() || '';
+    const precioValido = this.adicional.precio ?? 0;
+
+    if (!nombreValido || precioValido <= 0) {
       alert('Por favor completa todos los campos requeridos.');
       return;
     }

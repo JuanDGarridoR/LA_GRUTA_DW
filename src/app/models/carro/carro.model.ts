@@ -1,14 +1,9 @@
-// src/app/models/carro.model.ts
+// src/app/models/carro/carro.model.ts
+import { Adicional } from '../adicional/adicional.model';
 
 // ---------------------------------------
 // Tipos reutilizables
 // ---------------------------------------
-export interface Adicional {
-  id: number;
-  nombre: string;
-  precio?: number | null; // el back puede enviarlo null u omitirlo
-}
-
 export type PedidoEstado =
   | 'EN_PROCESO'
   | 'recibido'

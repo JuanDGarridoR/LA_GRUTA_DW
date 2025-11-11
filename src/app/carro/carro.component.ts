@@ -27,15 +27,11 @@ export class CarroComponent implements OnInit {
     private authService: AutenticacionService
   ) {}
 
-  // ======================================================
-  // 🔹 Cargar pedido activo al iniciar
-  // ======================================================
   ngOnInit() {
     const userId = this.authService.getUserId();
     if (userId) {
       this.pedidoService.getCarritoUsuario(userId).subscribe({
         next: (pedido) => {
-          // ⚠️ El backend puede devolver un mensaje en lugar de un pedido
           if (pedido && (pedido as any).id) {
             this.pedidoActual = pedido;
           } else {
@@ -47,17 +43,29 @@ export class CarroComponent implements OnInit {
     }
   }
 
-  // ======================================================
-  // 🔹 Accesores y helpers del carrito
-  // ======================================================
-  get items$() { return this.cart.items$; }
+  get items$() {
+    return this.cart.items$;
+  }
 
-  inc(i: CartItem)    { this.cart.updateCantidad(i.comidaId, i.adicionalIds, i.cantidad + 1); }
-  dec(i: CartItem)    { this.cart.updateCantidad(i.comidaId, i.adicionalIds, i.cantidad - 1); }
-  remove(i: CartItem) { this.cart.remove(i.comidaId, i.adicionalIds); }
+  inc(i: CartItem) {
+    this.cart.updateCantidad(i.comidaId, i.adicionalIds, i.cantidad + 1);
+  }
 
-  total(): number { return this.cart.total(); }
-  count(): number { return this.cart.count(); }
+  dec(i: CartItem) {
+    this.cart.updateCantidad(i.comidaId, i.adicionalIds, i.cantidad - 1);
+  }
+
+  remove(i: CartItem) {
+    this.cart.remove(i.comidaId, i.adicionalIds);
+  }
+
+  total(): number {
+    return this.cart.total();
+  }
+
+  count(): number {
+    return this.cart.count();
+  }
 
   adNames(it: CartItem): string {
     const ads: ReadonlyArray<Adicional> = it.adicionales ?? [];
@@ -73,9 +81,6 @@ export class CarroComponent implements OnInit {
     return (Number(it.precio) + this.adTotal(it)) * Number(it.cantidad ?? 0);
   }
 
-  // ======================================================
-  // 🔹 Crear pedido (nuevo)
-  // ======================================================
   crearPedido() {
     this.error = undefined;
     this.loading = true;
@@ -91,7 +96,8 @@ export class CarroComponent implements OnInit {
       const items = (itemsSnapshot ?? []).map((i) => ({
         comidaId: i.comidaId,
         cantidad: i.cantidad,
-        adicionalIds: i.adicionalIds ?? (i.adicionales?.map((a) => a.id) ?? []),
+        adicionalIds: (i.adicionalIds ?? i.adicionales?.map((a) => a.id) ?? [])
+          .filter((id): id is number => id !== undefined),
       }));
 
       if (items.length === 0) {
@@ -110,7 +116,7 @@ export class CarroComponent implements OnInit {
       this.pedidoService.crearPedido(req).subscribe({
         next: (resp: PedidoResponse) => {
           this.loading = false;
-          this.pedidoActual = resp; // ✅ guarda el pedido creado
+          this.pedidoActual = resp;
           alert(`🛒 Pedido #${resp.id} creado. Puedes confirmarlo cuando estés listo.`);
         },
         error: (err) => {
@@ -122,85 +128,80 @@ export class CarroComponent implements OnInit {
     });
   }
 
-  // ======================================================
-  // 🔹 Confirmar pedido activo
-  // ======================================================
- confirmarPedido() {
-  this.error = undefined;
-  this.loading = true;
+  confirmarPedido() {
+    this.error = undefined;
+    this.loading = true;
 
-  const userId = this.authService.getUserId();
-  if (!userId) {
-    this.loading = false;
-    this.error = 'No se encontró sesión activa.';
-    return;
-  }
+    const userId = this.authService.getUserId();
+    if (!userId) {
+      this.loading = false;
+      this.error = 'No se encontró sesión activa.';
+      return;
+    }
 
-  // Si no hay pedidoActual, lo creamos antes de confirmar
-  if (!this.pedidoActual) {
-    this.cart.items$.pipe(take(1)).subscribe((itemsSnapshot) => {
-      const items = (itemsSnapshot ?? []).map((i) => ({
-        comidaId: i.comidaId,
-        cantidad: i.cantidad,
-        adicionalIds: i.adicionalIds ?? (i.adicionales?.map((a) => a.id) ?? []),
-      }));
+    if (!this.pedidoActual) {
+      this.cart.items$.pipe(take(1)).subscribe((itemsSnapshot) => {
+        const items = (itemsSnapshot ?? []).map((i) => ({
+          comidaId: i.comidaId,
+          cantidad: i.cantidad,
+          adicionalIds: (i.adicionalIds ?? i.adicionales?.map((a) => a.id) ?? [])
+            .filter((id): id is number => id !== undefined),
+        }));
 
-      if (items.length === 0) {
-        this.loading = false;
-        this.error = 'Tu carrito está vacío.';
-        return;
-      }
-
-      const req = { clienteId: userId, items };
-
-      // 1️⃣ Crear pedido en backend
-      this.pedidoService.crearPedido(req).subscribe({
-        next: (pedido) => {
-          this.pedidoActual = pedido;
-          // 2️⃣ Luego confirmar
-          this.pedidoService.confirmarPedido(pedido.id).subscribe({
-            next: () => {
-              this.loading = false;
-              alert('✅ Pedido confirmado correctamente.');
-              this.cart.clear();
-              this.router.navigate(['/mis-pedidos']);
-            },
-            error: (err) => {
-              console.error(err);
-              this.loading = false;
-              this.error = 'No se pudo confirmar el pedido.';
-            },
-          });
-        },
-        error: (err) => {
-          console.error('Error creando pedido:', err);
+        if (items.length === 0) {
           this.loading = false;
-          this.error = 'No se pudo crear el pedido.';
-        },
+          this.error = 'Tu carrito está vacío.';
+          return;
+        }
+
+        const req: CreatePedidoRequest = {
+          clienteId: userId,
+          items,
+        };
+
+        this.pedidoService.crearPedido(req).subscribe({
+          next: (pedido) => {
+            this.pedidoActual = pedido;
+            this.pedidoService.confirmarPedido(pedido.id).subscribe({
+              next: () => {
+                this.loading = false;
+                alert('✅ Pedido confirmado correctamente.');
+                this.cart.clear();
+                this.router.navigate(['/mis-pedidos']);
+              },
+              error: (err) => {
+                console.error(err);
+                this.loading = false;
+                this.error = 'No se pudo confirmar el pedido.';
+              },
+            });
+          },
+          error: (err) => {
+            console.error('Error creando pedido:', err);
+            this.loading = false;
+            this.error = 'No se pudo crear el pedido.';
+          },
+        });
       });
+      return;
+    }
+
+    this.pedidoService.confirmarPedido(this.pedidoActual.id).subscribe({
+      next: () => {
+        this.loading = false;
+        alert('✅ Pedido confirmado correctamente.');
+        this.cart.clear();
+        this.router.navigate(['/mis-pedidos']);
+      },
+      error: (err) => {
+        console.error('Error confirmando pedido:', err);
+        this.loading = false;
+        this.error = 'No se pudo confirmar el pedido.';
+      },
     });
-    return;
   }
-
-  // Si ya hay un pedido existente
-  this.pedidoService.confirmarPedido(this.pedidoActual.id).subscribe({
-    next: () => {
-      this.loading = false;
-      alert('✅ Pedido confirmado correctamente.');
-      this.cart.clear();
-      this.router.navigate(['/mis-pedidos']);
-    },
-    error: (err) => {
-      console.error('Error confirmando pedido:', err);
-      this.loading = false;
-      this.error = 'No se pudo confirmar el pedido.';
-    },
-  });
-}
-
 
   volverAlMenu() {
-  this.router.navigate(['/menu']);
-}
-
+    this.router.navigate(['/menu']);
+  }
 }

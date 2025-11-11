@@ -16,32 +16,16 @@ export class MenuComponent implements OnInit {
   comidas: Comida[] = [];
   categorias: Categoria[] = [];
 
-  // Modal de adicionales
-  extras: Adicional[] = [];                     // lista de adicionales cargados
-  showExtrasModal = false;                      // mostrar/ocultar modal
-  selectedComida?: Comida;                      // comida actualmente seleccionada
-  selectedAdicionales: Adicional[] = [];        // ✅ múltiples adicionales seleccionados
+  extras: Adicional[] = [];
+  showExtrasModal = false;
+  selectedComida?: Comida;
+  selectedAdicionales: Adicional[] = [];
   loadingExtras = false;
 
-  // Cantidad pendiente
-  private pendingCantidad = 1;                  // ✅ mínimo 1
-  private readonly MAX_ADICIONALES = 4;         // ✅ máximo 4 diferentes adicionales
+  private pendingCantidad = 1;
+  private readonly MAX_ADICIONALES = 4;
 
-  // Modo de pedido
   orderMode: 'domicilio' | 'recoger' = (localStorage.getItem('order_mode') as any) || 'domicilio';
-
-  setOrderMode(mode: 'domicilio' | 'recoger') {
-    this.orderMode = mode;
-    localStorage.setItem('order_mode', mode);
-  }
-  isDomicilio(): boolean { return this.orderMode === 'domicilio'; }
-  isRecoger(): boolean { return this.orderMode === 'recoger'; }
-
-  // Categorías que requieren adicional obligatorio
-  private readonly CATS_REQUIEREN_ADICIONAL = new Set<string>([
-    // 'combos',
-    // 'pizzas-personalizadas'
-  ]);
 
   constructor(
     private comidaService: ComidaService,
@@ -53,47 +37,39 @@ export class MenuComponent implements OnInit {
     this.categorias = CATEGORIAS;
 
     this.comidaService.getComidas().subscribe({
-      next: (data: Comida[]) => { this.comidas = data; },
-      error: (err: any) => { console.error('❌ Error al cargar comidas:', err); }
+      next: (data: Comida[]) => this.comidas = data,
+      error: (err: any) => console.error('❌ Error al cargar comidas:', err)
     });
   }
-
-  // =========================
-  //      LÓGICA DE UI
-  // =========================
 
   sumarCantidad(comida: Comida) {
     comida.cantidad = (comida.cantidad || 0) + 1;
   }
 
   restarCantidad(comida: Comida) {
-    const actual = comida.cantidad || 0;
-    comida.cantidad = Math.max(actual - 1, 0);
+    comida.cantidad = Math.max((comida.cantidad || 0) - 1, 0);
   }
 
-  // Filtra las comidas de una categoría
   getComidasPorCategoria(slug: string): Comida[] {
     return this.comidas.filter(
       c => c.categoria?.slug?.toLowerCase() === slug.toLowerCase()
     );
   }
 
-  // Imagen segura
   getImageUrl(path: string | undefined): string {
     if (!path) return 'assets/images/default-placeholder.png';
     if (path.startsWith('http')) return path;
-
     const base = 'http://localhost:8080';
     return `${base}${path.startsWith('/') ? '' : '/'}${path}`;
   }
 
   // =========================
-  //     ADICIONALES / MODAL
+  // MODAL DE ADICIONALES
   // =========================
 
   verAdicionales(comida: Comida) {
     this.selectedComida = comida;
-    this.selectedAdicionales = [];  // limpiar selección anterior
+    this.selectedAdicionales = [];
     this.extras = [];
     this.loadingExtras = true;
     this.showExtrasModal = true;
@@ -117,49 +93,36 @@ export class MenuComponent implements OnInit {
     });
   }
 
-  // ✅ alternar selección de adicionales (checkboxes)
   toggleAdicional(adicional: Adicional) {
     const index = this.selectedAdicionales.findIndex(a => a.id === adicional.id);
     if (index >= 0) {
-      // si ya está seleccionado, lo quitamos
       this.selectedAdicionales.splice(index, 1);
+    } else if (this.selectedAdicionales.length < this.MAX_ADICIONALES) {
+      this.selectedAdicionales.push(adicional);
     } else {
-      // si no está, lo agregamos (si no supera el máximo)
-      if (this.selectedAdicionales.length < this.MAX_ADICIONALES) {
-        this.selectedAdicionales.push(adicional);
-      } else {
-        alert(`Solo puedes seleccionar hasta ${this.MAX_ADICIONALES} adicionales.`);
-      }
+      alert(`Solo puedes seleccionar hasta ${this.MAX_ADICIONALES} adicionales.`);
     }
   }
 
+  isAdicionalSeleccionado(adicional: Adicional): boolean {
+    return this.selectedAdicionales.some(a => a.id === adicional.id);
+  }
+
   // =========================
-  //     AGREGAR AL CARRO
+  // AGREGAR AL CARRITO
   // =========================
 
   onAgregarClick(comida: Comida) {
-    const cantidad = Math.max(comida.cantidad || 0, 1); // ✅ siempre mínimo 1
-    const slug = (comida.categoria?.slug || '').toLowerCase();
-
-    if (this.CATS_REQUIEREN_ADICIONAL.has(slug)) {
-      // guardar cantidad pendiente y abrir modal
-      this.pendingCantidad = cantidad;
-      this.verAdicionales(comida);
-      return;
-    }
-
-    // Agregar directo sin adicional
-    this.agregarAlCarro(comida, cantidad, []);
-    comida.cantidad = 0;
+    const cantidad = Math.max(comida.cantidad || 0, 1);
+    this.pendingCantidad = cantidad;
+    this.verAdicionales(comida);
   }
 
   confirmarSeleccion() {
     if (!this.selectedComida) return;
 
-    const cantidad = Math.max(this.pendingCantidad, 1);
-    this.agregarAlCarro(this.selectedComida, cantidad, this.selectedAdicionales);
+    this.agregarAlCarro(this.selectedComida, this.pendingCantidad, this.selectedAdicionales);
 
-    // limpiar modal
     this.selectedComida.cantidad = 0;
     this.selectedComida = undefined;
     this.selectedAdicionales = [];
@@ -172,12 +135,6 @@ export class MenuComponent implements OnInit {
       .filter(a => typeof a.id === 'number')
       .map(a => a.id as number);
 
-    const adicionalesData = adicionales.map(a => ({
-      id: a.id!,
-      nombre: (a as any).nombre ?? '',
-      precio: (a as any).precio
-    }));
-
     this.cart.add({
       comidaId: Number(comida.id),
       nombre: String(comida.nombre ?? ''),
@@ -185,33 +142,16 @@ export class MenuComponent implements OnInit {
       cantidad,
       image: comida.imagen,
       adicionalIds,
-      adicionales: adicionalesData
+      adicionales
     });
     this.mostrarToast();
   }
 
-  // Método para mostrar el aviso de pedido agregado
   private mostrarToast(): void {
     const toastEl = document.getElementById('pedidoToast');
     if (!toastEl) return;
 
-    const toast = new (window as any).bootstrap.Toast(toastEl, {
-      delay: 3500
-    });
+    const toast = new (window as any).bootstrap.Toast(toastEl, { delay: 3500 });
     toast.show();
   }
-
-  // =========================
-  //    LEGACY / PLACEHOLDER
-  // =========================
-
-  agregarPedido(comida: Comida) {
-    this.onAgregarClick(comida);
-  }
-
-  isAdicionalSeleccionado(adicional: any): boolean {
-  return this.selectedAdicionales?.some(a => a.id === adicional.id) || false;
-}
-
-
 }
