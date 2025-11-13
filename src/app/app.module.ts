@@ -1,9 +1,9 @@
 // src/app/app.module.ts
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { CommonModule } from '@angular/common';          
-import { RouterModule } from '@angular/router';        
-import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 
@@ -44,6 +44,9 @@ import { PedidosComponent } from './dashboard/pedidos/pedidos.component';
 // Operador
 import { PortalOperadorComponent } from './portal-operador/portal-operador.component';
 
+// Interceptor JWT
+import { JwtInterceptor } from './interceptors/jwt.interceptor';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -80,15 +83,17 @@ import { PortalOperadorComponent } from './portal-operador/portal-operador.compo
   ],
   imports: [
     BrowserModule,
-    CommonModule,            // ✅ Pipes/directivas comunes
-    RouterModule,            // ✅ routerLink / router-outlet
+    CommonModule,
+    RouterModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     CarouselModule.forRoot(),
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -16,6 +16,7 @@ export interface LoggedUser {
   id: number;
   username: string;
   role: string;
+  token?: string; // 👈 Añadido para manejar el token JWT
 }
 
 @Injectable({ providedIn: 'root' })
@@ -46,7 +47,11 @@ export class AutenticacionService {
   login(credentials: LoginRequest): Observable<LoggedUser> {
     return this.http.post<LoggedUser>(this.apiUrl, credentials).pipe(
       tap(user => {
-        // Guardar sesión
+        // 🟢 Guardar token y sesión
+        if (user.token) {
+          localStorage.setItem('token', user.token); // <--- NUEVO
+        }
+
         localStorage.setItem('loggedIn', 'true');
         localStorage.setItem('id', user.id.toString());
         localStorage.setItem('userId', user.id.toString());
@@ -60,10 +65,10 @@ export class AutenticacionService {
         this.usernameSubject.next(user.username);
         this.usuarioActualSubject.next(user as User);
 
-        // Sincronizar carrito: migra invitado -> usuario y carga el del usuario
+        // Sincronizar carrito
         setTimeout(() => {
           const cart = this.injector.get(CartService);
-          cart.syncWithUser(true); // migrateGuest = true
+          cart.syncWithUser(true);
         }, 0);
 
         // Redirección por rol
@@ -85,11 +90,9 @@ export class AutenticacionService {
   // LOGOUT
   // ============================
   logout(): void {
-    // NO borres los carritos por usuario; solo claves de sesión:
-    const authKeys = ['loggedIn', 'id', 'userId', 'role', 'username', 'user'];
+    const authKeys = ['token', 'loggedIn', 'id', 'userId', 'role', 'username', 'user'];
     authKeys.forEach(k => localStorage.removeItem(k));
 
-    // Cargar carrito de invitado en memoria (no borrar los carritos de usuarios)
     setTimeout(() => {
       const cart = this.injector.get(CartService);
       cart.syncAsGuest();
@@ -104,7 +107,7 @@ export class AutenticacionService {
   }
 
   // ============================
-  // Utilidades de usuario
+  // Utilidades
   // ============================
   get currentUser(): User | null {
     return this.usuarioActualSubject.value;
@@ -136,13 +139,11 @@ export class AutenticacionService {
       this.usernameSubject.next(username);
       this.usuarioActualSubject.next(user);
 
-      // Cargar el carrito del usuario actual (sin migración)
       setTimeout(() => {
         const cart = this.injector.get(CartService);
         cart.syncWithUser(false);
       }, 0);
     } else {
-      // Cargar carrito invitado
       setTimeout(() => {
         const cart = this.injector.get(CartService);
         cart.syncAsGuest();
