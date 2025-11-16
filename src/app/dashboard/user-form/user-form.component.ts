@@ -1,25 +1,26 @@
-// src/app/dashboard/user-form/user-form.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
-import { User } from 'src/app/models/user/user.model';
+import { User } from 'src/app/models/usuarios/user/user.model';
 
 @Component({
   selector: 'app-user-form',
   templateUrl: './user-form.component.html',
 })
 export class UserFormComponent implements OnInit {
+
   user: User = {
     id: undefined,
     username: '',
     password: '',
-    role: 'USER',
-    direccion: '',
-    telefono: ''
+    roles: [] // ← los roles se agregan aquí
   };
 
   isEditMode = false;
-  pageTitle = 'Nuevo Usuario';
+  pageTitle = 'Crear Usuario Administrativo';
+
+  // Roles disponibles en tu backend
+  availableRoles = ['ADMIN', 'OPERADOR'];
 
   constructor(
     private userService: UserService,
@@ -29,49 +30,51 @@ export class UserFormComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
+
     if (id) {
       this.isEditMode = true;
-      this.pageTitle = 'Editar Usuario';
+      this.pageTitle = 'Editar Usuario Administrativo';
+
       this.userService.getById(+id).subscribe({
-        next: (data) => this.user = data,
-        error: (err) => {
-          console.error('❌ Error al cargar usuario', err);
-          alert('No se pudo cargar el usuario desde el servidor.');
-          this.router.navigate(['/dashboard/clientes']);
+        next: (data) => {
+          this.user = {
+            id: data.id,
+            username: data.username,
+            password: '', // nunca traemos password
+            roles: data.roles || []
+          };
+        },
+        error: () => {
+          alert('No se pudo cargar el usuario.');
+          this.router.navigate(['/dashboard/usuarios']);
         }
       });
     }
   }
 
   guardarUsuario(): void {
+
     if (this.isEditMode) {
-      // UPDATE
       this.userService.update(this.user).subscribe({
         next: () => {
-          alert('Usuario actualizado correctamente');
-          this.router.navigate(['/dashboard/clientes']);
+          alert('Usuario actualizado.');
+          this.router.navigate(['/dashboard/usuarios']);
         },
-        error: (err) => {
-          console.error('❌ Error actualizando usuario:', err);
-          alert('No se pudo actualizar el usuario.');
-        }
+        error: () => alert('Error al actualizar usuario.')
       });
+
     } else {
-      // CREATE
       this.userService.add(this.user).subscribe({
         next: () => {
-          alert('Usuario agregado correctamente');
-          this.router.navigate(['/dashboard/clientes']);
+          alert('Usuario creado correctamente');
+          this.router.navigate(['/dashboard/usuarios']);
         },
-        error: (err) => {
-          console.error('❌ Error creando usuario:', err);
-          alert('No se pudo crear el usuario.');
-        }
+        error: () => alert('Error al crear usuario.')
       });
     }
   }
 
   cancelar(): void {
-    this.router.navigate(['/dashboard/clientes']);
+    this.router.navigate(['/dashboard/usuarios']);
   }
 }

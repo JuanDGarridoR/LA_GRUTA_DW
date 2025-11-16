@@ -7,6 +7,7 @@ import { AutenticacionService, LoginRequest } from '../services/autenticacion.se
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+
   credentials: LoginRequest = { username: '', password: '' };
   errorMsg = '';
   loading = false;
@@ -14,20 +15,22 @@ export class LoginComponent {
   constructor(private authService: AutenticacionService) {}
 
   login(): void {
-    this.loading = true;
     this.errorMsg = '';
+    this.loading = true;
 
     this.authService.login(this.credentials).subscribe({
       next: () => {
         this.loading = false;
-        // el servicio ya redirige según el rol
+        // El servicio ya redirige según el rol
       },
       error: (err) => {
         this.loading = false;
-        this.errorMsg =
-          typeof err.error === 'string'
-            ? err.error
-            : 'Error al iniciar sesión. Verifique sus credenciales.';
+
+        if (err.status === 401) {
+          this.errorMsg = 'Usuario o contraseña incorrectos.';
+        } else {
+          this.errorMsg = 'Error al iniciar sesión.';
+        }
       }
     });
   }

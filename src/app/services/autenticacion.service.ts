@@ -1,36 +1,36 @@
-// src/app/services/autenticacion.service.ts
 import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { User } from '../models/user/user.model';
+import { User } from '../models/usuarios/user/user.model';
 import { CartService } from './cart.service';
 
+// === MODELOS QUE EL BACKEND USA ===
 export interface LoginRequest {
   username: string;
   password: string;
 }
 
-export interface LoggedUser {
+export interface LoginResponse {
   id: number;
   username: string;
-  role: string;
-  token?: string; // 👈 Añadido para manejar el token JWT
+  roles: string[]; // ej: ["CLIENTE"], ["DOMICILIARIO"], ["ADMIN"]
 }
 
 @Injectable({ providedIn: 'root' })
 export class AutenticacionService {
-  private apiUrl = 'http://localhost:8080/api/users/login';
+
+  private apiUrl = 'http://localhost:8080/api/auth/login';
 
   private loggedInSubject = new BehaviorSubject<boolean>(false);
-  private roleSubject = new BehaviorSubject<string | null>(null);
+  private rolesSubject = new BehaviorSubject<string[] | null>(null);
   private usernameSubject = new BehaviorSubject<string | null>(null);
   private usuarioActualSubject = new BehaviorSubject<User | null>(this.getUsuarioActual());
 
   usuario$ = this.usuarioActualSubject.asObservable();
   isLoggedIn$ = this.loggedInSubject.asObservable();
-  role$ = this.roleSubject.asObservable();
+  roles$ = this.rolesSubject.asObservable();
   username$ = this.usernameSubject.asObservable();
 
   constructor(
@@ -42,55 +42,61 @@ export class AutenticacionService {
   }
 
   // ============================
-  // LOGIN
+  // ✔ LOGIN NUEVO
   // ============================
-  login(credentials: LoginRequest): Observable<LoggedUser> {
-    return this.http.post<LoggedUser>(this.apiUrl, credentials).pipe(
-      tap(user => {
-        // 🟢 Guardar token y sesión
-        if (user.token) {
-          localStorage.setItem('token', user.token); // <--- NUEVO
-        }
+  login(credentials: LoginRequest): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(this.apiUrl, credentials).pipe(
+      tap((res) => {
 
+        // Guardamos sesión
         localStorage.setItem('loggedIn', 'true');
-        localStorage.setItem('id', user.id.toString());
-        localStorage.setItem('userId', user.id.toString());
-        localStorage.setItem('role', user.role);
-        localStorage.setItem('username', user.username);
-        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('userId', res.id.toString());
+        localStorage.setItem('username', res.username);
+        localStorage.setItem('roles', JSON.stringify(res.roles));
 
-        // Emitir estado
+        // Emitimos cambios
         this.loggedInSubject.next(true);
-        this.roleSubject.next(user.role);
-        this.usernameSubject.next(user.username);
-        this.usuarioActualSubject.next(user as User);
+        this.usernameSubject.next(res.username);
+        this.rolesSubject.next(res.roles);
+
+        // Guardamos user completo (puedes mejorarlo con más datos si quieres)
+        const user: User = {
+          id: res.id,
+          username: res.username,
+          roles: res.roles
+        } as User;
+
+        localStorage.setItem('user', JSON.stringify(user));
+        this.usuarioActualSubject.next(user);
 
         // Sincronizar carrito
         setTimeout(() => {
           const cart = this.injector.get(CartService);
-          cart.syncWithUser(true);
+          cart.syncWithUser(true); // migrar carrito invitado
         }, 0);
 
-        // Redirección por rol
-        const role = user.role?.toUpperCase();
-        if (role === 'ADMIN') {
+        // Redirecciones según rol
+        if (res.roles.includes('ADMIN')) {
           this.router.navigate(['/dashboard']);
-        } else if (role === 'DOMICILIARIO') {
+        } else if (res.roles.includes('DOMICILIARIO')) {
           this.router.navigate(['/pedidos-asignados']);
-        } else if (role === 'OPERADOR') {
+        } else if (res.roles.includes('OPERADOR')) {
           this.router.navigate(['/operador/portal']);
+        } else if (res.roles.includes('CLIENTE')) {
+          this.router.navigate(['/home']);
         } else {
           this.router.navigate(['/home']);
         }
+
       })
     );
   }
 
   // ============================
-  // LOGOUT
+  // ✔ LOGOUT
   // ============================
   logout(): void {
-    const authKeys = ['token', 'loggedIn', 'id', 'userId', 'role', 'username', 'user'];
+    const authKeys = ['loggedIn', 'userId', 'username', 'roles', 'user'];
     authKeys.forEach(k => localStorage.removeItem(k));
 
     setTimeout(() => {
@@ -99,7 +105,7 @@ export class AutenticacionService {
     }, 0);
 
     this.loggedInSubject.next(false);
-    this.roleSubject.next(null);
+    this.rolesSubject.next(null);
     this.usernameSubject.next(null);
     this.usuarioActualSubject.next(null);
 
@@ -107,52 +113,43 @@ export class AutenticacionService {
   }
 
   // ============================
-  // Utilidades
+  // ✔ Getters
   // ============================
-  get currentUser(): User | null {
-    return this.usuarioActualSubject.value;
-  }
-
   getUsuarioActual(): User | null {
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user) : null;
   }
 
-  setUsuario(user: User): void {
-    localStorage.setItem('user', JSON.stringify(user));
-    localStorage.setItem('username', user.username ?? '');
-    this.usuarioActualSubject.next(user);
-    this.usernameSubject.next(user.username ?? '');
+  getUserId(): number | null {
+    const id = localStorage.getItem('userId');
+    return id ? Number(id) : null;
   }
 
   // ============================
-  // Restaurar sesión
+  // ✔ Restaurar sesión al recargar página
   // ============================
   private restoreSession(): void {
     if (localStorage.getItem('loggedIn') === 'true') {
-      const role = localStorage.getItem('role');
       const username = localStorage.getItem('username');
+      const rolesStr = localStorage.getItem('roles');
+      const roles = rolesStr ? JSON.parse(rolesStr) : null;
       const user = this.getUsuarioActual();
 
       this.loggedInSubject.next(true);
-      this.roleSubject.next(role);
       this.usernameSubject.next(username);
+      this.rolesSubject.next(roles);
       this.usuarioActualSubject.next(user);
 
       setTimeout(() => {
         const cart = this.injector.get(CartService);
         cart.syncWithUser(false);
       }, 0);
+
     } else {
       setTimeout(() => {
         const cart = this.injector.get(CartService);
         cart.syncAsGuest();
       }, 0);
     }
-  }
-
-  getUserId(): number | null {
-    const id = localStorage.getItem('userId') || localStorage.getItem('id');
-    return id ? Number(id) : null;
   }
 }

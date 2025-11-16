@@ -1,6 +1,6 @@
 import { Categoria } from '../categoria/categoria.model';
 import { Adicional } from '../adicional/adicional.model';
-import { User } from '../user/user.model';
+import { User } from '../usuarios/user/user.model';
 
 // Interfaz Comida (alineada con el backend Spring Boot)
 export interface Comida {

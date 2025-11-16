@@ -10,31 +10,29 @@ import { CartService } from '../../services/cart.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+
   // Observables de autenticación
   isLoggedIn$!: Observable<boolean>;
-  role$!: Observable<string | null>;
+  roles$!: Observable<string[] | null>;
   username$!: Observable<string | null>;
 
-  // Valores locales (para no usar | async en el HTML)
+  // Valores locales
   isLoggedIn = false;
-  role: string | null = null;
+  roles: string[] | null = null;
   username: string | null = null;
 
   headerClass: string = 'header-general solid';
   isScrolled = false;
 
-  // Variables de carrito y animaciones
+  // Variables del carrito
   pulseCart = false;
   showMiniToast = false;
   lastAdded: { nombre: string; precio: number; image?: string; cantidad: number } | null = null;
 
-  // timers (usar number para browser)
   private toastTimer?: number;
   private pulseTimer?: number;
 
   private subs: Subscription[] = [];
-
-  // contador derivado del carrito
   itemsCount = 0;
 
   constructor(
@@ -44,35 +42,26 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Inicializar observables de autenticación
+    // ====== AUTH OBSERVABLES ======
     this.isLoggedIn$ = this.authService.isLoggedIn$;
-    this.role$ = this.authService.role$;
+    this.roles$ = this.authService.roles$;
     this.username$ = this.authService.username$;
 
-    // Suscripciones a auth -> valores locales
+    // Guardar valores locales (sin async pipe)
     this.subs.push(
       this.isLoggedIn$.subscribe(v => (this.isLoggedIn = v)),
-      this.role$.subscribe(role => (this.role = role)),
+      this.roles$.subscribe(roles => (this.roles = roles)),
       this.username$.subscribe(username => (this.username = username))
     );
 
-    // Suscribirse a cambios del carrito para mantener contador reactivo
+    // ====== CARRITO: cantidad reactiva ======
     this.subs.push(
       this.cart.items$.subscribe(items => {
         this.itemsCount = (items ?? []).reduce((s, it) => s + (it.cantidad ?? 0), 0);
       })
     );
 
-    // Escuchar navegación para actualizar clases del header
-    this.subs.push(
-      this.router.events.subscribe(event => {
-        if (event instanceof NavigationEnd) {
-          this.updateHeaderClass(event.urlAfterRedirects);
-        }
-      })
-    );
-
-    // Animación del carrito (mini-toast y pulso)
+    // ====== Mini toast cuando agregas al carrito ======
     this.subs.push(
       this.cart.lastAdded$?.subscribe(item => {
         if (!item) return;
@@ -82,6 +71,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           image: item.image,
           cantidad: item.cantidad
         };
+
         this.showMiniToast = true;
         this.pulseCart = true;
 
@@ -93,7 +83,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
       })
     );
 
-    // Configuración inicial
+    // ====== Cambiar estilos al navegar ======
+    this.subs.push(
+      this.router.events.subscribe(event => {
+        if (event instanceof NavigationEnd) {
+          this.updateHeaderClass(event.urlAfterRedirects);
+        }
+      })
+    );
+
     this.updateHeaderClass(this.router.url);
     this.onScroll();
   }
@@ -104,23 +102,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this.pulseTimer) window.clearTimeout(this.pulseTimer);
   }
 
-  // ===== Scroll handler =====
+  // ===== Scroll listener =====
   @HostListener('window:scroll')
   onScroll() {
     this.isScrolled = window.scrollY > 4;
   }
 
-  // ===== Helpers de UI =====
+  // ===== Obtener contador del carrito =====
   cartCount(): number {
     return this.itemsCount;
   }
 
   logout(): void {
     this.authService.logout();
-    // Por si el logout no navegara:
     this.router.navigate(['/login']);
   }
 
+  // ===== Helpers =====
   esHome(): boolean {
     const currentRoute = this.router.url.split('#')[0];
     return currentRoute === '/home';
@@ -140,6 +138,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   scrollToFragment(event: Event, fragment: string): void {
     event.preventDefault();
     const element = document.getElementById(fragment);
+
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     } else {

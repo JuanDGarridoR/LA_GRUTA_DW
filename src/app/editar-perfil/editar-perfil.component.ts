@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserService } from '../services/user.service';
-import { User } from '../models/user/user.model';
-import { AutenticacionService } from '../services/autenticacion.service'; // 🔹 importar servicio de autenticación
+import { ClienteService } from '../services/cliente.service';
+import { Cliente } from '../models/usuarios/cliente/cliente.model';
 
 @Component({
   selector: 'app-editar-perfil',
@@ -10,79 +9,65 @@ import { AutenticacionService } from '../services/autenticacion.service'; // �
   styleUrls: ['./editar-perfil.component.css']
 })
 export class EditarPerfilComponent implements OnInit {
+
   form!: FormGroup;
-  userId!: number;
-  userData!: User;
+  cliente!: Cliente;
+  clienteId!: number;
 
   constructor(
     private fb: FormBuilder,
-    private userService: UserService,
-    private authService: AutenticacionService // 🔹 inyectar autenticación
+    private clienteService: ClienteService
   ) {}
 
   ngOnInit(): void {
-    // ✅ Obtener ID del usuario logueado
-    const storedId = localStorage.getItem('id');
-    if (storedId) {
-      this.userId = Number(storedId);
-      this.cargarUsuario();
-    } else {
-      console.error('❌ No se encontró el ID del usuario en localStorage');
+
+    const storedUserId = localStorage.getItem('id');
+    if (!storedUserId) {
+      console.error("❌ No hay usuario logueado.");
+      return;
     }
 
-    // ✅ Inicializar formulario
-    this.form = this.fb.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required],
-      direccion: [''],
-      telefono: ['']
-    });
-  }
+    const userId = Number(storedUserId);
 
-  cargarUsuario(): void {
-    this.userService.getById(this.userId).subscribe({
-      next: (user) => {
-        this.userData = user;
+    // Cargar cliente por id de usuario
+    this.clienteService.getByUserId(userId).subscribe({
+      next: (cli) => {
+        this.cliente = cli;
+        this.clienteId = cli.id!;
 
-        // ✅ Rellenar formulario con los datos actuales del usuario
         this.form.patchValue({
-          username: user.username,
-          password: user.password,
-          direccion: user.direccion,
-          telefono: user.telefono
+          nombre: cli.nombre,
+          apellido: cli.apellido,
+          correo: cli.correo,
+          telefono: cli.telefono,
+          direccion: cli.direccion
         });
       },
-      error: (err) => {
-        console.error('❌ Error al cargar usuario:', err);
-      }
+      error: (err) => console.error("❌ Error cargando cliente", err)
+    });
+
+    this.form = this.fb.group({
+      nombre: ['', Validators.required],
+      apellido: ['', Validators.required],
+      correo: ['', [Validators.required, Validators.email]],
+      telefono: [''],
+      direccion: ['']
     });
   }
 
   guardarCambios(): void {
-    if (this.form.invalid) {
-      return;
-    }
+    if (this.form.invalid) return;
 
-    const updatedUser: User = {
-      id: this.userId, // ✅ importante, viene de localStorage
-      username: this.form.value.username,
-      password: this.form.value.password,
-      direccion: this.form.value.direccion,
-      telefono: this.form.value.telefono,
-      role: this.userData.role // ✅ mantener el mismo rol
+    const updatedCliente: Cliente = {
+      ...this.cliente,
+      ...this.form.value
     };
 
-    this.userService.update(updatedUser).subscribe({
-      next: (response) => {
-        // ✅ Actualizar el usuario global en autenticación
-        this.authService.setUsuario(response);
-
-        alert('✅ Perfil actualizado correctamente');
+    this.clienteService.update(updatedCliente).subscribe({
+      next: () => {
+        alert("Perfil actualizado correctamente");
       },
-      error: (err) => {
-        console.error('❌ Error al editar perfil:', err);
-        alert('❌ Error al editar perfil');
-      }
+      error: () => alert("No se pudo actualizar el perfil.")
     });
   }
 }

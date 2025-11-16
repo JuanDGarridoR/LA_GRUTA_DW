@@ -5,37 +5,86 @@
     <h2>Crear Cuenta</h2>
 
     <form (ngSubmit)="register()" #registerForm="ngForm">
+      <!-- USERNAME -->
       <input
         type="text"
         class="form-control"
         name="username"
-        [(ngModel)]="user.username"
+        [(ngModel)]="userData.username"
         placeholder="Usuario"
         required
       />
 
+      <!-- PASSWORD -->
       <input
         type="password"
         class="form-control"
         name="password"
-        [(ngModel)]="user.password"
+        [(ngModel)]="userData.password"
         placeholder="Contraseña"
         required
       />
 
-      <div class="mt-3 text-start">
-        <label><input type="radio" name="role" [(ngModel)]="user.role" value="CLIENTE" required /> Cliente</label><br />
-        <label><input type="radio" name="role" [(ngModel)]="user.role" value="DOMICILIARIO" required /> Domiciliario</label>
-      </div>
+      <!-- NOMBRE -->
+      <input
+        type="text"
+        class="form-control"
+        name="nombre"
+        [(ngModel)]="userData.nombre"
+        placeholder="Nombre"
+        required
+      />
 
+      <!-- APELLIDO -->
+      <input
+        type="text"
+        class="form-control"
+        name="apellido"
+        [(ngModel)]="userData.apellido"
+        placeholder="Apellido"
+        required
+      />
+
+      <!-- CORREO -->
+      <input
+        type="email"
+        class="form-control"
+        name="correo"
+        [(ngModel)]="userData.correo"
+        placeholder="Correo electrónico"
+        required
+      />
+
+      <!-- TELEFONO -->
+      <input
+        type="text"
+        class="form-control"
+        name="telefono"
+        [(ngModel)]="userData.telefono"
+        placeholder="Teléfono"
+        required
+      />
+
+      <!-- DIRECCION -->
+      <input
+        type="text"
+        class="form-control"
+        name="direccion"
+        [(ngModel)]="userData.direccion"
+        placeholder="Dirección"
+        required
+      />
+
+      <!-- BOTON -->
       <button
         type="submit"
         class="btn btn-login w-100 mt-3"
         [disabled]="!registerForm.form.valid"
       >
-        Continuar
+        Crear Cuenta
       </button>
 
+      <!-- MENSAJES -->
       <p *ngIf="errorMsg" class="error mt-2">{{ errorMsg }}</p>
       <p *ngIf="successMsg" class="success mt-2">{{ successMsg }}</p>
     </form>

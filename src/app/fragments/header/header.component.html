@@ -1,52 +1,84 @@
 <header [ngClass]="headerClass" [class.scrolled]="isScrolled">
-  <nav class="container-fluid d-flex justify-content-between align-items-center position-relative">
-
+  <nav
+    class="container-fluid d-flex justify-content-between align-items-center position-relative"
+  >
     <!-- Izquierda -->
     <ul class="navbar-nav flex-row gap-4 left-menu">
       <li class="nav-item"><a class="nav-link" routerLink="/menu">Menú</a></li>
-      <li class="nav-item"><a class="nav-link" routerLink="/restaurantes">Restaurantes</a></li>
       <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/home']" fragment="sobre-nosotros">Nosotros</a>
+        <a class="nav-link" routerLink="/restaurantes">Restaurantes</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/home']" fragment="sobre-nosotros"
+          >Nosotros</a
+        >
       </li>
     </ul>
 
     <!-- Logo central -->
-    <a class="navbar-brand logo-central position-absolute top-50 start-50 translate-middle" routerLink="/home">
+    <a
+      class="navbar-brand logo-central position-absolute top-50 start-50 translate-middle"
+      routerLink="/home"
+    >
       <img src="assets/images/logoGruta.png" alt="Logo La Gruta Nera" />
     </a>
 
     <!-- Derecha -->
     <ul class="navbar-nav flex-row gap-4 right-menu align-items-center">
       <li class="nav-item">
-        <a class="nav-link" href="#" (click)="scrollToFragment($event, 'footer')">Contacto</a>
+        <a
+          class="nav-link"
+          href="#"
+          (click)="scrollToFragment($event, 'footer')"
+          >Contacto</a
+        >
       </li>
 
       <!-- Carro visible solo en /menu -->
       <li class="nav-item cart-wrapper" *ngIf="isMenu()">
-        <a class="nav-link position-relative" routerLink="/carro" [class.pulse]="pulseCart">
+        <a
+          class="nav-link position-relative"
+          routerLink="/carro"
+          [class.pulse]="pulseCart"
+        >
           <span class="cart-text">Carro</span>
-          <span class="badge-cart" *ngIf="cartCount() > 0">{{ cartCount() }}</span>
+          <span class="badge-cart" *ngIf="cartCount() > 0">{{
+            cartCount()
+          }}</span>
         </a>
       </li>
 
       <!-- ADMIN -->
-      <li class="nav-item" *ngIf="isLoggedIn && role === 'ADMIN'">
-        <a class="nav-link btn btn-reserva-header" routerLink="/dashboard">Dashboard</a>
+      <li class="nav-item" *ngIf="isLoggedIn && roles?.includes('ADMIN')">
+        <a class="nav-link btn btn-reserva-header" routerLink="/dashboard"
+          >Dashboard</a
+        >
       </li>
 
       <!-- OPERADOR -->
-      <li class="nav-item" *ngIf="isLoggedIn && role === 'OPERADOR'">
-        <a class="nav-link btn btn-reserva-header" routerLink="/operador/portal">Dashboard</a>
+      <li class="nav-item" *ngIf="isLoggedIn && roles?.includes('OPERADOR')">
+        <a class="nav-link btn btn-reserva-header" routerLink="/operador/portal"
+          >Dashboard</a
+        >
       </li>
 
       <!-- CLIENTE -->
-      <li class="nav-item" *ngIf="isLoggedIn && role === 'CLIENTE'">
-        <a class="nav-link btn btn-reserva-header" routerLink="/mis-pedidos">Mis Pedidos</a>
+      <li class="nav-item" *ngIf="isLoggedIn && roles?.includes('CLIENTE')">
+        <a class="nav-link btn btn-reserva-header" routerLink="/mis-pedidos"
+          >Mis Pedidos</a
+        >
       </li>
 
       <!-- DOMICILIARIO -->
-      <li class="nav-item" *ngIf="isLoggedIn && role === 'DOMICILIARIO'">
-        <a class="nav-link btn btn-reserva-header" routerLink="/pedidos-asignados">Entregas</a>
+      <li
+        class="nav-item"
+        *ngIf="isLoggedIn && roles?.includes('DOMICILIARIO')"
+      >
+        <a
+          class="nav-link btn btn-reserva-header"
+          routerLink="/pedidos-asignados"
+          >Entregas</a
+        >
       </li>
 
       <!-- LOGIN (no autenticado) -->
@@ -72,21 +104,32 @@
           />
         </a>
 
-        <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="profileDropdown">
+        <ul
+          class="dropdown-menu dropdown-menu-end shadow-lg"
+          aria-labelledby="profileDropdown"
+        >
           <li class="dropdown-item-text fw-bold">
-            {{ username || 'Usuario' }}
+            {{ username || "Usuario" }}
           </li>
           <li><hr class="dropdown-divider" /></li>
 
           <li>
-            <a class="dropdown-item" routerLink="/editar-perfil">Editar Perfil</a>
+            <a class="dropdown-item" routerLink="/editar-perfil"
+              >Editar Perfil</a
+            >
           </li>
 
           <!-- Carrito dentro del menú -->
           <li>
-            <a class="dropdown-item d-flex justify-content-between align-items-center" routerLink="/carro">
+            <a
+              class="dropdown-item d-flex justify-content-between align-items-center"
+              routerLink="/carro"
+            >
               Carrito
-              <span class="badge rounded-pill text-bg-warning" *ngIf="cartCount() > 0">
+              <span
+                class="badge rounded-pill text-bg-warning"
+                *ngIf="cartCount() > 0"
+              >
                 {{ cartCount() }}
               </span>
             </a>
@@ -95,14 +138,16 @@
           <li><hr class="dropdown-divider" /></li>
 
           <li>
-            <button class="dropdown-item" (click)="logout()">Cerrar sesión</button>
+            <button class="dropdown-item" (click)="logout()">
+              Cerrar sesión
+            </button>
           </li>
         </ul>
       </li>
     </ul>
   </nav>
 
-  <!-- Mini-toast (aparece cuando se agrega algo al carrito) -->
+  <!-- Mini-toast -->
   <div
     class="mini-toast shadow-sm p-2 rounded bg-white position-absolute"
     *ngIf="showMiniToast && lastAdded as la"
@@ -113,14 +158,14 @@
         [src]="src"
         alt="Comida"
         class="rounded"
-        style="width: 50px; height: 50px; object-fit: cover;"
+        style="width: 50px; height: 50px; object-fit: cover"
       />
       <img
         *ngIf="!la.image"
         src="assets/images/placeholder.png"
         alt="Comida"
         class="rounded"
-        style="width: 50px; height: 50px; object-fit: cover;"
+        style="width: 50px; height: 50px; object-fit: cover"
       />
 
       <div>
@@ -129,5 +174,4 @@
       </div>
     </div>
   </div>
-
 </header>

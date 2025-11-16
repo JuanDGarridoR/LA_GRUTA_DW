@@ -1,8 +1,8 @@
-// src/app/services/user.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { User } from '../models/user/user.model';
+import { User } from '../models/usuarios/user/user.model';
+import { Cliente } from '../models/usuarios/cliente/cliente.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,28 +12,33 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  // GET ALL
+  // 🔹 GET ALL
   getAll(): Observable<User[]> {
     return this.http.get<User[]>(this.apiUrl);
   }
 
-  // GET BY ID
+  // 🔹 GET BY ID
   getById(id: number): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/${id}`);
   }
 
-  // CREATE
+  // 🔹 CREATE (solo User simple)
   add(user: User): Observable<User> {
     return this.http.post<User>(this.apiUrl, user);
   }
 
-  // UPDATE
+  // 🔹 REGISTER CLIENTE (User + Cliente)
+  registerCliente(cliente: Cliente): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/register-cliente`, cliente);
+  }
+
+  // 🔹 UPDATE USER
   update(user: User): Observable<User> {
     return this.http.put<User>(`${this.apiUrl}/${user.id}`, user);
   }
 
-  // DELETE
-  deleteUser(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  // 🔹 DELETE USER
+  deleteUser(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
 }

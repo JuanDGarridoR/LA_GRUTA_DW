@@ -4,10 +4,11 @@ import { Observable } from 'rxjs';
 import { Domiciliario } from '../models/domiciliario/domiciliario.model';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class DomiciliarioService {
-  private apiUrl = 'http://localhost:8080/api/domiciliarios'; // tu endpoint del back
+
+  private apiUrl = 'http://localhost:8080/api/domiciliarios';
 
   constructor(private http: HttpClient) {}
 
@@ -24,10 +25,7 @@ export class DomiciliarioService {
   }
 
   update(domiciliario: Domiciliario): Observable<Domiciliario> {
-    return this.http.put<Domiciliario>(
-      `${this.apiUrl}/${domiciliario.id}`,
-      domiciliario
-    );
+    return this.http.put<Domiciliario>(`${this.apiUrl}/${domiciliario.id}`, domiciliario);
   }
 
   delete(id: number): Observable<void> {

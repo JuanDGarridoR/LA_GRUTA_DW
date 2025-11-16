@@ -1,9 +1,9 @@
 // src/app/app.module.ts
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { CommonModule } from '@angular/common';          
+import { RouterModule } from '@angular/router';        
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 
@@ -31,7 +31,6 @@ import { MisPedidosComponent } from './mis-pedidos/mis-pedidos.component';
 
 // Dashboard (admin)
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { ClientesComponent } from './dashboard/clientes/clientes.component';
 import { ComidasComponent } from './dashboard/comidas/comidas.component';
 import { AdicionalesComponent } from './dashboard/adicionales/adicionales.component';
 import { ComidasFormComponent } from './dashboard/comidas-form/comidas-form.component';
@@ -43,9 +42,6 @@ import { PedidosComponent } from './dashboard/pedidos/pedidos.component';
 
 // Operador
 import { PortalOperadorComponent } from './portal-operador/portal-operador.component';
-
-// Interceptor JWT
-import { JwtInterceptor } from './interceptors/jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -68,7 +64,6 @@ import { JwtInterceptor } from './interceptors/jwt.interceptor';
 
     // dashboard
     DashboardComponent,
-    ClientesComponent,
     ComidasComponent,
     AdicionalesComponent,
     ComidasFormComponent,
@@ -83,17 +78,15 @@ import { JwtInterceptor } from './interceptors/jwt.interceptor';
   ],
   imports: [
     BrowserModule,
-    CommonModule,
-    RouterModule,
+    CommonModule,            // ✅ Pipes/directivas comunes
+    RouterModule,            // ✅ routerLink / router-outlet
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     CarouselModule.forRoot(),
   ],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-  ],
+  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

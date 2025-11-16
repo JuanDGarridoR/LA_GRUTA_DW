@@ -1,5 +1,5 @@
 import { Comida } from '../comida/comida.model';
-import { User } from '../user/user.model';
+import { User } from '../usuarios/user/user.model';
 import { Domiciliario } from '../domiciliario/domiciliario.model';
 import { Adicional } from '../adicional/adicional.model';
 

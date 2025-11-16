@@ -9,6 +9,7 @@ import { Domiciliario } from '../../models/domiciliario/domiciliario.model';
   styleUrls: ['./domiciliarios-form.component.css']
 })
 export class DomiciliariosFormComponent implements OnInit {
+
   domiciliario: Domiciliario = {
     id: undefined,
     nombre: '',
@@ -30,11 +31,12 @@ export class DomiciliariosFormComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
+
     if (id) {
       this.editMode = true;
       this.domiciliarioService.getById(+id).subscribe({
-        next: (data) => (this.domiciliario = data),
-        error: (err) => console.error('Error al obtener domiciliario', err)
+        next: (data) => this.domiciliario = data,
+        error: (err: any) => console.error('Error al obtener domiciliario', err)
       });
     }
   }
@@ -43,12 +45,12 @@ export class DomiciliariosFormComponent implements OnInit {
     if (this.editMode) {
       this.domiciliarioService.update(this.domiciliario).subscribe({
         next: () => this.router.navigate(['/dashboard/domiciliarios']),
-        error: (err) => console.error('Error al actualizar', err)
+        error: (err: any) => console.error('Error al actualizar', err)
       });
     } else {
       this.domiciliarioService.add(this.domiciliario).subscribe({
         next: () => this.router.navigate(['/dashboard/domiciliarios']),
-        error: (err) => console.error('Error al crear', err)
+        error: (err: any) => console.error('Error al crear', err)
       });
     }
   }
