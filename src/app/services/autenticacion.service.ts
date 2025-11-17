@@ -15,7 +15,8 @@ export interface LoginRequest {
 export interface LoginResponse {
   id: number;
   username: string;
-  roles: string[]; // ej: ["CLIENTE"], ["DOMICILIARIO"], ["ADMIN"]
+  roles: string[];
+  token: string;      // ✔ AÑADIDO
 }
 
 @Injectable({ providedIn: 'root' })
@@ -48,6 +49,9 @@ export class AutenticacionService {
     return this.http.post<LoginResponse>(this.apiUrl, credentials).pipe(
       tap((res) => {
 
+        // ✔ Guardar token
+        localStorage.setItem('token', res.token);
+
         // Guardamos sesión
         localStorage.setItem('loggedIn', 'true');
         localStorage.setItem('userId', res.id.toString());
@@ -59,7 +63,7 @@ export class AutenticacionService {
         this.usernameSubject.next(res.username);
         this.rolesSubject.next(res.roles);
 
-        // Guardamos user completo (puedes mejorarlo con más datos si quieres)
+        // Guardamos user completo
         const user: User = {
           id: res.id,
           username: res.username,
@@ -72,7 +76,7 @@ export class AutenticacionService {
         // Sincronizar carrito
         setTimeout(() => {
           const cart = this.injector.get(CartService);
-          cart.syncWithUser(true); // migrar carrito invitado
+          cart.syncWithUser(true);
         }, 0);
 
         // Redirecciones según rol
@@ -96,8 +100,8 @@ export class AutenticacionService {
   // ✔ LOGOUT
   // ============================
   logout(): void {
-    const authKeys = ['loggedIn', 'userId', 'username', 'roles', 'user'];
-    authKeys.forEach(k => localStorage.removeItem(k));
+    const authKeys = ['loggedIn', 'userId', 'username', 'roles', 'user', 'token'];
+    authKeys.forEach(k => localStorage.removeItem(k)); // ✔ ELIMINAR TOKEN
 
     setTimeout(() => {
       const cart = this.injector.get(CartService);
@@ -130,6 +134,7 @@ export class AutenticacionService {
   // ============================
   private restoreSession(): void {
     if (localStorage.getItem('loggedIn') === 'true') {
+
       const username = localStorage.getItem('username');
       const rolesStr = localStorage.getItem('roles');
       const roles = rolesStr ? JSON.parse(rolesStr) : null;

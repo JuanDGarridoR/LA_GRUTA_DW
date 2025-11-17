@@ -1,46 +1,89 @@
-<div class="container mt-4">
-  <h2 class="text-center mb-4">Gestión de Operadores</h2>
+<h2 class="mb-4">Gestión de Operadores</h2>
 
-  <!-- Tabla -->
-  <div class="table-responsive shadow-sm">
-    <table class="table table-striped table-hover align-middle">
-      <thead class="table-dark">
-        <tr>
-          <th>ID</th>
-          <th>Usuario</th>
-          <th>Roles</th>
-          <th style="width: 120px">Acciones</th>
-        </tr>
-      </thead>
+<!-- =============================== -->
+<!-- 🔹 FORMULARIO -->
+<!-- =============================== -->
+<div class="card mb-4 p-3">
+  <h4>{{ editMode ? "Editar Operador" : "Crear Operador" }}</h4>
 
-      <tbody>
-        <tr *ngFor="let op of operadores">
-          <td>{{ op.id }}</td>
-          <td>{{ op.username }}</td>
+  <form (ngSubmit)="guardarOperador()">
+    <div class="mb-3">
+      <label class="form-label">Nombre</label>
+      <input
+        class="form-control"
+        [(ngModel)]="operadorForm.nombre"
+        name="nombre"
+        required
+      />
+    </div>
 
-          <!-- roles es string[] -->
-          <td>
-            <span class="badge bg-info me-1" *ngFor="let r of op.roles">
-              {{ r }}
-            </span>
-          </td>
+    <div class="mb-3">
+      <label class="form-label">Usuario</label>
+      <input
+        class="form-control"
+        [(ngModel)]="operadorForm.user!.username"
+        name="username"
+        required
+      />
+    </div>
 
-          <td>
-            <button
-              class="btn btn-danger btn-sm"
-              (click)="eliminarOperador(op.id)"
-            >
-              Eliminar
-            </button>
-          </td>
-        </tr>
+    <!-- Solo pedir contraseña si se crea y no si se edita -->
+    <div class="mb-3" *ngIf="!editMode">
+      <label class="form-label">Contraseña</label>
+      <input
+        type="password"
+        class="form-control"
+        [(ngModel)]="operadorForm.user!.password"
+        name="password"
+        required
+      />
+    </div>
 
-        <tr *ngIf="operadores.length === 0">
-          <td colspan="4" class="text-center text-muted py-3">
-            No hay operadores registrados.
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <button class="btn btn-primary me-2">
+      {{ editMode ? "Actualizar" : "Crear" }}
+    </button>
+    <button type="button" class="btn btn-secondary" (click)="resetForm()">
+      Limpiar
+    </button>
+  </form>
+</div>
+
+<!-- =============================== -->
+<!-- 🔹 TABLA DE OPERADORES -->
+<!-- =============================== -->
+<table class="table table-striped table-bordered align-middle">
+  <thead class="table-dark">
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Usuario</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let op of operadores">
+      <td>{{ op.id }}</td>
+      <td>{{ op.nombre }}</td>
+      <td>{{ op.user?.username }}</td>
+
+      <td>
+        <button
+          class="btn btn-warning btn-sm me-2"
+          (click)="editarOperador(op)"
+        >
+          Editar
+        </button>
+
+        <button class="btn btn-danger btn-sm" (click)="eliminarOperador(op.id)">
+          Eliminar
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Si no hay operadores -->
+<div *ngIf="operadores.length === 0" class="alert alert-info mt-3">
+  No hay operadores registrados.
 </div>

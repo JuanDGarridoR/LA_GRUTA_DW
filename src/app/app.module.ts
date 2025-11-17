@@ -42,6 +42,14 @@ import { PedidosComponent } from './dashboard/pedidos/pedidos.component';
 
 // Operador
 import { PortalOperadorComponent } from './portal-operador/portal-operador.component';
+import { OperadoresComponent } from './dashboard/operadores/operadores.component';
+import { OperadoresFormComponent } from './dashboard/operadores/operadoresform/operadorsform.componet';
+
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+
+
+
 
 @NgModule({
   declarations: [
@@ -75,6 +83,8 @@ import { PortalOperadorComponent } from './portal-operador/portal-operador.compo
 
     // operador
     PortalOperadorComponent,
+    OperadoresComponent,
+    OperadoresFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -86,7 +96,14 @@ import { PortalOperadorComponent } from './portal-operador/portal-operador.compo
     HttpClientModule,
     CarouselModule.forRoot(),
   ],
-  providers: [],
+  providers: [
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true
+  }
+],
+
   bootstrap: [AppComponent],
 })
 export class AppModule {}
