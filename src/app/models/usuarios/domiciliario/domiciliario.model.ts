@@ -2,12 +2,8 @@ export interface Domiciliario {
   id?: number;
 
   nombre: string;
-  correo: string;
-  telefono: string;
-
-  vehiculo: string;
-  placa?: string;
+  cedula: string;
+  celular: string;
 
   disponible: boolean;
-  zonaCobertura?: string;
 }

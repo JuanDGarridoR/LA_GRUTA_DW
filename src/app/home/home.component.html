@@ -22,17 +22,6 @@
   <a routerLink="/register" class="btn btn-outline-dark">Registrarse</a>
 </section>
 
-<!-- 👑 ADMIN -->
-<section *ngIf="role === 'ADMIN'" class="py-5 text-center bg-dark text-white">
-  <div class="container">
-    <h2 class="display-6 fw-bold mb-3">Panel del Administrador</h2>
-    <p class="lead">
-      Bienvenido {{ username }} 👑 — Gestiona comidas, usuarios y categorías.
-    </p>
-    <a routerLink="/comidas/admin" class="btn btn-outline-light mt-3">Ir al Dashboard</a>
-  </div>
-</section>
-
 <!-- 🍝 CLIENTE -->
 <section *ngIf="role === 'CLIENTE'" class="py-5 text-center bg-light">
   <div class="container">

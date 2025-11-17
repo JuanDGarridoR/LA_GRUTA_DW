@@ -1,0 +1,50 @@
+<div class="container">
+  <h2>{{ id ? 'Editar Administrador' : 'Agregar Administrador' }}</h2>
+
+  <form (ngSubmit)="guardar()">
+
+    <div class="mb-3">
+      <label>Usuario</label>
+      <input type="text" class="form-control" [(ngModel)]="admin.user.username" name="username" required>
+    </div>
+
+    <div class="mb-3" *ngIf="!id">
+      <label>Contraseña</label>
+      <input type="password" class="form-control" [(ngModel)]="admin.user.password" name="password" required>
+    </div>
+
+    <div class="mb-3">
+      <label>Nombre</label>
+      <input type="text" class="form-control" [(ngModel)]="admin.nombre" name="nombre" required>
+    </div>
+
+    <div class="mb-3">
+      <label>Apellido</label>
+      <input type="text" class="form-control" [(ngModel)]="admin.apellido" name="apellido" required>
+    </div>
+
+    <div class="mb-3">
+      <label>Correo</label>
+      <input type="email" class="form-control" [(ngModel)]="admin.correo" name="correo" required>
+    </div>
+
+    <div class="mb-3">
+      <label>Teléfono</label>
+      <input type="text" class="form-control" [(ngModel)]="admin.telefono" name="telefono">
+    </div>
+
+    <div class="mb-3">
+      <label>Dirección</label>
+      <input type="text" class="form-control" [(ngModel)]="admin.direccion" name="direccion">
+    </div>
+
+    <button class="btn btn-primary" type="submit">
+      Guardar
+    </button>
+
+    <button class="btn btn-secondary ms-2" routerLink="/dashboard/administradores">
+      Cancelar
+    </button>
+
+  </form>
+</div>

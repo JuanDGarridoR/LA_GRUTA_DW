@@ -5,6 +5,7 @@
     <h2>Crear Cuenta</h2>
 
     <form (ngSubmit)="register()" #registerForm="ngForm">
+
       <!-- USERNAME -->
       <input
         type="text"
@@ -75,16 +76,10 @@
         required
       />
 
-      <!-- BOTON -->
-      <button
-        type="submit"
-        class="btn btn-login w-100 mt-3"
-        [disabled]="!registerForm.form.valid"
-      >
+      <button type="submit" class="btn btn-login w-100 mt-3" [disabled]="!registerForm.form.valid">
         Crear Cuenta
       </button>
 
-      <!-- MENSAJES -->
       <p *ngIf="errorMsg" class="error mt-2">{{ errorMsg }}</p>
       <p *ngIf="successMsg" class="success mt-2">{{ successMsg }}</p>
     </form>

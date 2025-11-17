@@ -67,7 +67,7 @@ export class AutenticacionService {
         const user: User = {
           id: res.id,
           username: res.username,
-          roles: res.roles
+          roles: res.roles.map(r => ({ name: r }))
         } as User;
 
         localStorage.setItem('user', JSON.stringify(user));

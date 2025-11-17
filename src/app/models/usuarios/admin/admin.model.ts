@@ -1,13 +1,11 @@
 import { User } from "../user/user.model";
 
-export interface Cliente {
+export interface Admin {
   id?: number;
-
-  user: User;     // relación uno a uno
-
   nombre: string;
   apellido: string;
   correo: string;
   telefono?: string;
   direccion?: string;
+  user: User;   // Relación
 }

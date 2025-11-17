@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
-import { User } from 'src/app/models/user/user.model';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -8,7 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './clientes.component.html',
 })
 export class ClientesComponent implements OnInit {
-  usuarios: User[] = [];
+  //usuarios: User[] = [];
 
   constructor(private userService: UserService) {}
 
@@ -18,7 +17,7 @@ export class ClientesComponent implements OnInit {
 
   cargarUsuarios(): void {
     this.userService.getAll().subscribe({
-      next: (data) => (this.usuarios = data),
+      //next: (data) => (this.usuarios = data),
       error: (err: HttpErrorResponse) => {
         console.error('❌ No se pudieron cargar los usuarios', err);
         alert('No se pudieron cargar los usuarios desde el servidor.');
@@ -35,7 +34,7 @@ eliminarUsuario(id?: number): void {
   this.userService.deleteUser(Number(id)).subscribe({  // ⚡ forzar a número
     next: () => {
       // ⚡ Actualizar la lista sin recargar desde backend
-      this.usuarios = this.usuarios.filter(u => u.id !== id);
+      //this.usuarios = this.usuarios.filter(u => u.id !== id);
       console.log(`✅ Usuario con ID ${id} eliminado del backend y frontend`);
     },
     error: (err) => {
