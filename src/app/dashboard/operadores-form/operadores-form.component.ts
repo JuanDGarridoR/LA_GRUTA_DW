@@ -8,7 +8,6 @@ import { Operador } from 'src/app/models/usuarios/operador/operador.model';
   templateUrl: './operadores-form.component.html',
 })
 export class OperadoresFormComponent implements OnInit {
-
   operador: Operador = {
     nombre: '',
     apellido: '',
@@ -22,6 +21,7 @@ export class OperadoresFormComponent implements OnInit {
   };
 
   editMode = false;
+  id?: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -30,13 +30,10 @@ export class OperadoresFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-
-    if (id) {
+    this.id = Number(this.route.snapshot.paramMap.get('id'));
+    if (this.id) {
       this.editMode = true;
-      this.operadoresService.getById(+id).subscribe(op => {
-        this.operador = op;
-      });
+      this.operadoresService.getById(this.id).subscribe(op => this.operador = op);
     }
   }
 
