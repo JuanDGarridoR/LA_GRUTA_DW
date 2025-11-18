@@ -11,8 +11,8 @@ import { Domiciliario } from '../../models/domiciliario/domiciliario.model';
 export class DomiciliariosFormComponent implements OnInit {
 
   domiciliario: Domiciliario = {
-    id: undefined,
     nombre: '',
+    cedula: '',
     correo: '',
     telefono: '',
     vehiculo: '',
@@ -31,12 +31,14 @@ export class DomiciliariosFormComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
-
     if (id) {
       this.editMode = true;
       this.domiciliarioService.getById(+id).subscribe({
         next: (data) => this.domiciliario = data,
-        error: (err: any) => console.error('Error al obtener domiciliario', err)
+        error: (err) => {
+          console.error('Error al obtener domiciliario', err);
+          alert(err.error?.error || 'No se pudo cargar el domiciliario.');
+        }
       });
     }
   }
@@ -44,13 +46,25 @@ export class DomiciliariosFormComponent implements OnInit {
   guardar(): void {
     if (this.editMode) {
       this.domiciliarioService.update(this.domiciliario).subscribe({
-        next: () => this.router.navigate(['/dashboard/domiciliarios']),
-        error: (err: any) => console.error('Error al actualizar', err)
+        next: (res) => {
+          alert(res.mensaje);
+          this.router.navigate(['/dashboard/domiciliarios']);
+        },
+        error: (err) => {
+          console.error('Error al actualizar', err);
+          alert(err.error?.error || 'No se pudo actualizar el domiciliario.');
+        }
       });
     } else {
       this.domiciliarioService.add(this.domiciliario).subscribe({
-        next: () => this.router.navigate(['/dashboard/domiciliarios']),
-        error: (err: any) => console.error('Error al crear', err)
+        next: (res) => {
+          alert(res.mensaje);
+          this.router.navigate(['/dashboard/domiciliarios']);
+        },
+        error: (err) => {
+          console.error('Error al crear', err);
+          alert(err.error?.error || 'No se pudo crear el domiciliario.');
+        }
       });
     }
   }

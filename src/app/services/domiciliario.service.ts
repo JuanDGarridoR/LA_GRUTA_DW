@@ -12,23 +12,28 @@ export class DomiciliarioService {
 
   constructor(private http: HttpClient) {}
 
+  // Obtener todos los domiciliarios
   getAll(): Observable<Domiciliario[]> {
     return this.http.get<Domiciliario[]>(this.apiUrl);
   }
 
+  // Obtener domiciliario por ID
   getById(id: number): Observable<Domiciliario> {
     return this.http.get<Domiciliario>(`${this.apiUrl}/${id}`);
   }
 
-  add(domiciliario: Domiciliario): Observable<Domiciliario> {
-    return this.http.post<Domiciliario>(this.apiUrl, domiciliario);
+  // Agregar domiciliario
+  add(domiciliario: Domiciliario): Observable<{ mensaje: string }> {
+    return this.http.post<{ mensaje: string }>(this.apiUrl, domiciliario);
   }
 
-  update(domiciliario: Domiciliario): Observable<Domiciliario> {
-    return this.http.put<Domiciliario>(`${this.apiUrl}/${domiciliario.id}`, domiciliario);
+  // Actualizar domiciliario
+  update(domiciliario: Domiciliario): Observable<{ mensaje: string }> {
+    return this.http.put<{ mensaje: string }>(`${this.apiUrl}/${domiciliario.id}`, domiciliario);
   }
 
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  // Eliminar domiciliario
+  delete(id: number): Observable<{ mensaje: string }> {
+    return this.http.delete<{ mensaje: string }>(`${this.apiUrl}/${id}`);
   }
 }

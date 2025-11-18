@@ -1,56 +1,56 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
-  <h1 class="m-0">Lista de Domiciliarios</h1>
-  <button class="btn btn-success" routerLink="/dashboard/domiciliarios/nuevo">
-    Nuevo Domiciliario
+  <h1 class="m-0">Domiciliarios</h1>
+
+  <button class="btn btn-success" [routerLink]="['/dashboard/domiciliarios/nuevo']">
+    Agregar Domiciliario
   </button>
 </div>
 
-<div class="table-responsive">
-  <table class="table table-striped table-hover text-center shadow-sm">
+<div class="table-responsive" *ngIf="domiciliarios && domiciliarios.length > 0">
+  <table class="table table-hover text-center align-middle">
     <thead class="table-dark">
       <tr>
         <th>ID</th>
         <th>Nombre</th>
-        <th>Correo</th>
+        <th>Cédula</th>
         <th>Teléfono</th>
-        <th>Vehículo</th>
-        <th>Zona de Cobertura</th>
         <th>Disponible</th>
         <th>Acciones</th>
       </tr>
     </thead>
+
     <tbody>
-      <tr *ngFor="let domiciliario of domiciliarios">
-        <td>{{ domiciliario.id }}</td>
-        <td>{{ domiciliario.nombre }}</td>
-        <td>{{ domiciliario.correo }}</td>
-        <td>{{ domiciliario.telefono }}</td>
-        <td>{{ domiciliario.vehiculo }}</td>
-        <td>{{ domiciliario.zonaCobertura || 'N/A' }}</td>
+      <tr *ngFor="let d of domiciliarios">
+        <td>{{ d.id }}</td>
+        <td>{{ d.nombre }}</td>
+        <td>{{ d.cedula }}</td>
+        <td>{{ d.telefono || '—' }}</td>
         <td>
           <span
             class="badge"
-            [class.bg-success]="domiciliario.disponible"
-            [class.bg-danger]="!domiciliario.disponible"
+            [class.bg-success]="d.disponible"
+            [class.bg-danger]="!d.disponible"
           >
-            {{ domiciliario.disponible ? 'Sí' : 'No' }}
+            {{ d.disponible ? 'Sí' : 'No' }}
           </span>
         </td>
         <td>
           <button
             class="btn btn-warning btn-sm me-2"
-            [routerLink]="['/dashboard/domiciliarios/editar', domiciliario.id]"
+            [routerLink]="['/dashboard/domiciliarios/editar', d.id]"
           >
             Editar
           </button>
-          <button
-            class="btn btn-danger btn-sm"
-            (click)="eliminarDomiciliario(domiciliario.id)"
-          >
+
+          <button class="btn btn-danger btn-sm" (click)="eliminarDomiciliario(d.id)">
             Eliminar
           </button>
         </td>
       </tr>
     </tbody>
   </table>
+</div>
+
+<div *ngIf="!domiciliarios || domiciliarios.length === 0" class="alert alert-info">
+  No hay domiciliarios registrados.
 </div>

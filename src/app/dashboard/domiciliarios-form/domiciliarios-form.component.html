@@ -5,51 +5,40 @@
 
   <form #domForm="ngForm" (ngSubmit)="guardar()">
     <div class="row g-3">
+
+      <!-- Nombre -->
       <div class="col-md-6">
         <label for="nombre" class="form-label">Nombre</label>
-        <input
-          type="text"
-          id="nombre"
-          class="form-control"
-          [(ngModel)]="domiciliario.nombre"
-          name="nombre"
-          required
-        />
+        <input type="text" id="nombre" class="form-control"
+               [(ngModel)]="domiciliario.nombre" name="nombre" required />
       </div>
 
+      <!-- Cédula -->
+      <div class="col-md-6">
+        <label for="cedula" class="form-label">Cédula</label>
+        <input type="text" id="cedula" class="form-control"
+               [(ngModel)]="domiciliario.cedula" name="cedula" required />
+      </div>
+
+      <!-- Correo -->
       <div class="col-md-6">
         <label for="correo" class="form-label">Correo</label>
-        <input
-          type="email"
-          id="correo"
-          class="form-control"
-          [(ngModel)]="domiciliario.correo"
-          name="correo"
-          required
-        />
+        <input type="email" id="correo" class="form-control"
+               [(ngModel)]="domiciliario.correo" name="correo" required />
       </div>
 
+      <!-- Teléfono -->
       <div class="col-md-6">
         <label for="telefono" class="form-label">Teléfono</label>
-        <input
-          type="text"
-          id="telefono"
-          class="form-control"
-          [(ngModel)]="domiciliario.telefono"
-          name="telefono"
-          required
-        />
+        <input type="text" id="telefono" class="form-control"
+               [(ngModel)]="domiciliario.telefono" name="telefono" required />
       </div>
 
+      <!-- Vehículo -->
       <div class="col-md-6">
         <label for="vehiculo" class="form-label">Vehículo</label>
-        <select
-          id="vehiculo"
-          class="form-select"
-          [(ngModel)]="domiciliario.vehiculo"
-          name="vehiculo"
-          required
-        >
+        <select id="vehiculo" class="form-select"
+                [(ngModel)]="domiciliario.vehiculo" name="vehiculo" required>
           <option value="">Seleccione...</option>
           <option value="Moto">Moto</option>
           <option value="Carro">Carro</option>
@@ -58,48 +47,35 @@
         </select>
       </div>
 
+      <!-- Placa (opcional) -->
       <div class="col-md-6">
         <label for="placa" class="form-label">Placa (opcional)</label>
-        <input
-          type="text"
-          id="placa"
-          class="form-control"
-          [(ngModel)]="domiciliario.placa"
-          name="placa"
-        />
+        <input type="text" id="placa" class="form-control"
+               [(ngModel)]="domiciliario.placa" name="placa" />
       </div>
 
+      <!-- Zona de cobertura -->
       <div class="col-md-6">
-        <label for="zona" class="form-label">Zona de Cobertura</label>
-        <input
-          type="text"
-          id="zona"
-          class="form-control"
-          [(ngModel)]="domiciliario.zonaCobertura"
-          name="zonaCobertura"
-          required
-        />
+        <label for="zonaCobertura" class="form-label">Zona de Cobertura</label>
+        <input type="text" id="zonaCobertura" class="form-control"
+               [(ngModel)]="domiciliario.zonaCobertura" name="zonaCobertura" required />
       </div>
 
+      <!-- Disponible -->
       <div class="col-md-6">
         <label class="form-label">Disponible</label>
-        <select
-          class="form-select"
-          [(ngModel)]="domiciliario.disponible"
-          name="disponible"
-        >
+        <select class="form-select"
+                [(ngModel)]="domiciliario.disponible" name="disponible">
           <option [ngValue]="true">Sí</option>
           <option [ngValue]="false">No</option>
         </select>
       </div>
+
     </div>
 
     <div class="d-flex justify-content-center mt-4">
-      <button
-        type="submit"
-        class="btn btn-primary me-2"
-        [disabled]="!domForm.form.valid"
-      >
+      <button type="submit" class="btn btn-primary me-2"
+              [disabled]="!domForm.form.valid">
         {{ editMode ? 'Actualizar' : 'Guardar' }}
       </button>
       <button type="button" class="btn btn-secondary" (click)="cancelar()">
